@@ -1,0 +1,390 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>if(window.history&&window.history.replaceState){window.history.replaceState(null,document.title,window.location.href)}</script>
+    <meta name="theme-color" content="#3b82f6" />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>PISO WIFI - Status</title>
+    <style>
+        #portalLoader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#0f172a;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;transition:opacity .4s ease,visibility .4s ease}
+        #portalLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-icon{width:56px;height:56px;border:4px solid rgba(59,130,246,.2);border-top-color:#3b82f6;border-radius:50%;animation:ldSpin .8s linear infinite;margin-bottom:24px}
+        .loader-brand{color:#fff;font-size:22px;font-weight:700;letter-spacing:2px;margin-bottom:16px}
+        .loader-dots{display:-webkit-box;display:-webkit-flex;display:flex}
+        .loader-dots span{display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:50%;animation:ldBounce 1.2s infinite ease-in-out;margin-right:8px}
+        .loader-dots span:last-child{margin-right:0}
+        .loader-dots span:nth-child(1){animation-delay:0s}
+        .loader-dots span:nth-child(2){animation-delay:.15s}
+        .loader-dots span:nth-child(3){animation-delay:.3s}
+        @-webkit-keyframes ldSpin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+        @keyframes ldSpin{to{transform:rotate(360deg)}}
+        @-webkit-keyframes ldBounce{0%,80%,100%{-webkit-transform:scale(0);transform:scale(0);opacity:.3}40%{-webkit-transform:scale(1);transform:scale(1);opacity:1}}
+        @keyframes ldBounce{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
+    </style>
+    <script>var _ts=Date.now();document.write('<link rel="stylesheet" href="css/style.css?ts='+_ts+'">');document.write('<script src="js/core.js?ts='+_ts+'"><\/script>');</script>
+    <script>
+        var hsAddress = "$(server-address)";
+        var vlanId = "$(interface-name)";
+        var userIp = "$(ip)";
+        var userMac = "$(mac)";
+        var potalError = "$(error)";
+        var sessionTimeLeftSecs = "$(session-time-left-secs)";
+        var toSyncVoucher = "$(username)";
+        var statusRefresh = "$(refresh-timeout-secs)";
+        $(if advert-pending == 'yes')
+            var popup = '';
+        function focusAdvert() {
+            if (window.focus) popup.focus();
+        }
+        function openAdvert() {
+            popup = open('$(link-advert)', 'hotspot_advert', '');
+            setTimeout("focusAdvert()", 1000);
+        }
+        $(endif)
+        function openLogout() {
+            if (window.name != 'hotspot_status') return true;
+            open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+            window.close();
+            return false;
+        }
+    </script>
+
+</head>
+
+<body $(if advert-pending=='yes' ) onLoad="openAdvert()" $(endif)>
+    <div id="portalLoader">
+        <div class="loader-icon"></div>
+        <div class="loader-brand">Please Wait...</div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+    </div>
+    <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+    <div class="ie-fixMinHeight">
+        <main class="main">
+            <div class="wrap">
+                <div class="page-card">
+
+                    <!-- Banner -->
+                    <div class="banner-container" id="bannerContainer">
+                        <div class="dark-overlay"></div>
+                        <div class="banner-text">
+                            <h1 class="wifi-text" id="hotspotName">PISO WIFI</h1>
+                            <div class="vendo-name" id="vendoName"></div>
+                        </div>
+                    </div>
+                    <script>(function(){var i=new Image();i.onload=function(){var c=document.getElementById('bannerContainer');if(c){c.style.backgroundImage='url(img/banner.jpg)';c.style.backgroundSize='cover';c.style.webkitBackgroundSize='cover';c.style.backgroundPosition='center';}};i.src='img/banner.jpg';})();</script>
+
+                    <div class="card-body">
+
+                        <!-- High Speed Connection announcement -->
+                        <div class="announcement" id="announcement">High Speed Connection</div>
+
+                        <!-- Status badge -->
+                        <div class="status-container">
+                            $(if session-time-left)
+                            $(if login-by == 'trial')
+                            <div id="sessionStatus" class="status-badge connected">
+                                <span class="status-icon"><svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                                <span class="status-text">Free Trial</span>
+                                <span class="session-dot" style="display:none"></span>
+                                <span class="session-label" style="display:none"></span>
+                            </div>
+                            $(else)
+                            <div id="sessionStatus" class="status-badge connected">
+                                <span class="status-icon"><svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                                <span class="status-text">Connected</span>
+                                <span class="session-dot" style="display:none"></span>
+                                <span class="session-label" style="display:none"></span>
+                            </div>
+                            $(endif)
+                            $(else)
+                            <div id="sessionStatus" class="status-badge connected">
+                                <span class="status-icon"><svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                                <span class="status-text">Member</span>
+                                <span class="session-dot" style="display:none"></span>
+                                <span class="session-label" style="display:none"></span>
+                            </div>
+                            $(endif)
+                        </div>
+
+                        <!-- Time Remaining -->
+                        $(if session-time-left)
+                        <div class="time-card connected" id="timeCard">
+                            <div class="time-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                Time Remaining
+                            </div>
+                            <div class="time-value" id="remaining-time">--</div>
+                            <div class="timer-hidden">
+                                <span id="days">00</span><span class="semicolon">:</span>
+                                <span id="hours">00</span><span class="semicolon">:</span>
+                                <span id="minutes">00</span><span class="semicolon">:</span>
+                                <span id="seconds">00</span>
+                            </div>
+                        </div>
+                        $(else)
+                        <div class="member-card">
+                            <h1>$(username)</h1>
+                            <h2>MEMBER: UNLIMITED</h2>
+                        </div>
+                        $(endif)
+
+                        <!-- Expiry card (hidden for member and trial) -->
+                        $(if session-time-left)
+                        $(if login-by != 'trial')
+                        <div class="expiry-card">
+                            <div class="expiry-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                Expiry
+                            </div>
+                            <div class="expiry-value" id="expiry">--</div>
+                        </div>
+                        $(endif)
+                        $(endif)
+
+                        <!-- Device / Data toggles -->
+                        <div class="dropdown-row">
+                            <button type="button" class="dropdown-btn" onclick="toggleDropdown('deviceInfo', this)" aria-expanded="false">
+                                <span class="btn-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                    Device
+                                </span>
+                                <span class="dropdown-caret"><svg xmlns="http://www.w3.org/2000/svg" class="ico caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+                            </button>
+                            <button type="button" class="dropdown-btn" onclick="toggleDropdown('dataInfo', this)" aria-expanded="false">
+                                <span class="btn-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                                    Data
+                                </span>
+                                <span class="dropdown-caret"><svg xmlns="http://www.w3.org/2000/svg" class="ico caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+                            </button>
+                        </div>
+
+                        <div class="dropdown-content" id="deviceInfo">
+                            <div class="info-row">
+                                <span class="info-label">IP</span>
+                                <span class="info-value">$(ip)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">MAC</span>
+                                <span class="info-value">$(mac)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">NodeMCU</span>
+                                <span class="info-value"><span class="vendo-dot"></span></span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-content" id="dataInfo">
+                            <div class="info-row">
+                                <span class="info-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                                    Upload
+                                </span>
+                                <span class="info-value" id="bytesIn">$(bytes-in-nice)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    Download
+                                </span>
+                                <span class="info-value" id="bytesOut">$(bytes-out-nice)</span>
+                            </div>
+                        </div>
+
+                        $(if session-time-left)
+                        $(if login-by != 'trial')
+                        <!-- Pause Time (full width, same position as Resume in login) -->
+                        <button type="button" class="btn btn-warning" id="pauseButton" onclick="pause()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            Pause Time
+                        </button>
+
+                        <!-- Extend -->
+                        <button type="button" class="btn btn-success" id="insert-coin-button" user-type="extend" onclick="openModal(0)" aria-label="Extend session">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                            <span>Extend</span>
+                        </button>
+
+                        <!-- Action grid -->
+                        <div class="action-grid">
+                            <button type="button" class="btn btn-primary" id="ratesButton" onclick="openModal(2)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                                WiFi Rates
+                            </button>
+                            <button type="button" class="btn btn-primary" id="voucherButton" onclick="openModal(6)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>
+                                Vouchers
+                            </button>
+                        </div>
+                        <div id="gcash-button-wrapper"></div>
+                        $(endif)
+                        $(else)
+                        <button type="button" class="btn btn-danger" id="memberLogoutButton" onclick="logout()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Logout
+                        </button>
+                        $(endif)
+
+                        <!-- members still need this id present -->
+                        <button type="button" id="memberButton" style="display:none"></button>
+
+                        <div class="footer-credit" id="footerCredit">
+                            Powered by <a href="#" target="_blank">LPB Piso Wifi</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- modal[0] : insert coin -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Insert coin">
+        <div class="modal-content">
+            <div class="modal-head"><span>Please insert coin</span></div>
+            <div class="modal-body">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="progress-bg" cx="50" cy="50" r="40"></circle>
+                        <circle id="progress-value" class="progress-value" cx="50" cy="50" r="40"
+                            stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                    </svg>
+                    <div class="progress-text" id="userTime">0h:0m</div>
+                </div>
+                <div class="insert-coin-details">
+                    <span>COINS</span>
+                    <span id="userCoin">0</span>
+                </div>
+                <div class="insert-coin-details">
+                    <span>VOUCHER</span>
+                    <span id="userCode">******</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(0)" id="cancelInsertCoinButton">Cancel</button>
+                <button type="button" id="proceedInsertCoinButton" onclick="loginVoucher()" disabled>I'm done paying</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[1] : member login -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Member login">
+        <div class="modal-content">
+            <div class="modal-head"><span>Member login</span></div>
+            <div class="modal-body">
+                <form name="memlogin" class="flex-column" action="$(link-login-only)" method="post" $(if chap-id)
+                    onSubmit="return doLoginMember()" $(endif)>
+                    <input type="hidden" name="dst" value="$(link-orig)" />
+                    <input type="hidden" name="popup" value="true" />
+                    <input name="memusername" type="text" placeholder="Username" required />
+                    <input name="mempassword" type="password" placeholder="Password" required />
+                    <input type="submit" value="LOGIN" class="button" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(1)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[2] : rates -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="WiFi rates">
+        <div class="modal-content">
+            <div class="modal-head"><span>WiFi Rates</span></div>
+            <div class="modal-body">
+                <table id="rate-list">
+                    <tr>
+                        <th>Amount</th>
+                        <th>Time</th>
+                        <th>Validity</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(2)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[3] : select vendo -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Select vendo">
+        <div class="modal-content">
+            <div class="modal-head"><span>Select vendo</span></div>
+            <div class="modal-body" id="vendo-list">
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(3)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[4] : notification -->
+    <div class="modal" role="alertdialog" aria-modal="true" aria-label="Notification">
+        <div class="modal-content" style="max-width: 90%;">
+            <div class="modal-body-notification">
+                <h2 id="notificationMessage"></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[5] : (free trial placeholder) -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Free trial">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p style="text-align:center">Free trial</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[6] : voucher input -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Voucher">
+        <div class="modal-content">
+            <div class="modal-head"><span>Use voucher</span></div>
+            <div class="modal-body">
+                <p style="color:#6b7280; font-size:13px; margin-bottom:10px">Enter your voucher code to redeem time.</p>
+                <input type="text" id="convertVoucherInput" class="voucher-input" aria-label="Voucher code" placeholder="Voucher code" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(6)">CLOSE</button>
+                <button type="button" id="proceedInsertCoinButton" onclick="initConvertVoucher()" style="background:#3b82f6;color:#fff">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>document.write('<script src="js/status.js?ts='+_ts+'"><\/script>');</script>
+    $(if session-time-left)
+    <script>
+        var sessionTimeLeftInterval = null;
+        if(sessionTimeLeftInterval === null) {
+            sessionTimeLeftInterval = setInterval(userTimeLeft, 1000);
+        }
+        function userTimeLeft(){
+            if(sessionTimeLeftSecs > 0){
+                sessionTimeLeftSecs--;
+                sessionTimeConvert(sessionTimeLeftSecs);
+            } else {
+                showNotification(`Thank You!<br><br>voucher ${toSyncVoucher} time's up`);
+                setTimeout(()=>{location.reload()},3000)
+            }
+        }
+        var statusRefreshTimer = null;
+        if(statusRefreshTimer === null){
+            statusRefreshTimer = setInterval(refreshStatusPage, statusRefresh * 1000);
+        }
+        function refreshStatusPage() {
+            if (!isInsertingCoin) { location.reload(); }
+        }
+    </script>
+    $(endif)
+    <script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js" async></script>
+    <link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
+    <script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js" async></script>
+</body>
+
+</html>

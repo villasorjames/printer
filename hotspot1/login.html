@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="description" content="Secure WiFi hotspot access portal." />
+    <script>if(window.history&&window.history.replaceState){window.history.replaceState(null,document.title,window.location.href)}</script>
+    <title>PISO WIFI - Log in</title>
+    <style>
+        #portalLoader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#0f172a;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;transition:opacity .4s ease,visibility .4s ease}
+        #portalLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-icon{width:56px;height:56px;border:4px solid rgba(59,130,246,.2);border-top-color:#3b82f6;border-radius:50%;animation:ldSpin .8s linear infinite;margin-bottom:24px}
+        .loader-brand{color:#fff;font-size:22px;font-weight:700;letter-spacing:2px;margin-bottom:16px}
+        .loader-dots{display:-webkit-box;display:-webkit-flex;display:flex}
+        .loader-dots span{display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:50%;animation:ldBounce 1.2s infinite ease-in-out;margin-right:8px}
+        .loader-dots span:last-child{margin-right:0}
+        .loader-dots span:nth-child(1){animation-delay:0s}
+        .loader-dots span:nth-child(2){animation-delay:.15s}
+        .loader-dots span:nth-child(3){animation-delay:.3s}
+        @-webkit-keyframes ldSpin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+        @keyframes ldSpin{to{transform:rotate(360deg)}}
+        @-webkit-keyframes ldBounce{0%,80%,100%{-webkit-transform:scale(0);transform:scale(0);opacity:.3}40%{-webkit-transform:scale(1);transform:scale(1);opacity:1}}
+        @keyframes ldBounce{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
+    </style>
+    <script>var _ts=Date.now();document.write('<link rel="stylesheet" href="css/style.css?ts='+_ts+'">');document.write('<script src="js/core.js?ts='+_ts+'"><\/script>');</script>
+</head>
+
+<body>
+
+    <div id="portalLoader">
+        <div class="loader-icon"></div>
+        <div class="loader-brand">Please Wait...</div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+        <input type="hidden" name="username" />
+        <input type="hidden" name="password" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+
+    <script>document.write('<script src="/md5.js?ts='+_ts+'"><\/script>');</script>
+    <script>
+        var hsAddress = "$(server-address)";
+        var vlanId = "$(interface-name)";
+        var userIp = "$(ip)";
+        var userMac = "$(mac)";
+        var potalError = "$(error)";
+
+        function doLogin() {
+            if (loginOption === 0) {
+                document.sendin.password.value = hexMD5('$(chap-id)' + "" + '$(chap-challenge)');
+            } else {
+                document.sendin.password.value = hexMD5('$(chap-id)' + document.sendin.username.value + '$(chap-challenge)');
+            }
+            document.sendin.submit();
+            return false;
+        }
+        function doLoginMember() {
+            document.sendin.username.value = document.memlogin.memusername.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.memlogin.mempassword.value + '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+    </script>
+    $(endif)
+
+    <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="ie-fixMinHeight">
+        <main class="main">
+            <div class="wrap">
+                <div class="page-card">
+
+                    <!-- Banner -->
+                    <div class="banner-container" id="bannerContainer">
+                        <div class="dark-overlay"></div>
+                        <div class="banner-text">
+                            <h1 class="wifi-text" id="hotspotName">PISO WIFI</h1>
+                            <div class="vendo-name" id="vendoName"></div>
+                        </div>
+                    </div>
+                    <script>(function(){var i=new Image();i.onload=function(){var c=document.getElementById('bannerContainer');if(c){c.style.backgroundImage='url(img/banner.jpg)';c.style.backgroundSize='cover';c.style.webkitBackgroundSize='cover';c.style.backgroundPosition='center';}};i.src='img/banner.jpg';})();</script>
+
+                    <div class="card-body">
+
+                        <!-- High Speed Connection announcement -->
+                        <div class="announcement" id="announcement">High Speed Connection</div>
+
+                        <!-- Status badge -->
+                        <div class="status-container">
+                            <div id="sessionStatus" class="status-badge disconnected">
+                                <span class="status-icon"><svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                                <span class="status-text">Disconnected</span>
+                                <span class="session-dot" style="display:none"></span>
+                                <span class="session-label" style="display:none"></span>
+                            </div>
+                        </div>
+
+                        <!-- Time Remaining -->
+                        <div class="time-card" id="timeCard">
+                            <div class="time-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                Time Remaining
+                            </div>
+                            <div class="time-value" id="remaining-time">--</div>
+                            <div class="timer-hidden">
+                                <span id="days">00</span><span class="semicolon">:</span>
+                                <span id="hours">00</span><span class="semicolon">:</span>
+                                <span id="minutes">00</span><span class="semicolon">:</span>
+                                <span id="seconds">00</span>
+                            </div>
+                        </div>
+
+                        <!-- Expiry card -->
+                        <div class="expiry-card">
+                            <div class="expiry-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                Expiry
+                            </div>
+                            <div class="expiry-value" id="expiry">--</div>
+                        </div>
+
+                        <!-- Device toggle -->
+                        <div class="dropdown-row" style="grid-template-columns: 1fr">
+                            <button type="button" class="dropdown-btn" onclick="toggleDropdown('deviceInfo', this)" aria-expanded="false">
+                                <span class="btn-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                    Device
+                                </span>
+                                <span class="dropdown-caret"><svg xmlns="http://www.w3.org/2000/svg" class="ico caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+                            </button>
+                        </div>
+
+                        <div class="dropdown-content" id="deviceInfo">
+                            <div class="info-row">
+                                <span class="info-label">IP</span>
+                                <span class="info-value">$(ip)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">MAC</span>
+                                <span class="info-value">$(mac)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">NodeMCU</span>
+                                <span class="info-value"><span class="vendo-dot"></span></span>
+                            </div>
+                        </div>
+
+
+                        $(if trial == "no")
+                        <div id="resumeWrapper" style="display:none; margin-bottom:0.6rem">
+                            <button type="button" id="resumeButton" class="btn btn-warning" onclick="doResume()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                Resume
+                            </button>
+                        </div>
+
+                        <!-- Insert Coin (primary) -->
+                        <button type="button" class="btn btn-success" id="insert-coin-button" user-type="new" onclick="openModal(0)" aria-label="Insert coin to purchase access">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                            <span>Insert Coin</span>
+                        </button>
+
+                        <!-- Action grid: only hotspot-supported buttons -->
+                        <div class="action-grid">
+                            <button type="button" class="btn btn-primary" id="ratesButton" onclick="openModal(2)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                                WiFi Rates
+                            </button>
+                            <button type="button" class="btn btn-primary" id="voucherButton" onclick="openModal(6)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>
+                                Vouchers
+                            </button>
+                        </div>
+                        <div class="action-grid">
+                            <button type="button" class="btn btn-primary" id="memberButton" onclick="openModal(1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                Member
+                            </button>
+                            <div id="gcash-button-wrapper"></div>
+                        </div>
+                        $(else)
+                        <button type="button" class="btn btn-success" onclick="openModal(5)" aria-label="Start free trial">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                            Start Free Trial
+                        </button>
+                        $(endif)
+
+                        <div class="footer-credit" id="footerCredit">
+                            Powered by <a href="#" target="_blank">LPB Piso Wifi</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- modal[0] : insert coin -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Insert coin">
+        <div class="modal-content">
+            <div class="modal-head"><span>Please insert coin</span></div>
+            <div class="modal-body">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="progress-bg" cx="50" cy="50" r="40"></circle>
+                        <circle id="progress-value" class="progress-value" cx="50" cy="50" r="40"
+                            stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                    </svg>
+                    <div class="progress-text" id="userTime">0h:0m</div>
+                </div>
+                <div class="insert-coin-details">
+                    <span>COINS</span>
+                    <span id="userCoin">0</span>
+                </div>
+                <div class="insert-coin-details">
+                    <span>VOUCHER</span>
+                    <span id="userCode">******</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(0)" id="cancelInsertCoinButton">Cancel</button>
+                <button type="button" id="proceedInsertCoinButton" onclick="loginVoucher()" disabled>I'm done paying</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[1] : member login -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Member login">
+        <div class="modal-content">
+            <div class="modal-head"><span>Member login</span></div>
+            <div class="modal-body">
+                <form name="memlogin" class="flex-column" action="$(link-login-only)" method="post" $(if chap-id)
+                    onSubmit="return doLoginMember()" $(endif)>
+                    <input type="hidden" name="dst" value="$(link-orig)" />
+                    <input type="hidden" name="popup" value="true" />
+                    <input name="memusername" type="text" placeholder="Username" required />
+                    <input name="mempassword" type="password" placeholder="Password" required />
+                    <input type="submit" value="LOGIN" class="button" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(1)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[2] : rates -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="WiFi rates">
+        <div class="modal-content">
+            <div class="modal-head"><span>WiFi Rates</span></div>
+            <div class="modal-body">
+                <table id="rate-list">
+                    <tr>
+                        <th>Amount</th>
+                        <th>Time</th>
+                        <th>Validity</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(2)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[3] : select vendo -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Select vendo">
+        <div class="modal-content">
+            <div class="modal-head"><span>Select vendo</span></div>
+            <div class="modal-body" id="vendo-list">
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(3)">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[4] : notification -->
+    <div class="modal" role="alertdialog" aria-modal="true" aria-label="Notification">
+        <div class="modal-content" style="max-width: 90%;">
+            <div class="modal-body-notification">
+                <h2 id="notificationMessage"></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[5] : free trial -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Free trial">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="trial-image-wrapper" style="text-align:center; margin-bottom: 12px;">
+                    <img src="img/ads.png" alt="Advertisement">
+                </div>
+                <p style="text-align:center">Free trial user (login in <span id="trial-timer">10</span>s)</p>
+                <a id="trial-link" href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)"></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal[6] : voucher input -->
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Voucher">
+        <div class="modal-content">
+            <div class="modal-head"><span>Use voucher</span></div>
+            <div class="modal-body">
+                <p style="color:#6b7280; font-size:13px; margin-bottom:10px">Enter your voucher code to redeem time.</p>
+                <input type="text" id="convertVoucherInput" class="voucher-input" aria-label="Voucher code" placeholder="Voucher code" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal(6)">CLOSE</button>
+                <button type="button" id="proceedInsertCoinButton" onclick="initConvertVoucher()" style="background:#3b82f6;color:#fff">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>document.write('<script src="js/login.js?ts='+_ts+'"><\/script>');</script>
+
+    <script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js" async></script>
+    <link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
+    <script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js" async></script>
+
+</body>
+
+</html>
