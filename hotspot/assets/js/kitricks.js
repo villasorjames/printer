@@ -1042,10 +1042,7 @@ function notifyCoinSlotError(errorCode) {
         msgModal.querySelector(".header").textContent = "Warning!";
         document.querySelector("#message").textContent = "You have been banned from using coin slot, due to multiple request for insert coin, please try again later!";
     }
-    if (errorCode == "no.internet.detected") {
-        msgModal.querySelector(".header").textContent = "Error!";
-        document.querySelector("#message").innerHTML = "No internet connection as of the moment, Please try again later";
-    }
+
     if (errorCode == "offline") {
         msgModal.querySelector(".header").textContent = "Error!";
         document.querySelector("#message").innerHTML = 'Error connecting to "' + document.querySelector("[data-vendo]").textContent + '", Please check your wifi connection';
