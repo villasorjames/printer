@@ -937,11 +937,6 @@ ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
                 (username_only = t.Settings.username_only),
                 (link.href = t[e(444)][e(519)]),
                 (link[e(472)] = t[e(444)][e(453)]),
-                t[e(444)].custom_theme &&
-                    (document[e(506)][e(420)].setProperty(e(579), t[e(625)].background),
-                    document.documentElement.style[e(496)](e(412), t[e(625)].container),
-                    document[e(506)][e(420)][e(496)](e(487), t[e(625)].color),
-                    document[e(506)].style.setProperty("--text-color", t[e(625)][e(518)])),
                 t.Settings[e(595)]
                     ? ((payment_gateway = t[e(595)].payment_gateway), (portal_key = t[e(595)].portal_key))
                     : (document[e(492)](e(443))[e(420)][e(503)] = e(464)),
