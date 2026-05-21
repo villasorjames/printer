@@ -775,7 +775,7 @@ ajaxsettings.onerror = function () {
 
 insertBtn.onclick = function () {
     if (autoSelect) {
-        insertBtn.style.pointerEvents = "none";
+        insertBtn.style.display = "none";
         showBtnProgress(insertBtn);
         vcTopUp = false;
         insertCoin(0);
