@@ -796,7 +796,14 @@ pauseBtn.onclick = function () { paused(1000); };
 document.getElementById("ratesBtn").onclick = function () { getWifiRate(0); };
 
 document.getElementById("gcashBtn").onclick = function () {
-    display_ewalletvoucher_modal(gcash_portal_key, gcash_node_ip, 'username', 'submit');
+    if (typeof display_ewalletvoucher_modal === "function") {
+        display_ewalletvoucher_modal(gcash_portal_key, gcash_node_ip, 'username', 'submit');
+    } else {
+        var msgModal = document.querySelector("[data-message]");
+        msgModal.querySelector(".header").textContent = "GCash Unavailable";
+        document.querySelector("#message").textContent = "Payment widget failed to load. Check internet connection.";
+        openModal(msgModal);
+    }
 };
 
 document.getElementById("memberBtn").onclick = function () {
