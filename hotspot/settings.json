@@ -1,6 +1,6 @@
 ﻿{
     "Settings" : {
-        "vendo_option"          :   0,
+        "vendo_option"          :   1,
         "username_only"         :   false,
         "currency"              :   "₱",
         "footer_text"           :   "TAPICAN, LILOY, ZDN. PISO WIFI BUILDER 09361935986",

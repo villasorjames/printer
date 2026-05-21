@@ -743,11 +743,11 @@ ajaxsettings.onreadystatechange = function () {
             }
             for (var n = 0; n < t.VendoAddresses.length; n++) {
                 selectVendo.innerHTML = selectVendo.innerHTML +
-                    '<button type="button" class="btn btn-primary" onclick="insertBtnManual(this)" data-vendo-ip="' +
+                    '<div class="vendo-list-items" onclick="insertBtnManual(this)" data-vendo-ip="' +
                     t.VendoAddresses[n].vendoIp +
                     '" data-ssid="' + t.VendoAddresses[n].ssid +
                     '" data-vendo-name="' + t.VendoAddresses[n].vendoName +
-                    '">' + t.VendoAddresses[n].vendoName + "</button>";
+                    '">' + t.VendoAddresses[n].vendoName + "</div>";
             }
         } else if (2 == t.Settings.vendo_option) {
             for (n = 0; n < t.VendoAddresses.length; n++) {
