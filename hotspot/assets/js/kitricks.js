@@ -29,6 +29,9 @@ var voucher = getStorageValue("activeVoucher"),
     prefix = false,
     coinslotExit = false,
     pause_button = true,
+    insert_coin_button = true,
+    member_button = true,
+    wifi_rates_button = true,
     member_logout_button = true,
     trial_logout_button = true,
     subscription = false,
@@ -91,7 +94,7 @@ function api() {
                     if (tempMac !== mac && tempMac !== null) randomtempMac = true;
                     pauseBtn.style.pointerEvents = "auto";
                     intervalManager(0);
-                    memberBtnEl.style.display = "block";
+                    if (member_button) memberBtnEl.style.display = "block";
                     body.style.display = "block";
                 } else if ("Connected" == e.status) {
                     voucher = e.voucher;
@@ -684,8 +687,14 @@ ajaxsettings.onreadystatechange = function () {
     if (4 == this.readyState && 200 == this.status) {
         var t = JSON.parse(this.responseText);
         pause_button = t.Settings.pause_button;
+        insert_coin_button = t.Settings.insert_coin_button;
+        member_button = t.Settings.member_button;
+        wifi_rates_button = t.Settings.wifi_rates_button;
         member_logout_button = t.Settings.member_logout_button;
         trial_logout_button = t.Settings.trial_logout_button;
+        if (!insert_coin_button) insertBtn.style.display = "none";
+        if (!member_button) document.getElementById("member").style.display = "none";
+        if (!wifi_rates_button) document.getElementById("ratesBtn").style.display = "none";
         currency = t.Settings.currency;
         username_only = t.Settings.username_only;
         link.href = t.Settings.footer_link;
