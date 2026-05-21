@@ -2,230 +2,210 @@
 <html lang="en">
 <head>
 	<title>Login Portal</title>
-	<style>
-		#portalLoader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease,visibility .4s ease}
-		#portalLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
-		.loader-icon{width:48px;height:48px;border:4px solid rgba(59,130,246,.2);border-top-color:#3b82f6;border-radius:50%;animation:ldSpin .8s linear infinite;margin-bottom:20px}
-		.loader-brand{color:#fff;font-size:20px;font-weight:700;letter-spacing:2px;margin-bottom:14px}
-		.loader-dots{display:flex}
-		.loader-dots span{display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:50%;animation:ldBounce 1.2s infinite ease-in-out;margin-right:6px}
-		.loader-dots span:nth-child(1){animation-delay:0s}
-		.loader-dots span:nth-child(2){animation-delay:.15s}
-		.loader-dots span:nth-child(3){animation-delay:.3s}
-		@keyframes ldSpin{to{transform:rotate(360deg)}}
-		@keyframes ldBounce{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
-	</style>
 	<script>var _t=Date.now();document.write('<link rel="stylesheet" href="assets/css/style.css?_='+_t+'">');</script>
 	<link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
 <body id="body" data-interface="$(interface-name)">
-
-<div id="portalLoader">
-	<div class="loader-icon"></div>
-	<div class="loader-brand">Please Wait...</div>
-	<div class="loader-dots"><span></span><span></span><span></span></div>
-</div>
-
-<div class="ie-fixMinHeight">
-	<main class="main">
-		<div class="wrap">
-			<div class="page-card">
-
-				<!-- Banner -->
-				<div class="banner-container">
-					<div class="dark-overlay"></div>
-					<div class="banner-text">
-						<h1 class="wifi-text" data-vendo>PISO WIFI</h1>
-						<div class="vendo-name" data-ssid style="display:none;"></div>
-					</div>
+	<div class="row">
+		<div class="banner">
+			<h2 data-vendo></h2>
+			<h2 data-ssid style="display:none;">Kit Pisowifi</h2>
+		</div>
+		<div class="container">
+			<div class="content">
+				<div class="time-wrapper ">
+					<span id="timer">
+						<div class="d-flex flex-fill align-content-stretch">
+							<div class="inner-wrapper">
+								<div id="min">00</div>
+								<div>minutes</div>
+							</div>
+							<div class="inner-wrapper">
+								<div id="sec">00</div>
+								<div>seconds</div>
+							</div>
+						</div>
+					</span>
 				</div>
+			</div><br>
+		</div>
+		<div class="details">
+			<table id="details">
+				<tr>
+					<td>
+						<p><b>Status:</b>
+					</td>
+					<td>
+						<span id="status">Connected</span>
+					</td>
+				</tr>
+				<tr id="userID">
 
-				<div class="card-body">
-
-					<!-- Status badge -->
-					<div class="status-container">
-						<div class="status-badge connected" id="statusBadge">
-							<span class="status-icon">
-								<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-							</span>
-							<span id="status">Connected</span>
-						</div>
-					</div>
-
-					<!-- Timer -->
-					<div class="time-card">
-						<div class="time-label">
-							<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-							Time Remaining
-						</div>
-						<div class="time-value" id="timer">
-							<div class="d-flex flex-fill align-content-stretch">
-								<div class="inner-wrapper"><div id="min">00</div><div>minutes</div></div>
-								<div class="inner-wrapper"><div id="sec">00</div><div>seconds</div></div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Info table -->
-					<div class="info-card">
-						<table>
-							<tr id="userID"></tr>
-							<tr>
-								<td class="info-label">MAC</td>
-								<td><span id="mac" class="info-value">$(mac)</span></td>
-							</tr>
-							<tr>
-								<td class="info-label">IP</td>
-								<td><span id="ip" class="info-value">$(ip)</span></td>
-							</tr>
-							<tr id="Exp">
-								<td class="info-label">Expiry</td>
-								<td><span id="exp" class="info-value">--</span></td>
-							</tr>
-						</table>
-					</div>
-
-					<!-- Buttons -->
-					<div class="btn-group">
-						<button type="button" class="btn btn-success" id="insertBtn">
-							<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-							Insert Coin
-						</button>
-						<button type="button" class="btn btn-warning" id="pauseBtn">
-							<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-							Pause
-						</button>
-						<div class="action-grid">
-							<button type="button" class="btn btn-primary" id="ratesBtn">
-								<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
-								Wifi Rates
-							</button>
-							<button type="button" class="btn btn-primary" id="memberBtn">
-								<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-								Member Login
-							</button>
-						</div>
-						<button type="button" class="btn btn-gcash" id="gcashBtn">
-							<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-							GCash / E-Payment
-						</button>
-						<div class="input-group">
-							<div class="d-flex flex-fill align-content-stretch">
-								<input type="text" id="username" value="" placeholder="Voucher code..">
-								<button type="button" id="submit" class="submit">Submit</button>
-							</div>
-						</div>
-					</div>
-
-					<!-- Footer -->
-					<div class="footer-credit">
-						Powered by <a id="link" href="#">KiTricks.Net</a>
-					</div>
-
+				</tr>
+				<tr>
+					<td>
+						<p><b>MAC:</b></p>
+					</td>
+					<td>
+						<span id="mac">$(mac)</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p><b>IP:</b></p>
+					</td>
+					<td>
+						<span id="ip">$(ip)</span>
+					</td>
+				</tr>
+				<tr id="Exp">
+					<td>
+						<p><b>Expiration:</b></p>
+					</td>
+					<td>
+						<span id="exp">--</span>
+					</td>
+				</tr>
+			</table>
+			<br>
+			<br>
+		</div>
+		<br>
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary" id="insertBtn">Insert Coin</button>
+			<button type="button" class="btn btn-primary" id="pauseBtn">Pause</button>
+			<button type="button" class="btn btn-primary" id="ratesBtn">Wifi Rates</button>
+			<button type="button" class="btn btn-primary" id="memberBtn">Member Login</button>
+			<button type="button" class="btn btn-primary" id="gcashBtn">Gcash</button>
+			<div class="input-group">
+				<div class="d-flex flex-fill align-content-stretch">
+					<input type="text" id="username" value="" placeholder="Voucher Here..">
+					<button type="button" id="submit" class="submit">Submit</button>
 				</div>
 			</div>
 		</div>
-	</main>
-</div>
-
-<!-- Modal: Insert Coin -->
-<div class="modal" data-insert-coin tabindex="-1">
-	<div class="modal-content">
-		<div class="header">Please Insert Coin</div>
-		<div class="progress-bar"></div>
-		<div class="modal-body" id="insBody">
-			<div class="insert-coin-details"><span>Amount</span><span id="totalCoin">₱ 0</span></div>
-			<div class="insert-coin-details"><span>Time</span><span id="totalTime">--:--</span></div>
-			<div class="insert-coin-details"><span>Validity</span><span id="validity">--:--</span></div>
-		</div>
-		<div class="modal-footer">
-			<button data-ic-close class="btn-modal btn-modal-close">Cancel</button>
-		</div>
+		<footer class="main-footer">
+			<b>Powered by: <a id="link" href="#">KiTricks.Net</a>.</b><br>Click link to contact me.
+		</footer>
 	</div>
-</div>
-
-<!-- Modal: Select Vendo -->
-<div class="modal" data-select-vendo>
-	<div class="modal-content">
-		<div class="header">Choose Your Location</div>
-		<div class="modal-body"><div id="selectVendo"></div></div>
-		<div class="modal-footer">
-			<button data-sv-close class="btn-modal btn-modal-close">Close</button>
+		<div class="modal" data-insert-coin tabindex="-1">
+			<div class="modal-dialog">
+				<div class="header">Please Insert Coin</div>
+				<div class="progress-bar"></div>
+				<div id="insBody">
+					<hr>
+					<table>
+						<tr>
+							<td>
+								<p><b>Amount:</b>
+							</td>
+							<td class="span">
+								<span id="totalCoin">₱ 0</span>.00
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<p><b>Time:</b></p>
+							</td>
+							<td>
+								<span id="totalTime">--:--</span>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<p><b>Validity:</b></p>
+							</td>
+							<td>
+								<span id="validity">--:--</span>
+							</td>
+						</tr>
+					</table>
+					<br>
+					<hr>
+					<br>
+					<button data-ic-close class="btn btn-secondary">Cancel</button>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-
-<!-- Modal: Wifi Rates -->
-<div class="modal" data-rates>
-	<div class="modal-content">
-		<div class="header">Wifi Rates</div>
-		<div class="modal-body" id="ratesBody">
-			<table id="rate-list">
-				<thead><tr><th>Amount</th><th>Time</th><th>Validity</th></tr></thead>
-				<tbody id="rates"></tbody>
-			</table>
+		<div class="modal" data-select-vendo>
+			<div class="modal-dialog">
+				<div class="header">Chose Your Location</div>
+				<hr>
+				<div id="selectVendo"></div>
+				<hr>
+				<button data-sv-close class="btn btn-secondary">Close</button>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<button data-wr-close class="btn-modal btn-modal-close">Close</button>
+		<div class="modal" data-rates>
+			<div class="modal-dialog">
+				<div class="header">Wifi Rates</div>
+				<div id="ratesBody">
+					<hr>
+					<table>
+						<thead>
+							<tr>
+								<td>Amount</td>
+								<td>Time</td>
+								<td>Validity</td>
+							</tr>
+						</thead>
+						<tbody id="rates"></tbody>
+					</table>
+					<br>
+					<button data-wr-close class="btn btn-secondary">Close</button>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-
-<!-- Modal: Member Login -->
-<div class="modal" data-member tabindex="-1">
-	<div class="modal-content">
-		<div class="header">Login to Connect</div>
-		<div class="modal-body" id="mlBody">
-			<input type="text" id="Muser" placeholder="Username" />
-			<input type="password" id="Mpass" placeholder="Password" />
+		<div class="modal" data-member tabindex="-1">
+			<div class="modal-dialog">
+				<div class="header">Login to Connect</div>
+				<div id="mlBody">
+					<hr>
+					<input type="username" id="Muser" placeholder="Username" />
+					<input type="password" id="Mpass" placeholder="Password" />
+					<hr>
+					<br>
+					<div class="btn-footer">
+						<button data-ml-close class="btn btn-secondary">Cancel</button>
+						<button data-login class="btn btn-primary">Login</button>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<button data-ml-close class="btn-modal btn-modal-close">Cancel</button>
-			<button data-login class="btn-modal btn-modal-primary">Login</button>
+		<div class="modal" data-dialog tabindex="-1">
+			<div class="modal-dialog">
+				<div class="header"></div>
+				<div class="progress-bar"></div>
+			</div>
 		</div>
-	</div>
-</div>
-
-<!-- Modal: Dialog (loading) -->
-<div class="modal" data-dialog tabindex="-1">
-	<div class="modal-content">
-		<div class="header"></div>
-		<div class="progress-bar"></div>
-	</div>
-</div>
-
-<!-- Modal: Trial -->
-<div class="modal" data-trial tabindex="-1">
-	<div class="modal-content">
-		<div class="header"></div>
-		<div class="modal-body"></div>
-		<div class="modal-footer">
-			<button data-trl-close class="btn-modal btn-modal-close">Cancel</button>
-			<button data-claim class="btn-modal btn-modal-primary">Claim</button>
+		<div class="modal" data-trial tabindex="-1">
+			<div class="modal-dialog">
+				<div class="header"></div><br>
+				<hr>
+				<br>
+				<div class="btn-footer">
+					<button data-trl-close class="btn btn-secondary">Cancel</button>
+					<button data-claim class="btn btn-primary">Claim</button>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-
-<!-- Modal: Message -->
-<div class="modal" data-message tabindex="-1">
-	<div class="modal-content">
-		<div class="header"></div>
-		<div class="modal-body">
-			<span id="message"></span>
+		<div class="modal" data-message tabindex="-1">
+			<div class="modal-dialog dialog-small">
+				<div class="header"></div>
+				<hr>
+				<span id="message"></span>
+				<hr>
+				<br>
+				<button data-msg-close class="btn btn-secondary">Okay</button>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<button data-msg-close class="btn-modal btn-modal-close">Okay</button>
-		</div>
-	</div>
-</div>
-
-<script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js"></script>
-<script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js"></script>
-<script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js"></script>
-<script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js"></script>
-<script>document.write('<script src="assets/js/kitricks.js?_='+_t+'"><\/script>');</script>
+	<br>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js"></script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js"></script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js"></script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js"></script>
+	<script>document.write('<script src="assets/js/kitricks.js?_='+_t+'"><\/script>');</script>
 </body>
-</html>
