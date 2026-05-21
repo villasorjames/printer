@@ -16,8 +16,8 @@ var voucher = getStorageValue("activeVoucher"),
     ipAddress = "",
     mac = "",
     macNoColon = "",
-    payment_gateway = "",
-    portal_key = "",
+    gcash_node_ip = "",
+    gcash_portal_key = "",
     intervalID = null,
     timer = null,
     insertingCoin = false,
@@ -710,8 +710,8 @@ ajaxsettings.onreadystatechange = function () {
         link.href = t.Settings.footer_link;
         link.textContent = t.Settings.footer_text;
         if (t.Settings.gcash_payment) {
-            payment_gateway = t.gcash_payment.payment_gateway;
-            portal_key = t.gcash_payment.portal_key;
+            gcash_node_ip = t.gcash_payment.gcash_node_ip;
+            gcash_portal_key = t.gcash_payment.gcash_portal_key;
         } else {
             document.getElementById("gcashBtn").style.display = "none";
         }
@@ -796,15 +796,7 @@ pauseBtn.onclick = function () { paused(1000); };
 document.getElementById("ratesBtn").onclick = function () { getWifiRate(0); };
 
 document.getElementById("gcashBtn").onclick = function () {
-    openModal(document.querySelector("[data-gcash]"));
-};
-document.querySelector("[data-gc-close]").onclick = function () {
-    closeModal(document.querySelector("[data-gcash]"));
-};
-document.querySelector("[data-gc-pay]").onclick = function () {
-    var mobileNum = document.getElementById("gcNumber").value,
-        amount = document.getElementById("gcAmount").value;
-    location.href = payment_gateway + "?portal_key=" + portal_key + "&mobile=" + mobileNum + "&amount=" + amount;
+    display_ewalletvoucher_modal(gcash_portal_key, gcash_node_ip, 'username', 'submit');
 };
 
 document.getElementById("memberBtn").onclick = function () {

@@ -19,8 +19,8 @@
     "subscription_prefix" : ["ME", "Vc", "MO", "Ec"],
 
 "gcash_payment" :{
-        "payment_gateway":"https://payments.wifree.network/xendit/production/purchase_voucher.php",
-        "portal_key" :  ""
+        "gcash_node_ip"   : "",
+        "gcash_portal_key": ""
     },
 
     "VendoAddresses" : [
