@@ -4,7 +4,6 @@ var voucher = getStorageValue("activeVoucher"),
     invalidUser = getStorageValue("invalidUser"),
     insertcoinbg = new Audio(),
     coinCount = new Audio(),
-    dateNow = Date.now(),
     totalCoinReceived = 0,
     extendTimeCriteria = 0,
     vcTopUp = false,
@@ -975,10 +974,6 @@ function removeStorageValue(key) {
 
 function getStorageValue(key) {
     if (localStorage != null) return localStorage.getItem(key);
-}
-
-function clearStorageValue() {
-    if (localStorage != null) localStorage.clear();
 }
 
 function setCookie(name, value, seconds) {
