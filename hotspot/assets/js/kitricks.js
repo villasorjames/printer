@@ -38,7 +38,6 @@ var voucher = getStorageValue("activeVoucher"),
     macNoColon = "",
     payment_gateway = "",
     portal_key = "",
-    internet_status = "",
     intervalID = null,
     timer = null,
     insertingCoin = !1,
@@ -1001,9 +1000,7 @@ ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
         var e = _0x5873e6;
         autoSelect
             ? ((insertBtn[e(420)][e(434)] = e(464)), (insertBtn[e(567)] = e(590)), (vcTopUp = !1), insertCoin(0))
-            : internet_status == e(633)
-              ? notifyCoinSlotError(e(626))
-              : openModal(svmodal);
+            : openModal(svmodal);
     }),
     (document[_0x5873e6(540)](_0x5873e6(500))[_0x5873e6(659)] = function () {
         donepaying();
@@ -1057,9 +1054,7 @@ ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
     (document[_0x5873e6(492)](_0x5873e6(440)).onclick = function () {
         var e = _0x5873e6,
             t = document[e(492)](e(454))[e(449)];
-        internet_status == e(633)
-            ? notifyCoinSlotError(e(626))
-            : "" == t
+        "" == t
               ? (openModal(dialog),
                 (dialog[e(540)](".progress-bar")[e(420)][e(503)] = e(464)),
                 (dialog.querySelector(e(515)).textContent = "Invalid Voucher!"),
