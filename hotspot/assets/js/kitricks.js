@@ -1,33 +1,13 @@
-var _0x5873e6 = _0xa071;
-!(function () {
-    for (var e = _0xa071, t = _0x486d(); ; )
-        try {
-            if (
-                777682 ==
-                -parseInt(e(663)) * (-parseInt(e(602)) / 2) +
-                    parseInt(e(594)) / 3 +
-                    -parseInt(e(542)) / 4 +
-                    -parseInt(e(618)) / 5 +
-                    (-parseInt(e(525)) / 6) * (-parseInt(e(435)) / 7) +
-                    -parseInt(e(653)) / 8 +
-                    (parseInt(e(470)) / 9) * (-parseInt(e(482)) / 10)
-            )
-                break;
-            t.push(t.shift());
-        } catch (e) {
-            t.push(t.shift());
-        }
-})();
 var voucher = getStorageValue("activeVoucher"),
-    activeMac = getStorageValue(_0x5873e6(612)),
+    activeMac = getStorageValue("activeMac"),
     tempMac = getStorageValue("tempMac"),
-    invalidUser = getStorageValue(_0x5873e6(614)),
+    invalidUser = getStorageValue("invalidUser"),
     insertcoinbg = new Audio(),
     coinCount = new Audio(),
     dateNow = Date.now(),
     totalCoinReceived = 0,
     extendTimeCriteria = 0,
-    vcTopUp = !1,
+    vcTopUp = false,
     voucherToConvert = "",
     macVoucher = "",
     vendorIpAddress = "",
@@ -40,1200 +20,1016 @@ var voucher = getStorageValue("activeVoucher"),
     portal_key = "",
     intervalID = null,
     timer = null,
-    insertingCoin = !1,
-    username_only = !1,
-    pause = !1,
-    trial = !1,
-    unlimited = !1,
-    randomtempMac = !1,
-    prefix = !1,
-    coinslotExit = !1,
-    pause_button = !0,
-    member_logout_button = !0,
-    trial_logout_button = !0,
-    subscription = !1,
+    insertingCoin = false,
+    username_only = false,
+    pause = false,
+    trial = false,
+    unlimited = false,
+    randomtempMac = false,
+    prefix = false,
+    coinslotExit = false,
+    pause_button = true,
+    member_logout_button = true,
+    trial_logout_button = true,
+    subscription = false,
     subscription_prefix = [],
-    body = document[_0x5873e6(492)]("body"),
-    interfaceName = body[_0x5873e6(516)][_0x5873e6(502)],
-    icmodal = document[_0x5873e6(540)](_0x5873e6(475)),
-    insertBtn = document[_0x5873e6(492)](_0x5873e6(558)),
-    svmodal = document[_0x5873e6(540)](_0x5873e6(644)),
-    pauseBtn = document.getElementById(_0x5873e6(415)),
-    dialog = document[_0x5873e6(540)]("[data-dialog]"),
-    trlmodal = document[_0x5873e6(540)]("[data-trial]"),
-    ssid = document.querySelector(_0x5873e6(556)),
-    vendor = document.querySelector(_0x5873e6(534)),
-    selectVendo = document[_0x5873e6(492)](_0x5873e6(560)),
-    link = document[_0x5873e6(492)]("link");
-(body[_0x5873e6(420)][_0x5873e6(503)] = _0x5873e6(464)), (pauseBtn[_0x5873e6(420)].pointerEvents = _0x5873e6(464));
+    body = document.getElementById("body"),
+    interfaceName = body.dataset.interface,
+    icmodal = document.querySelector("[data-insert-coin]"),
+    insertBtn = document.getElementById("insertBtn"),
+    svmodal = document.querySelector("[data-select-vendo]"),
+    pauseBtn = document.getElementById("pauseBtn"),
+    dialog = document.querySelector("[data-dialog]"),
+    trlmodal = document.querySelector("[data-trial]"),
+    ssid = document.querySelector("[data-ssid]"),
+    vendor = document.querySelector("[data-vendo]"),
+    selectVendo = document.getElementById("selectVendo"),
+    link = document.getElementById("link");
+
+body.style.display = "none";
+pauseBtn.style.pointerEvents = "none";
+
 var ajaxsettings = new XMLHttpRequest();
+
 function api() {
-    var n = _0x5873e6,
-        o = document.getElementById("exp"),
-        a = document[n(492)](n(589)),
-        i = document[n(492)](n(468)),
-        r = document.getElementById("memberBtn"),
-        s = document.getElementById("userID"),
-        e = new XMLHttpRequest();
-    e[n(660)]("GET", "/api", !0),
-        e.send(),
-        (e[n(569)] = function () {
-            var e,
-                t = n;
-            4 == this[t(584)] &&
-                (200 == this[t(589)]
-                    ? ((e = JSON.parse(this[t(530)])),
-                      (mac = e.mac),
-                      (macNoColon = replaceAll(mac, ":")),
-                      (ipAddress = e.ip),
-                      (a[t(472)] = e[t(589)]),
-                      (apiStatus = e[t(589)]),
-                      (null != voucher && "" != voucher) || (voucher = macNoColon),
-                      insertingCoin
-                          ? ((o[t(472)] = "Loading..."),
-                            setTimeout(function () {
-                                getValidity(1);
-                            }, 3e3))
-                          : getData(1),
-                      e[t(589)] == t(596)
-                          ? ("yes" == e[t(436)] &&
-                                setTimeout(function () {
-                                    openModal(trlmodal);
-                                }, 1e3),
-                            null !== getCookie(t(421)) &&
-                                ((i.innerHTML = getCookie(t(421))),
-                                (a[t(472)] = "Time Paused"),
-                                (pauseBtn[t(420)][t(503)] = t(469))),
-                            tempMac !== mac && null !== tempMac && (randomtempMac = !0),
-                            (pauseBtn.style[t(434)] = "auto"),
-                            intervalManager(0),
-                            (r[t(420)][t(434)] = t(416)),
-                            (body[t(420)][t(503)] = t(469)))
-                          : "Connected" == e[t(589)] &&
-                            ((voucher = e.voucher),
-                            e[t(455)] !== t(436) && setStorageValue(t(458), voucher),
-                            null !== getCookie(t(421)) && eraseCookie(t(421)),
-                            removeStorageValue(t(614)),
-                            (r[t(420)][t(434)] = t(464)),
-                            setStorageValue(t(535), mac),
-                            (pause = !1),
-                            (a[t(472)] = t(657)),
-                            (null != activeMac && null != activeMac) || setStorageValue(t(612), mac),
-                            pause_button
-                                ? prefix ||
-                                  ((pauseBtn.style.display = t(469)),
-                                  (pauseBtn[t(420)][t(434)] = "auto"),
-                                  (pauseBtn[t(472)] = "Pause"))
-                                : ((pauseBtn[t(420)][t(503)] = t(464)), (pauseBtn[t(420)][t(434)] = t(464))),
-                            subscription &&
-                                (0 === voucher[t(466)](subscription_prefix[0]) ||
-                                    0 === voucher[t(466)](subscription_prefix[1]) ||
-                                    0 === voucher[t(466)](subscription_prefix[2]) ||
-                                    (0 === voucher[t(466)](subscription_prefix[3]) && voucher[t(609)] < 12)) &&
-                                ((insertBtn[t(420)][t(503)] = t(464)),
-                                (pauseBtn[t(420)][t(503)] = t(464)),
-                                (prefix = !0),
-                                (document.querySelector(t(520))[t(420)][t(503)] = t(464)),
-                                (i[t(567)] = t(593))),
-                            null != e[t(598)] || prefix
-                                ? e.loginBy == t(436) || voucher == "T-" + mac
-                                    ? (intervalManager(!0, animate, 1e3),
-                                      (trial = !0),
-                                      (insertBtn[t(420)][t(503)] = t(464)),
-                                      (document.querySelector(t(520))[t(420)][t(503)] = t(464)),
-                                      trial_logout_button
-                                          ? ((pauseBtn[t(420)][t(503)] = t(469)),
-                                            (pauseBtn[t(420)][t(434)] = "auto"),
-                                            (pauseBtn[t(472)] = t(621)))
-                                          : (pauseBtn.style[t(503)] = t(464)))
-                                    : prefix ||
-                                      (intervalManager(!0, animate, 1e3), (i[t(567)] = secondsToDhms(e[t(598)])))
-                                : ((unlimited = !0),
-                                  intervalManager(0),
-                                  (i[t(567)] = t(582)),
-                                  (insertBtn.style.display = t(464)),
-                                  member_logout_button
-                                      ? ((pauseBtn[t(420)].display = "block"),
-                                        (pauseBtn.style[t(434)] = "auto"),
-                                        (pauseBtn[t(472)] = t(621)))
-                                      : (pauseBtn.style.display = "none"),
-                                  (document[t(540)](t(520)).style[t(503)] = "none")),
-                            (body[t(420)][t(503)] = t(469))),
-                      voucher != macNoColon &&
-                          (voucher == "T-" + mac
-                              ? (s[t(567)] = "<td><p><b>User:</b></td><td><b>TRIAL</b></td>")
-                              : (s.innerHTML = t(564) + voucher + "</span></td>")))
-                    : (body[t(420)][t(503)] = "block"));
-        });
-}
-function getValidity(o) {
-    var e,
-        t,
-        a = _0x5873e6,
-        i = document.getElementById(a(533));
-    5 < o
-        ? (i[a(472)] = a(554))
-        : ((e = null == activeMac || null == activeMac ? macNoColon : replaceAll(activeMac, ":")),
-          (t = new XMLHttpRequest())[a(660)](a(630), a(537) + e + a(603), !0),
-          t[a(588)](a(643), a(413)),
-          t[a(588)](a(655), a(411)),
-          t[a(431)](),
-          (t[a(569)] = function () {
-              var e,
-                  t,
-                  n = a;
-              4 == this[n(584)] &&
-                  (200 == this[n(589)]
-                      ? ((t = (e = this[n(530)])[n(474)]("#")),
-                        (i[n(472)] = t[1]),
-                        50 < e.length &&
-                            ((i[n(472)] = n(629)),
-                            setTimeout(function () {
-                                getValidity(o + 1);
-                            }, 1e3)))
-                      : (i.textContent = n(554)));
-          }));
-}
-function getData(o) {
-    var e,
-        t,
-        a = _0x5873e6,
-        i = document[a(492)](a(533));
-    5 < o
-        ? fallbackData()
-        : ((e = null == activeMac || null == activeMac ? macNoColon : replaceAll(activeMac, ":")),
-          (pauseBtn[a(567)] = a(590)),
-          (t = new XMLHttpRequest()).open("GET", a(537) + e + ".txt", !0),
-          t.setRequestHeader(a(643), a(413)),
-          t[a(588)]("Pragma", a(411)),
-          t[a(431)](),
-          (t.onreadystatechange = function () {
-              var e = a;
-              if (4 == this.readyState)
-                  if (200 == this[e(589)]) {
-                      var t = this[e(530)],
-                          n = t[e(474)]("#");
-                      if (((macVoucher = n[0]), (i[e(472)] = n[1]), 50 < t[e(609)]))
-                          return (
-                              (i[e(472)] = e(629)),
-                              void setTimeout(function () {
-                                  getData(o + 1);
-                              }, 1e3)
-                          );
-                      "Disconnected" == apiStatus
-                          ? ((pauseBtn[e(420)].pointerEvents = e(416)),
-                            (pause = !0),
-                            null == voucher
-                                ? ((macVoucher == e(624) && "" == macVoucher) || (voucher = macVoucher),
-                                  (pauseBtn[e(472)] = "Connect"))
-                                : (pauseBtn[e(472)] = "Resume"),
-                            null == invalidUser && getTimeleft())
-                          : unlimited || (pauseBtn[e(472)] = e(610));
-                  } else fallbackData();
-          }));
-}
-function fallbackData() {
-    var e = _0x5873e6,
-        t = document[e(492)](e(533)),
-        n = document[e(492)](e(589));
-    apiStatus !== e(657)
-        ? (null == invalidUser && getTimeleft(),
-          (pauseBtn[e(420)][e(434)] = "auto"),
-          (pause = !0),
-          n[e(472)] == e(596) ? (pauseBtn.textContent = e(488)) : (pauseBtn[e(472)] = e(513)))
-        : (t[e(472)] = e(554));
-}
-function getTimeleft() {
-    var e = _0x5873e6;
-    randomtempMac
-        ? setTimeout(function () {
-              doConnect(!1, !1, voucher);
-          }, 300)
-        : null == getCookie(e(421)) &&
-          setTimeout(function () {
-              doConnect(!1, !0, voucher);
-          }, 300);
-}
-function paused(e) {
-    var n = _0x5873e6,
-        o = document[n(492)]("status");
-    (pauseBtn[n(420)].pointerEvents = "none"),
-        (timeleft = document[n(492)](n(468))),
-        (pauseBtn[n(567)] = '<div class="loader"></div>'),
-        setTimeout(function () {
-            var e,
-                t = n;
-            (pauseBtn.style[t(434)] = t(416)),
-                pause
-                    ? doConnect(!1, !1, voucher)
-                    : (intervalManager(0),
-                      (e = new XMLHttpRequest())[t(660)](t(447), t(450), !0),
-                      e[t(588)](t(505), t(622)),
-                      e[t(431)](t(490)),
-                      (e[t(569)] = function () {
-                          var e = t;
-                          4 == this[e(584)] &&
-                              200 == this.status &&
-                              (unlimited
-                                  ? (removeStorageValue(e(612)),
-                                    removeStorageValue(e(535)),
-                                    removeStorageValue(e(458)),
-                                    location.reload())
-                                  : trial
-                                    ? location[e(511)]()
-                                    : ((o[e(472)] = e(649)),
-                                      (pauseBtn.textContent = e(513)),
-                                      setCookie(e(421), timeleft.innerHTML, 30)));
-                      }),
-                      (pause = !0));
-        }, e);
-}
-function doConnect(t, n, e, o) {
-    var a = _0x5873e6,
-        i = document[a(540)](a(654)),
-        r = document[a(492)]("status");
-    t
-        ? (closeModal(i),
-          openModal(dialog),
-          (dialog.querySelector(a(578))[a(420)][a(503)] = a(464)),
-          (dialog.querySelector(a(515))[a(472)] = a(627)))
-        : (o = username_only ? "" : e);
-    i = new XMLHttpRequest();
-    i.open(a(447), a(442), !0),
-        (i[a(569)] = function () {
-            var e = a;
-            4 == this[e(584)] &&
-                200 == this[e(589)] &&
-                ("" != this.responseText[e(474)](e(638))[0]
-                    ? t
-                        ? ((dialog[e(540)](e(515))[e(472)] = e(491)),
-                          setTimeout(function () {
-                              closeModal(dialog);
-                          }, 1500))
-                        : (null !== getCookie(e(421)) && eraseCookie(e(421)),
-                          removeStorageValue(e(612)),
-                          removeStorageValue(e(535)),
-                          removeStorageValue(e(458)),
-                          (document[e(492)]("timer")[e(567)] = secondsToDhms(0)),
-                          (r.textContent = "Disconnected"),
-                          n
-                              ? setStorageValue(e(614), "true")
-                              : ((dialog.querySelector(".progress-bar")[e(420)][e(503)] = e(464)),
-                                openModal(dialog),
-                                (dialog.querySelector(".header")[e(472)] = "Invalid Voucher!"),
-                                setTimeout(function () {
-                                    (pauseBtn.textContent = e(488)), closeModal(dialog);
-                                }, 1500)))
-                    : (t
-                          ? ((dialog[e(540)](e(515)).textContent = e(539)),
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1500))
-                          : n && paused(300),
-                      api()));
-        }),
-        i[a(431)](a(538) + e + a(640) + o);
-}
-function _0x486d() {
-    var e = [
-        '<div class="inner-wrapper"><div id="min">',
-        "75%",
-        "Done Paying",
-        "&convertVoucher=",
-        "220iNKKGi",
-        "assets/sounds/insertcoinbg.mp3?date=",
-        "offline",
-        "[data-gcash]",
-        "Done",
-        "--color-primary",
-        "Connect",
-        "=; Max-Age=-99999999;",
-        "erase-cookie=true",
-        "Invalid Username or Password!",
-        "getElementById",
-        "remainTime",
-        "[data-wr-close]",
-        "href",
-        "setProperty",
-        "&mac=",
-        "onerror",
-        "vendoName",
-        "[data-ic-close]",
-        "getTime",
-        "interface",
-        "display",
-        "loop",
-        "Content-Type",
-        "documentElement",
-        "voucher=",
-        "Days ",
-        "<td>",
-        "#totalCoin",
-        "reload",
-        "parse",
-        "Resume",
-        "add",
-        ".header",
-        "dataset",
-        "errorCode",
-        "textcolor",
-        "footer_link",
-        ".btn-group .input-group",
-        "pause",
-        "[data-ml-close]",
-        "removeItem",
-        "text/plain",
-        "23898ESNSIR",
-        "validity",
-        "erase-cookie=false",
-        "insertcoin",
-        "You have been banned from using coin slot, due to multiple request for insert coin, please try again later!",
-        "responseText",
-        '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">',
-        "voucher_input",
-        "exp",
-        "[data-vendo]",
-        "tempMac",
-        "Error connecting to ",
-        "/data/",
-        "username=",
-        "Connected Successfully!",
-        "querySelector",
-        "Insert Coin",
-        "35032kKpFsY",
-        "/api",
-        "; expires=",
-        "Please Insert Coin",
-        "show",
-        ", Please check your wifi connection",
-        "Login to Connect",
-        "Coinslot was cancelled",
-        "[data-sv-close]",
-        "subscription_prefix",
-        "&extendTime=",
-        "[data-message]",
-        "Not Available",
-        "coinslot.busy",
-        "[data-ssid]",
-        "now",
-        "insertBtn",
-        "--:--",
-        "selectVendo",
-        "/topUp",
-        "rates",
-        "ratesBody",
-        "<td><p><b>User:</b></td><td><span>",
-        "ratesBtn",
-        "/cancelTopUp",
-        "innerHTML",
-        "dst=&username=T-",
-        "onreadystatechange",
-        "Muser",
-        "&amount=",
-        "Converting, Please wait!",
-        "</td>",
-        " Days ",
-        "hour",
-        "Retrying, Please wait!",
-        "mac",
-        ".progress-bar",
-        "--background",
-        "totalCoin",
-        "100%",
-        '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>UNLIMITED</div><div></div></div></div>',
-        "load",
-        "readyState",
-        "[data-rates]",
-        '<div class="d-flex flex-fill align-content-stretch">',
-        "memberBtn",
-        "setRequestHeader",
-        "status",
-        '<div class="loader"></div>',
-        "auto_pause",
-        ".00</td>",
-        '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>Subscription</div><div></div></div></div>',
-        "4386195lnUAuG",
-        "gcash_payment",
-        "Disconnected",
-        "internet_status",
-        "timeleft",
-        "gcAmount",
-        "Note: Changes takes effects only after uploading to mikrotik",
-        '<div class="inner-wrapper"><div id="hr">',
-        "8578ucgAtZ",
-        ".txt",
-        "30%",
-        "Cancel",
-        "modal-active",
-        "toUTCString",
-        "Reading coin, please wait",
-        "length",
-        "Pause",
-        "No Pause Time",
-        "activeMac",
-        "Force login, Please wait!",
-        "invalidUser",
-        "settings.json",
-        '</div><div>hours</div></div><div class="inner-wrapper"><div id="min">',
-        "VendoAddresses",
-        "3377940ZAXBfT",
-        "[data-gc-pay]",
-        "remove",
-        "Logout",
-        "application/x-www-form-urlencoded",
-        "gcNumber",
-        "null",
-        "custom_theme",
-        "no.internet.detected",
-        "Checking User...",
-        "setInterval",
-        "Loading...",
-        "GET",
-        "</tr>",
-        "[data-msg-close]",
-        "down",
-        "</div><div>seconds</div></div></div>",
-        "Processing, Please wait!",
-        "coin.is.reading",
-        "Error!",
-        "<script>",
-        "vendoIp",
-        "&password=",
-        "Retrying, Please Wait!",
-        "<tr>",
-        "Expires",
-        "[data-select-vendo]",
-        "min",
-        "substring",
-        "</div><div>day</div></div>",
-        "#validity",
-        "Time Paused",
-        "#totalTime",
-        "Coin slot is busy, Please try again later",
-        "pause_button",
-        "3672472OYjNEs",
-        "[data-member]",
-        "Pragma",
-        "&ipAddress=",
-        "Connected",
-        "</div><div>days</div></div>",
-        "onclick",
-        "open",
-        "/useVoucher",
-        "</div><div>seconds</div></div>",
-        "151enXMxH",
-        "Coin slot expired",
-        "true",
-        "no-cache",
-        "--container",
-        "Tue, 01 Jan 1980 1:00:00 GMT",
-        "floor",
-        "pauseBtn",
-        "auto",
-        "play",
-        "Mpass",
-        "vendo_option",
-        "style",
-        "timeLeft",
-        '<button type="button" class="btn btn-primary" onclick="insertBtnManual(this)" data-vendo-ip="',
-        "setItem",
-        "Connecting, Please wait!",
-        "charAt",
-        "Wifi Rates",
-        "http://",
-        "ssid",
-        "Invalid Voucher",
-        "src",
-        "send",
-        "false",
-        "/getRates?date=",
-        "pointerEvents",
-        "77nUytkD",
-        "trial",
-        "Unlimited",
-        "0h:0m",
-        "waitTime",
-        "submit",
-        "50%",
-        "/login",
-        "gcashBtn",
-        "Settings",
-        "mlBody",
-        "replace",
-        "POST",
-        " Day ",
-        "value",
-        "/logout",
-        "no_internet_settings",
-        "[data-dialog]",
-        "footer_text",
-        "username",
-        "loginBy",
-        "classList",
-        "Content-type",
-        "activeVoucher",
-        "Voucher checking, Please wait!",
-        "internet_status_text",
-        "width",
-        "#message",
-        " is offline!",
-        "none",
-        "cookie",
-        "indexOf",
-        "clear",
-        "timer",
-        "block",
-        "95085GpAhRz",
-        "currentTime",
-        "textContent",
-        "timeAdded",
-        "split",
-        "[data-insert-coin]",
-        "coin.not.inserted",
-        "assets/sounds/coinreceived.mp3?date=",
-    ];
-    return (_0x486d = function () {
-        return e;
-    })();
-}
-function forceLogin() {
-    var e = _0x5873e6,
-        t = document[e(540)](e(452));
-    (t[e(540)](e(578))[e(420)][e(461)] = e(581)),
-        (t[e(540)](".header")[e(472)] = e(486)),
-        setTimeout(function () {
-            closeModal(t), api();
-        }, 250);
-}
-function insertBtnManual(e) {
-    var t = _0x5873e6,
-        n = e.dataset,
-        o = document[t(540)](t(556)),
-        e = document.querySelector(t(534));
-    closeModal(svmodal),
-        (insertBtn[t(420)].pointerEvents = "none"),
-        (insertBtn[t(567)] = t(590)),
-        (vendorIpAddress = n[t(639)]),
-        (o[t(567)] = n[t(428)]),
-        (e[t(567)] = n.vendoName),
-        (vcTopUp = !1),
-        insertCoin(0),
-        setStorageValue(t(639), n.vendoIp),
-        setStorageValue(t(428), n.ssid),
-        setStorageValue(t(499), n[t(499)]);
-}
-function insertCoin(n) {
-    var o = _0x5873e6;
-    (document[o(540)](o(650))[o(472)] = o(559)),
-        (document.querySelector(o(648))[o(472)] = o(559)),
-        removeStorageValue("invalidUser");
-    var t = getStorageValue(o(458));
-    extendTimeCriteria = null == t ? 0 : 1;
-    t = new XMLHttpRequest();
-    return (
-        t[o(660)](o(447), o(427) + vendorIpAddress + o(561), !0),
-        t[o(588)](o(457), o(622)),
-        (t[o(569)] = function () {
-            var e,
-                t = o;
-            4 == this[t(584)] &&
-                200 == this[t(589)] &&
-                ((e = JSON.parse(this.responseText))[t(589)] == t(410)
-                    ? (vcTopUp
-                          ? ((dialog[t(540)](".progress-bar")[t(420)][t(503)] = t(469)),
-                            (dialog[t(540)](".progress-bar").style[t(461)] = "10%"),
-                            (dialog[t(540)](t(515))[t(472)] = t(459)),
-                            convertextVoucher(),
-                            openModal(dialog))
-                          : (audioPlay(!0),
-                            (coinslotExit = !1),
-                            (icmodal[t(540)](t(515)).textContent = t(545)),
-                            (insertBtn[t(420)][t(434)] = t(416)),
-                            (insertBtn[t(472)] = t(541)),
-                            (icmodal[t(540)](t(578))[t(420)][t(461)] = "100%"),
-                            (document[t(540)](t(500))[t(472)] = t(605)),
-                            null == timer &&
-                                (timer = window[t(628)](function () {
-                                    checkCoin();
-                                }, 1e3)),
-                            openModal(icmodal)),
-                      (voucher = e.voucher),
-                      (insertingCoin = !0))
-                    : (notifyCoinSlotError(e[t(517)]), (timer = null), clearInterval(timer)));
-        }),
-        (t[o(498)] = function () {
-            var t = o;
-            n < 5
-                ? ((insertBtn[t(420)][t(434)] = t(464)),
-                  openModal(dialog),
-                  (dialog[t(540)](t(578))[t(420)][t(503)] = t(464)),
-                  (dialog[t(540)](".header")[t(472)] = t(641)),
-                  setTimeout(function () {
-                      insertCoin(e, n + 1);
-                  }, 1e3))
-                : ((dialog.querySelector(t(515))[t(472)] = vendor.textContent + t(463)),
-                  setTimeout(function () {
-                      closeModal(dialog);
-                  }, 1500),
-                  (insertBtn[t(472)] = t(541)),
-                  (insertBtn.style.pointerEvents = "auto"));
-        }),
-        t.send(o(507) + voucher + o(497) + mac + o(656) + ipAddress + o(552) + extendTimeCriteria),
-        (totalCoinReceived = 0),
-        !1
-    );
-}
-function checkCoin() {
-    var s = _0x5873e6,
-        e = new XMLHttpRequest();
-    e[s(660)](s(447), s(427) + vendorIpAddress + "/checkCoin", !0),
-        e[s(588)](s(457), s(622)),
-        e[s(431)](s(507) + voucher),
-        (e.onreadystatechange = function () {
-            var e,
-                t,
-                n,
-                o,
-                a,
-                i,
-                r = s;
-            4 == this[r(584)] &&
-                200 == this[r(589)] &&
-                ((e = JSON[r(512)](this[r(530)])),
-                (totalCoinReceived = parseInt(e[r(580)])),
-                vcTopUp
-                    ? "true" == e.status
-                        ? (setStorageValue(r(458), voucher),
-                          null !== intervalID &&
-                              (intervalManager(0),
-                              (a = new XMLHttpRequest()).open(r(447), r(450), !0),
-                              a[r(431)]("erase-cookie=false")))
-                        : "coin.not.inserted" == e[r(517)]
-                          ? donepaying()
-                          : e[r(517)] == r(555)
-                            ? (clearInterval(timer),
-                              0 == totalCoinReceived ? insertCoinhidden(!0, r(549)) : donepaying())
-                            : clearInterval(timer)
-                    : ((t = document.querySelector(r(648))),
-                      (n = document[r(540)](r(500))),
-                      (o = document[r(540)](r(650))),
-                      "true" == e.status
-                          ? ((n.style[r(434)] = "none"),
-                            setStorageValue("activeVoucher", voucher),
-                            null !== intervalID &&
-                                (intervalManager(0),
-                                (i = new XMLHttpRequest()).open("POST", r(450), !0),
-                                i[r(431)](r(527))),
-                            (document.querySelector(r(510))[r(472)] = currency + " " + e.totalCoin),
-                            0 == e.timeAdded ? (o[r(472)] = "--:--") : (o[r(472)] = credits(parseInt(e[r(473)]))),
-                            0 == e[r(526)] ? (t[r(472)] = r(559)) : (t[r(472)] = credits(parseInt(60 * e[r(526)]))),
-                            coindropPlay())
-                          : e[r(517)] == r(636)
-                            ? ((icmodal[r(540)](".header")[r(472)] = r(608)),
-                              (n[r(472)] = "Wait"),
-                              (n[r(420)][r(434)] = "none"))
-                            : e[r(517)] == r(476)
-                              ? ((totalCoinReceived = parseInt(e[r(580)])),
-                                (n[r(420)][r(434)] = r(416)),
-                                coinslotExit || (icmodal[r(540)](r(515))[r(472)] = r(545)),
-                                (a = parseInt(parseInt(e[r(493)]) / 1e3)),
-                                (i = parseFloat(e[r(439)])),
-                                (i = parseInt(((1e3 * a) / i) * 100)),
-                                0 < totalCoinReceived && (n[r(472)] = r(480)),
-                                0 == a
-                                    ? 0 < totalCoinReceived
-                                        ? donepaying()
-                                        : insertCoinhidden(!0, r(664))
-                                    : ((document[r(540)]("#totalCoin")[r(472)] = currency + " " + e[r(580)]),
-                                      0 == e[r(473)]
-                                          ? (o.textContent = r(559))
-                                          : (o[r(472)] = credits(parseInt(e[r(473)]))),
-                                      0 == e[r(526)]
-                                          ? (t[r(472)] = "--:--")
-                                          : (t.textContent = credits(parseInt(60 * e.validity))),
-                                      (icmodal[r(540)](r(578))[r(420)][r(461)] = i + "%")))
-                              : e[r(517)] == r(555)
-                                ? (audioPlay(!1),
-                                  clearInterval(timer),
-                                  0 == totalCoinReceived ? insertCoinhidden(!0, r(549)) : donepaying())
-                                : clearInterval(timer)));
-        });
-}
-function donepaying() {
-    var e,
-        t = _0x5873e6;
-    0 < totalCoinReceived
-        ? (vcTopUp || (audioPlay(!1), closeModal(icmodal)),
-          clearInterval(timer),
-          (timer = null),
-          openModal(dialog),
-          (dialog[t(540)](t(578))[t(420)][t(461)] = t(441)),
-          (dialog[t(540)](t(515)).textContent = t(635)),
-          (e = new XMLHttpRequest())[t(660)](t(447), t(427) + vendorIpAddress + t(661), !0),
-          e[t(588)]("Content-type", t(622)),
-          e[t(431)]("voucher=" + voucher),
-          (e.onreadystatechange = function () {
-              var e = t;
-              4 == this[e(584)] &&
-                  200 == this.status &&
-                  (JSON[e(512)](this.responseText)[e(589)] == e(410)
-                      ? ((dialog[e(540)](".progress-bar")[e(420)][e(461)] = e(479)),
-                        (dialog[e(540)](".header")[e(472)] = e(424)),
-                        setTimeout(function () {
-                            forceLogin();
-                        }, 250))
-                      : insertCoinhidden(!1));
-          }),
-          (e[t(498)] = function () {
-              var e = t;
-              (dialog[e(540)](e(578))[e(420)][e(461)] = e(479)),
-                  (dialog[e(540)](e(515))[e(472)] = e(613)),
-                  setTimeout(function () {
-                      forceLogin();
-                  }, 3e3);
-          }))
-        : insertCoinhidden(!1);
-}
-function convertextVoucher() {
-    var n = _0x5873e6,
-        e = document.getElementById(n(454))[n(449)];
-    voucherToConvert = e;
-    e = new XMLHttpRequest();
-    e[n(660)](n(447), n(427) + vendorIpAddress + "/convertVoucher", !0),
-        e[n(588)](n(505), n(622)),
-        e[n(431)](n(507) + voucher + n(481) + voucherToConvert),
-        (e.onreadystatechange = function () {
-            var t = n;
-            4 == this[t(584)] &&
-                200 == this[t(589)] &&
-                (JSON.parse(this.responseText)[t(589)] == t(432)
-                    ? insertCoinhidden(!0, t(429))
-                    : null == timer &&
-                      (timer = window[t(628)](function () {
-                          var e = t;
-                          (dialog[e(540)](".progress-bar")[e(420)].width = e(604)),
-                              (dialog[e(540)](e(515))[e(472)] = e(572)),
-                              checkCoin();
-                      }, 1e3)),
-                (document[t(492)](t(454))[t(449)] = ""));
-        }),
-        (e[n(498)] = function () {
-            var e = n;
-            document[e(492)]("username")[e(449)] = "";
-        });
-}
-function insertCoinhidden(e, t) {
-    var n = _0x5873e6;
-    closeModal(icmodal),
-        clearInterval(timer),
-        (timer = null),
-        (insertingCoin = !1),
-        vcTopUp || audioPlay(!1),
-        e &&
-            ((dialog[n(540)](n(578)).style.display = n(464)),
-            openModal(dialog),
-            (coinslotExit = !0),
-            (dialog[n(540)](n(515))[n(472)] = t),
-            setTimeout(function () {
-                closeModal(dialog);
-            }, 2e3)),
-        0 == totalCoinReceived && cancelTopUp();
-}
-function cancelTopUp() {
-    var e = _0x5873e6,
-        t = new XMLHttpRequest();
-    t[e(660)]("POST", e(427) + vendorIpAddress + e(566), !0),
-        t[e(588)](e(505), "application/x-www-form-urlencoded"),
-        t[e(431)](e(507) + voucher + e(497) + mac);
-}
-function getWifiRate(n) {
-    var d = _0x5873e6,
-        p = document[d(492)](d(565)),
-        m = document[d(492)](d(563));
-    (document[d(492)]("ratesBody")[d(420)][d(503)] = d(469)),
-        (p[d(420)].pointerEvents = "none"),
-        (m.style[d(503)] = "none"),
-        (wrmodal = document[d(540)]("[data-rates]")),
-        (p[d(567)] = d(590));
-    var e = new XMLHttpRequest();
-    e.open(d(630), d(427) + vendorIpAddress + d(433) + Date[d(557)](), !0),
-        e[d(588)](d(457), d(524)),
-        e[d(431)](),
-        (e[d(569)] = function () {
-            var s = d;
-            if (4 == this.readyState && 200 == this[s(589)]) {
-                var e = this[s(530)];
-                (p.style[s(434)] = s(416)),
-                    (m[s(420)][s(503)] = "block"),
-                    (p[s(472)] = s(426)),
-                    (wrmodal[s(540)](s(515))[s(472)] = s(426)),
-                    openModal(wrmodal);
-                var t,
-                    n = e[s(474)]("|"),
-                    o = "";
-                for (t in n) {
-                    var a = n[t][s(474)]("#"),
-                        i = 60 * parseInt(a[2]),
-                        r = 60 * parseInt(a[3]);
-                    function c(e) {
-                        var t = s,
-                            n = Math[t(414)](e / 86400),
-                            o = Math[t(414)]((e % 86400) / 3600),
-                            a = Math[t(414)]((e % 3600) / 60),
-                            i = 0 < n ? n + (1 === n ? "Day " : t(508)) : "",
-                            r = 0 < o ? o + "" : "0",
-                            e = 0 < a ? a + "" : "0";
-                        return 0 < n && 0 == o && 0 == a
-                            ? i
-                            : 0 < a && 0 == o && 0 == n
-                              ? e + t(645)
-                              : 0 < o && 0 == a && 0 == n
-                                ? r + t(575)
-                                : i + r + "h:" + e + "m";
+    var expEl = document.getElementById("exp"),
+        statusEl = document.getElementById("status"),
+        timerEl = document.getElementById("timer"),
+        memberBtnEl = document.getElementById("memberBtn"),
+        userIDEl = document.getElementById("userID"),
+        xhr = new XMLHttpRequest();
+
+    xhr.open("GET", "/api", true);
+    xhr.send();
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState) {
+            if (200 == this.status) {
+                var e = JSON.parse(this.responseText);
+                mac = e.mac;
+                macNoColon = replaceAll(mac, ":");
+                ipAddress = e.ip;
+                statusEl.textContent = e.status;
+                apiStatus = e.status;
+                if (voucher == null || voucher == "") voucher = macNoColon;
+
+                if (insertingCoin) {
+                    expEl.textContent = "Loading...";
+                    setTimeout(function () { getValidity(1); }, 3000);
+                } else {
+                    getData(1);
+                }
+
+                if (e.status == "Disconnected") {
+                    if ("yes" == e.trial) {
+                        setTimeout(function () { openModal(trlmodal); }, 1000);
                     }
-                    var l = c(i),
-                        u = c(r);
-                    u == s(438) || 0 == r ? (u = s(437)) : i == r && (u = s(611)),
-                        (o =
-                            (o = (o = (o += s(642)) + s(509) + currency + " " + a[1] + s(592)) + s(509) + l + "</td>") +
-                            s(509) +
-                            u +
-                            s(573)),
-                        (o += s(631)),
-                        (document[s(492)](s(562))[s(567)] = o);
+                    if (getCookie("timeLeft") !== null) {
+                        timerEl.innerHTML = getCookie("timeLeft");
+                        statusEl.textContent = "Time Paused";
+                        pauseBtn.style.display = "block";
+                    }
+                    if (tempMac !== mac && tempMac !== null) randomtempMac = true;
+                    pauseBtn.style.pointerEvents = "auto";
+                    intervalManager(0);
+                    memberBtnEl.style.display = "block";
+                    body.style.display = "block";
+                } else if ("Connected" == e.status) {
+                    voucher = e.voucher;
+                    if (e.loginBy !== "trial") setStorageValue("activeVoucher", voucher);
+                    if (getCookie("timeLeft") !== null) eraseCookie("timeLeft");
+                    removeStorageValue("invalidUser");
+                    memberBtnEl.style.display = "none";
+                    setStorageValue("activeMac", mac);
+                    pause = false;
+                    statusEl.textContent = "Connected";
+                    if (activeMac == null || activeMac == null) setStorageValue("activeMac", mac);
+
+                    if (pause_button) {
+                        if (!prefix) {
+                            pauseBtn.style.display = "block";
+                            pauseBtn.style.pointerEvents = "auto";
+                            pauseBtn.textContent = "Pause";
+                        }
+                    } else {
+                        pauseBtn.style.display = "none";
+                        pauseBtn.style.pointerEvents = "none";
+                    }
+
+                    if (subscription && (
+                        0 === voucher.indexOf(subscription_prefix[0]) ||
+                        0 === voucher.indexOf(subscription_prefix[1]) ||
+                        0 === voucher.indexOf(subscription_prefix[2]) ||
+                        (0 === voucher.indexOf(subscription_prefix[3]) && voucher.length < 12)
+                    )) {
+                        insertBtn.style.display = "none";
+                        pauseBtn.style.display = "none";
+                        prefix = true;
+                        document.querySelector(".btn-group .input-group").style.display = "none";
+                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>Subscription</div><div></div></div></div>';
+                    }
+
+                    if (e.timeleft != null || prefix) {
+                        if (e.loginBy == "trial" || voucher == "T-" + mac) {
+                            intervalManager(true, animate, 1000);
+                            trial = true;
+                            insertBtn.style.display = "none";
+                            document.querySelector(".btn-group .input-group").style.display = "none";
+                            if (trial_logout_button) {
+                                pauseBtn.style.display = "block";
+                                pauseBtn.style.pointerEvents = "auto";
+                                pauseBtn.textContent = "Logout";
+                            } else {
+                                pauseBtn.style.display = "none";
+                            }
+                        } else if (!prefix) {
+                            intervalManager(true, animate, 1000);
+                            timerEl.innerHTML = secondsToDhms(e.timeleft);
+                        }
+                    } else {
+                        unlimited = true;
+                        intervalManager(0);
+                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>UNLIMITED</div><div></div></div></div>';
+                        insertBtn.style.display = "none";
+                        if (member_logout_button) {
+                            pauseBtn.style.display = "block";
+                            pauseBtn.style.pointerEvents = "auto";
+                            pauseBtn.textContent = "Logout";
+                        } else {
+                            pauseBtn.style.display = "none";
+                        }
+                        document.querySelector(".btn-group .input-group").style.display = "none";
+                    }
+                    body.style.display = "block";
+                }
+
+                if (voucher != macNoColon) {
+                    if (voucher == "T-" + mac) {
+                        userIDEl.innerHTML = "<td><p><b>User:</b></td><td><b>TRIAL</b></td>";
+                    } else {
+                        userIDEl.innerHTML = "<td><p><b>User:</b></td><td><span>" + voucher + "</span></td>";
+                    }
+                }
+            } else {
+                body.style.display = "block";
+            }
+        }
+    };
+}
+
+function getValidity(o) {
+    var expEl = document.getElementById("exp");
+    if (5 < o) {
+        expEl.textContent = "Not Available";
+    } else {
+        var mac_str = (activeMac == null || activeMac == null) ? macNoColon : replaceAll(activeMac, ":");
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/data/" + mac_str + ".txt", true);
+        xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
+        xhr.setRequestHeader("Pragma", "no-cache");
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (4 == this.readyState) {
+                if (200 == this.status) {
+                    var parts = this.responseText.split("#");
+                    expEl.innerHTML = parts[1];
+                    if (50 < this.responseText.length) {
+                        expEl.innerHTML = "Loading...";
+                        setTimeout(function () { getValidity(o + 1); }, 1000);
+                    }
+                } else {
+                    expEl.textContent = "Not Available";
                 }
             }
-        }),
-        (e[d(498)] = function () {
-            var e = d,
-                t = document[e(492)]("ratesBtn");
-            n < 4
-                ? (openModal(wrmodal),
-                  (wrmodal.querySelector(e(515))[e(472)] = e(576)),
-                  setTimeout(function () {
-                      getWifiRate(n + 1);
-                  }, 1e3))
-                : ((wrmodal[e(540)](e(515))[e(472)] = "Wifi rates is not availabe at this moment."),
-                  setTimeout(function () {
-                      closeModal(wrmodal);
-                  }, 2e3),
-                  (t[e(420)][e(434)] = e(416)),
-                  (t[e(472)] = e(426)));
-        });
-}
-ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
-    ajaxsettings[_0x5873e6(588)]("Expires", _0x5873e6(413)),
-    ajaxsettings[_0x5873e6(588)](_0x5873e6(655), _0x5873e6(411)),
-    ajaxsettings[_0x5873e6(431)](),
-    (ajaxsettings.onreadystatechange = function () {
-        var e = _0x5873e6;
-        if (4 == this[e(584)] && 200 == this[e(589)]) {
-            var t = JSON.parse(this.responseText);
-            if (
-                ((pause_button = t[e(444)][e(652)]),
-                (member_logout_button = t.Settings.member_logout_button),
-                (trial_logout_button = t[e(444)].trial_logout_button),
-                (currency = t.Settings.currency),
-                (username_only = t.Settings.username_only),
-                (link.href = t[e(444)][e(519)]),
-                (link[e(472)] = t[e(444)][e(453)]),
-                t.Settings[e(595)]
-                    ? ((payment_gateway = t[e(595)].payment_gateway), (portal_key = t[e(595)].portal_key))
-                    : (document[e(492)](e(443))[e(420)][e(503)] = e(464)),
-                t.Settings[e(532)] || (document[e(540)](".btn-group .input-group")[e(420)].display = e(464)),
-                t[e(444)].subscription && ((subscription = !0), (subscription_prefix = t[e(551)])),
-                0 == t[e(444)].vendo_option)
-            )
-                (ssid[e(567)] = t.VendoAddresses[0][e(428)]),
-                    (vendor[e(472)] = t[e(617)][0][e(499)]),
-                    (vendorIpAddress = t.VendoAddresses[0][e(639)]);
-            else if (1 == t[e(444)].vendo_option) {
-                (autoSelect = !1),
-                    null == getStorageValue(e(639))
-                        ? ((vendorIpAddress = t[e(617)][0][e(639)]),
-                          (ssid[e(567)] = t[e(617)][0][e(428)]),
-                          (vendor.innerHTML = t[e(617)][0][e(499)]),
-                          setStorageValue("vendoIp", t[e(617)][0][e(639)]),
-                          setStorageValue("ssid", t[e(617)][0][e(428)]),
-                          setStorageValue("vendoName", t[e(617)][0][e(499)]))
-                        : ((vendorIpAddress = getStorageValue("vendoIp")),
-                          (ssid[e(567)] = getStorageValue(e(428))),
-                          (vendor[e(567)] = getStorageValue(e(499))));
-                for (var n = 0; n < t[e(617)].length; n++)
-                    selectVendo[e(567)] =
-                        selectVendo[e(567)] +
-                        e(422) +
-                        t.VendoAddresses[n][e(639)] +
-                        '" data-ssid="' +
-                        t.VendoAddresses[n].ssid +
-                        '" data-vendo-name="' +
-                        t[e(617)][n][e(499)] +
-                        '">' +
-                        t[e(617)][n][e(499)] +
-                        "</button>";
-            } else if (2 == t.Settings[e(419)])
-                for (n = 0; n < t[e(617)][e(609)]; n++) {
-                    var o = interfaceName;
-                    t[e(617)][n].interfaceName == o &&
-                        ((ssid[e(567)] = t[e(617)][n][e(428)]),
-                        (vendor[e(472)] = t[e(617)][n][e(499)]),
-                        (vendorIpAddress = t[e(617)][n][e(639)]));
-                }
-            1 !== t[e(444)][e(419)] &&
-                ((autoSelect = !0),
-                removeStorageValue("vendoIp"),
-                removeStorageValue("ssid"),
-                removeStorageValue(e(499))),
-                api();
-        }
-    }),
-    (ajaxsettings[_0x5873e6(498)] = function () {
-        var e = _0x5873e6;
-        (body[e(420)].display = e(469)), alert(e(600));
-    }),
-    (insertBtn.onclick = function () {
-        var e = _0x5873e6;
-        autoSelect
-            ? ((insertBtn[e(420)][e(434)] = e(464)), (insertBtn[e(567)] = e(590)), (vcTopUp = !1), insertCoin(0))
-            : openModal(svmodal);
-    }),
-    (document[_0x5873e6(540)](_0x5873e6(500))[_0x5873e6(659)] = function () {
-        donepaying();
-    }),
-    (document[_0x5873e6(540)](_0x5873e6(550))[_0x5873e6(659)] = function () {
-        closeModal(svmodal);
-    }),
-    (document.querySelector(_0x5873e6(494))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6;
-        closeModal(document[e(540)](e(585)));
-    }),
-    (document.querySelector(_0x5873e6(522))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6;
-        closeModal(document[e(540)](e(654)));
-    }),
-    (document[_0x5873e6(540)](_0x5873e6(632))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6;
-        closeModal(document[e(540)](e(553)));
-    }),
-    (pauseBtn.onclick = function () {
-        paused(1e3);
-    }),
-    (document[_0x5873e6(492)](_0x5873e6(565))[_0x5873e6(659)] = function () {
-        getWifiRate(0);
-    }),
-    (document[_0x5873e6(492)](_0x5873e6(443))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6;
-        openModal(document[e(540)](e(485)));
-    }),
-    (document[_0x5873e6(540)]("[data-gc-close]")[_0x5873e6(659)] = function () {
-        var e = _0x5873e6;
-        closeModal(document[e(540)](e(485)));
-    }),
-    (document[_0x5873e6(540)](_0x5873e6(619))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6,
-            t = document.getElementById(e(623))[e(449)],
-            n = document[e(492)](e(599))[e(449)];
-        location[e(495)] = payment_gateway + "?portal_key=" + portal_key + "&mobile=" + t + e(571) + n;
-    }),
-    (document.getElementById(_0x5873e6(587))[_0x5873e6(659)] = function () {
-        var e = _0x5873e6,
-            t = document.querySelector(e(654));
-        (document.getElementById(e(445))[e(420)].display = e(469)),
-            (t[e(540)](".header")[e(472)] = e(548)),
-            openModal(t);
-    }),
-    (document[_0x5873e6(540)]("[data-login]").onclick = function () {
-        var e = _0x5873e6;
-        doConnect(!0, !1, document[e(492)](e(570))[e(449)], document[e(492)](e(418))[e(449)]);
-    }),
-    (document[_0x5873e6(492)](_0x5873e6(440)).onclick = function () {
-        var e = _0x5873e6,
-            t = document[e(492)](e(454))[e(449)];
-        "" == t
-              ? (openModal(dialog),
-                (dialog[e(540)](".progress-bar")[e(420)][e(503)] = e(464)),
-                (dialog.querySelector(e(515)).textContent = "Invalid Voucher!"),
-                setTimeout(function () {
-                    closeModal(dialog);
-                }, 2e3))
-              : ((vcTopUp = !0), insertCoin(0));
-    }),
-    (document.querySelector("[data-claim]")[_0x5873e6(659)] = function () {
-        var n = _0x5873e6;
-        (this.innerHTML = n(590)),
-            (this[n(420)][n(434)] = "none"),
-            setTimeout(function () {
-                var e = n,
-                    t = new XMLHttpRequest();
-                t[e(660)](e(447), e(442), !0), t.send(e(568) + mac), location[e(511)]();
-            }, 1e3);
-    }),
-    (document.querySelector("[data-trl-close]")[_0x5873e6(659)] = function () {
-        closeModal(trlmodal);
-    });
-var animate = function () {
-    var n = _0x5873e6,
-        e = new XMLHttpRequest();
-    e.open(n(630), n(543), !0),
-        e.send(),
-        (e[n(569)] = function () {
-            var e,
-                t = n;
-            4 === this[t(584)] &&
-                200 === this.status &&
-                ((e = JSON[t(512)](this[t(530)])),
-                null == getStorageValue("ip")
-                    ? setStorageValue("ip", e.ip)
-                    : getStorageValue("ip") !== e.ip && (removeStorageValue("ip"), location[t(511)]()),
-                (mac = e[t(577)]),
-                (macNoColon = replaceAll(mac, ":")),
-                (ipAddress = e.ip),
-                (document.getElementById("timer")[t(567)] = secondsToDhms(e[t(598)])),
-                (stats[t(472)] = e[t(589)]),
-                "Disconnected" == e[t(589)] && intervalManager(0),
-                0 == e[t(598)] &&
-                    ((e = new XMLHttpRequest())[t(660)](t(447), t(450), !0),
-                    e[t(588)](t(505), t(622)),
-                    e[t(431)](t(490)),
-                    (e.onreadystatechange = function () {
-                        var e = t;
-                        4 == this[e(584)] && 200 == this[e(589)] && location.reload();
-                    }),
-                    null !== getCookie(t(421)) && eraseCookie(t(421)),
-                    removeStorageValue(t(612)),
-                    removeStorageValue(t(535)),
-                    removeStorageValue(t(458))),
-                pause_button
-                    ? !prefix &&
-                      trial &&
-                      trial_logout_button &&
-                      ((pauseBtn[t(420)][t(503)] = t(469)), (pauseBtn[t(420)].pointerEvents = "auto"))
-                    : ((pauseBtn[t(420)][t(503)] = "none"), (pauseBtn[t(420)].pointerEvents = t(464))));
-        }),
-        (e.onerror = function () {
-            notifyCoinSlotError(n(484));
-        });
-};
-function intervalManager(e, t, n) {
-    e
-        ? ((intervalID = setInterval(t, n)), (pauseBtn.textContent = "Pause"))
-        : (clearInterval(intervalID), (intervalID = null));
-}
-function audioPlay(e) {
-    var t = _0x5873e6;
-    4 === insertcoinbg[t(584)]
-        ? e
-            ? insertcoinbg[t(417)]()
-            : (insertcoinbg[t(521)](), (insertcoinbg[t(471)] = 0))
-        : ((insertcoinbg.src = t(483) + Date.now()),
-          insertcoinbg[t(583)](),
-          (insertcoinbg[t(504)] = !0),
-          insertcoinbg.play());
-}
-function coindropPlay() {
-    var e = _0x5873e6;
-    4 === coinCount[e(584)]
-        ? coinCount.play()
-        : ((coinCount[e(430)] = e(477) + Date[e(557)]()), coinCount[e(583)](), coinCount[e(417)]());
-}
-function credits(e) {
-    var t = _0x5873e6;
-    e = Number(e);
-    var n = Math[t(414)](e / 86400),
-        o = Math[t(414)]((e % 86400) / 3600),
-        e = Math[t(414)]((e % 3600) / 60);
-    return (0 < n ? n + t(1 == n ? 448 : 574) : "") + "" + (0 < o ? o + "" : "0") + "h:" + (0 < e ? e + "" : "0") + "m";
-}
-function secondsToDhms(e) {
-    var t = _0x5873e6;
-    e = Number(e);
-    var n = Math.floor(e / 86400),
-        o = Math[t(414)]((e % 86400) / 3600),
-        a = Math[t(414)]((e % 3600) / 60),
-        i = Math[t(414)](e % 60);
-    n < 10 && (n = "0" + n), o < 10 && (o = "0" + o), a < 10 && (a = "0" + a), i < 10 && (i = "0" + i);
-    (e = 0 < n ? '<div class="inner-wrapper"><div id="day">' + n + t(1 == n ? 647 : 658) : ""),
-        (a = 0 < a ? a + "" : "00"),
-        (i = 0 < i ? i + "" : "00");
-    if (0 < n && 0 == o) {
-        var r = 0 < o ? o + "" : "00";
-        return t(586) + e + t(601) + r + t(616) + a + t(531) + i + t(662);
+        };
     }
-    return (
-        '<div class="d-flex flex-fill align-content-stretch">' +
-        e +
-        (r = 0 < o ? t(601) + o + "</div><div>hours</div></div>" : "") +
-        t(478) +
-        a +
-        t(531) +
-        i +
-        t(634)
-    );
 }
-function setStorageValue(e, t) {
-    null != localStorage && localStorage[_0x5873e6(423)](e, t);
+
+function getData(o) {
+    var expEl = document.getElementById("exp");
+    if (5 < o) {
+        fallbackData();
+    } else {
+        var mac_str = (activeMac == null || activeMac == null) ? macNoColon : replaceAll(activeMac, ":");
+        pauseBtn.innerHTML = '<div class="loader"></div>';
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/data/" + mac_str + ".txt", true);
+        xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
+        xhr.setRequestHeader("Pragma", "no-cache");
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (4 == this.readyState) {
+                if (200 == this.status) {
+                    var text = this.responseText,
+                        parts = text.split("#");
+                    macVoucher = parts[0];
+                    expEl.innerHTML = parts[1];
+                    if (50 < text.length) {
+                        expEl.innerHTML = "Loading...";
+                        setTimeout(function () { getData(o + 1); }, 1000);
+                        return;
+                    }
+                    if ("Disconnected" == apiStatus) {
+                        pauseBtn.style.pointerEvents = "auto";
+                        pause = true;
+                        if (voucher == null) {
+                            if (!(macVoucher == "null" && "" == macVoucher)) voucher = macVoucher;
+                            pauseBtn.textContent = "Connect";
+                        } else {
+                            pauseBtn.textContent = "Resume";
+                        }
+                        if (invalidUser == null) getTimeleft();
+                    } else if (!unlimited) {
+                        pauseBtn.textContent = "Pause";
+                    }
+                } else {
+                    fallbackData();
+                }
+            }
+        };
+    }
 }
-function removeStorageValue(e) {
-    null != localStorage && localStorage[_0x5873e6(523)](e);
+
+function fallbackData() {
+    var expEl = document.getElementById("exp"),
+        statusEl = document.getElementById("status");
+    if (apiStatus !== "Connected") {
+        if (invalidUser == null) getTimeleft();
+        pauseBtn.style.pointerEvents = "auto";
+        pause = true;
+        if (statusEl.textContent == "Disconnected") {
+            pauseBtn.textContent = "Connect";
+        } else {
+            pauseBtn.textContent = "Resume";
+        }
+    } else {
+        expEl.textContent = "Not Available";
+    }
 }
-function _0xa071(e, t) {
-    var n = _0x486d();
-    return (_0xa071 = function (e, t) {
-        return n[(e -= 410)];
-    })(e, t);
+
+function getTimeleft() {
+    if (randomtempMac) {
+        setTimeout(function () { doConnect(false, false, voucher); }, 300);
+    } else if (getCookie("timeLeft") == null) {
+        setTimeout(function () { doConnect(false, true, voucher); }, 300);
+    }
 }
-function getStorageValue(e) {
-    if (null != localStorage) return localStorage.getItem(e);
+
+function paused(delay) {
+    var statusEl = document.getElementById("status");
+    pauseBtn.style.pointerEvents = "none";
+    timeleft = document.getElementById("timer");
+    pauseBtn.innerHTML = '<div class="loader"></div>';
+    setTimeout(function () {
+        pauseBtn.style.pointerEvents = "auto";
+        if (pause) {
+            doConnect(false, false, voucher);
+        } else {
+            intervalManager(0);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/logout", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("erase-cookie=true");
+            xhr.onreadystatechange = function () {
+                if (4 == this.readyState && 200 == this.status) {
+                    if (unlimited) {
+                        removeStorageValue("activeMac");
+                        removeStorageValue("tempMac");
+                        removeStorageValue("activeVoucher");
+                        location.reload();
+                    } else if (trial) {
+                        location.reload();
+                    } else {
+                        statusEl.textContent = "Time Paused";
+                        pauseBtn.textContent = "Resume";
+                        setCookie("timeLeft", timeleft.innerHTML, 30);
+                    }
+                }
+            };
+            pause = true;
+        }
+    }, delay);
 }
+
+function doConnect(isLogout, setInvalid, voucherVal, password) {
+    var memberModal = document.querySelector("[data-member]"),
+        statusEl = document.getElementById("status");
+    if (isLogout) {
+        closeModal(memberModal);
+        openModal(dialog);
+        dialog.querySelector(".progress-bar").style.display = "none";
+        dialog.querySelector(".header").textContent = "Checking User...";
+    } else {
+        password = username_only ? "" : voucherVal;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/login", true);
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState && 200 == this.status) {
+            if ("" != this.responseText.split("<script>")[0]) {
+                if (isLogout) {
+                    dialog.querySelector(".header").textContent = "Invalid Username or Password!";
+                    setTimeout(function () { closeModal(dialog); }, 1500);
+                } else {
+                    if (getCookie("timeLeft") !== null) eraseCookie("timeLeft");
+                    removeStorageValue("activeMac");
+                    removeStorageValue("tempMac");
+                    removeStorageValue("activeVoucher");
+                    document.getElementById("timer").innerHTML = secondsToDhms(0);
+                    statusEl.textContent = "Disconnected";
+                    if (setInvalid) {
+                        setStorageValue("invalidUser", "true");
+                    } else {
+                        dialog.querySelector(".progress-bar").style.display = "none";
+                        openModal(dialog);
+                        dialog.querySelector(".header").textContent = "Invalid Voucher!";
+                        setTimeout(function () {
+                            pauseBtn.textContent = "Connect";
+                            closeModal(dialog);
+                        }, 1500);
+                    }
+                }
+            } else {
+                if (isLogout) {
+                    dialog.querySelector(".header").textContent = "Connected Successfully!";
+                    setTimeout(function () { location.reload(); }, 1500);
+                } else if (setInvalid) {
+                    paused(300);
+                }
+                api();
+            }
+        }
+    };
+    xhr.send("username=" + voucherVal + "&password=" + password);
+}
+
+function forceLogin() {
+    var dlg = document.querySelector("[data-dialog]");
+    dlg.querySelector(".progress-bar").style.width = "100%";
+    dlg.querySelector(".header").innerHTML = "Done";
+    setTimeout(function () { closeModal(dlg); api(); }, 250);
+}
+
+function insertBtnManual(el) {
+    var data = el.dataset,
+        ssidEl = document.querySelector("[data-ssid]"),
+        vendorEl = document.querySelector("[data-vendo]");
+    closeModal(svmodal);
+    insertBtn.style.pointerEvents = "none";
+    insertBtn.innerHTML = '<div class="loader"></div>';
+    vendorIpAddress = data.vendoIp;
+    ssidEl.innerHTML = data.ssid;
+    vendorEl.innerHTML = data.vendoName;
+    vcTopUp = false;
+    insertCoin(0);
+    setStorageValue("vendoIp", data.vendoIp);
+    setStorageValue("ssid", data.ssid);
+    setStorageValue("vendoName", data.vendoName);
+}
+
+function insertCoin(retryCount) {
+    document.querySelector("[data-ic-close]").textContent = "Please Insert Coin";
+    document.querySelector("#totalTime").textContent = "--:--";
+    removeStorageValue("invalidUser");
+    var savedVoucher = getStorageValue("activeVoucher");
+    extendTimeCriteria = (savedVoucher == null) ? 0 : 1;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://" + vendorIpAddress + "/topUp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState && 200 == this.status) {
+            var res = JSON.parse(this.responseText);
+            if (res.status == "insertcoin") {
+                if (vcTopUp) {
+                    dialog.querySelector(".progress-bar").style.display = "block";
+                    dialog.querySelector(".progress-bar").style.width = "10%";
+                    dialog.querySelector(".header").textContent = "Voucher checking, Please wait!";
+                    convertextVoucher();
+                    openModal(dialog);
+                } else {
+                    audioPlay(true);
+                    coinslotExit = false;
+                    icmodal.querySelector(".header").textContent = "Please Insert Coin";
+                    insertBtn.style.pointerEvents = "auto";
+                    insertBtn.textContent = "Insert Coin";
+                    icmodal.querySelector(".progress-bar").style.width = "100%";
+                    document.querySelector("[data-sv-close]").textContent = "Cancel";
+                    if (timer == null) {
+                        timer = window.setInterval(function () { checkCoin(); }, 1000);
+                    }
+                    openModal(icmodal);
+                }
+                voucher = res.voucher;
+                insertingCoin = true;
+            } else {
+                notifyCoinSlotError(res.errorCode);
+                timer = null;
+                clearInterval(timer);
+            }
+        }
+    };
+    xhr.onerror = function () {
+        if (retryCount < 5) {
+            insertBtn.style.pointerEvents = "none";
+            openModal(dialog);
+            dialog.querySelector(".progress-bar").style.display = "none";
+            dialog.querySelector(".header").textContent = "Retrying, Please Wait!";
+            setTimeout(function () { insertCoin(retryCount + 1); }, 1000);
+        } else {
+            dialog.querySelector(".header").textContent = vendor.textContent + " is offline!";
+            setTimeout(function () { closeModal(dialog); }, 1500);
+            insertBtn.textContent = "Insert Coin";
+            insertBtn.style.pointerEvents = "auto";
+        }
+    };
+    xhr.send("voucher=" + voucher + "&mac=" + mac + "&ipAddress=" + ipAddress + "&extendTime=" + extendTimeCriteria);
+    totalCoinReceived = 0;
+    return false;
+}
+
+function checkCoin() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://" + vendorIpAddress + "/checkCoin", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("voucher=" + voucher);
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState && 200 == this.status) {
+            var res = JSON.parse(this.responseText);
+            totalCoinReceived = parseInt(res.totalCoin);
+
+            if (vcTopUp) {
+                if ("true" == res.status) {
+                    setStorageValue("activeVoucher", voucher);
+                    if (intervalID !== null) {
+                        intervalManager(0);
+                        var xhr2 = new XMLHttpRequest();
+                        xhr2.open("POST", "/logout", true);
+                        xhr2.send("erase-cookie=false");
+                    }
+                } else if ("coin.not.inserted" == res.errorCode) {
+                    donepaying();
+                } else if (res.errorCode == "coinslot.busy") {
+                    clearInterval(timer);
+                    if (0 == totalCoinReceived) insertCoinhidden(true, "/getRates?date=");
+                    else donepaying();
+                } else {
+                    clearInterval(timer);
+                }
+            } else {
+                var totalTimeEl = document.querySelector("#totalTime"),
+                    iccloseBtn = document.querySelector("[data-ic-close]"),
+                    totalCoinEl = document.querySelector("#totalTime");
+
+                if ("true" == res.status) {
+                    iccloseBtn.style.display = "none";
+                    setStorageValue("activeVoucher", voucher);
+                    if (intervalID !== null) {
+                        intervalManager(0);
+                        var xhr3 = new XMLHttpRequest();
+                        xhr3.open("POST", "/logout", true);
+                        xhr3.send("erase-cookie=false");
+                    }
+                    document.querySelector("#totalCoin").innerHTML = currency + " " + res.totalCoin;
+                    if (0 == res.timeAdded) totalCoinEl.innerHTML = "--:--";
+                    else totalCoinEl.innerHTML = credits(parseInt(res.timeAdded));
+                    if (0 == res.validity) totalTimeEl.innerHTML = "--:--";
+                    else totalTimeEl.textContent = credits(parseInt(60 * res.validity));
+                    coindropPlay();
+                } else if (res.errorCode == "coin.is.reading") {
+                    icmodal.querySelector(".header").textContent = "Reading coin, please wait";
+                    iccloseBtn.textContent = "Wait";
+                    iccloseBtn.style.pointerEvents = "none";
+                } else if (res.errorCode == "coin.not.inserted") {
+                    totalCoinReceived = parseInt(res.totalCoin);
+                    iccloseBtn.style.pointerEvents = "auto";
+                    if (!coinslotExit) icmodal.querySelector(".header").textContent = "Please Insert Coin";
+                    var remainSecs = parseInt(parseInt(res.remainTime) / 1000);
+                    var validityVal = parseFloat(res.waitTime);
+                    var pct = parseInt(((1000 * remainSecs) / validityVal) * 100);
+                    if (0 < totalCoinReceived) iccloseBtn.textContent = "Done Paying";
+                    if (0 == remainSecs) {
+                        if (0 < totalCoinReceived) donepaying();
+                        else insertCoinhidden(true, "Coin slot expired");
+                    } else {
+                        document.querySelector("#totalCoin").innerHTML = currency + " " + res.totalCoin;
+                        if (0 == res.timeAdded) totalCoinEl.innerHTML = "--:--";
+                        else totalCoinEl.innerHTML = credits(parseInt(res.timeAdded));
+                        if (0 == res.validity) totalTimeEl.innerHTML = "--:--";
+                        else totalTimeEl.textContent = credits(parseInt(60 * res.validity));
+                        icmodal.querySelector(".progress-bar").style.width = pct + "%";
+                    }
+                } else if (res.errorCode == "coinslot.busy") {
+                    audioPlay(false);
+                    clearInterval(timer);
+                    if (0 == totalCoinReceived) insertCoinhidden(true, "Coinslot was cancelled");
+                    else donepaying();
+                } else {
+                    clearInterval(timer);
+                }
+            }
+        }
+    };
+}
+
+function donepaying() {
+    if (0 < totalCoinReceived) {
+        if (!vcTopUp) { audioPlay(false); closeModal(icmodal); }
+        clearInterval(timer);
+        timer = null;
+        openModal(dialog);
+        dialog.querySelector(".progress-bar").style.width = "50%";
+        dialog.querySelector(".header").textContent = "Processing, Please wait!";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://" + vendorIpAddress + "/useVoucher", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("voucher=" + voucher);
+        xhr.onreadystatechange = function () {
+            if (4 == this.readyState && 200 == this.status) {
+                if (JSON.parse(this.responseText).status == "insertcoin") {
+                    dialog.querySelector(".progress-bar").style.width = "75%";
+                    dialog.querySelector(".header").textContent = "Connecting, Please wait!";
+                    setTimeout(function () { forceLogin(); }, 250);
+                } else {
+                    insertCoinhidden(false);
+                }
+            }
+        };
+        xhr.onerror = function () {
+            dialog.querySelector(".progress-bar").style.width = "75%";
+            dialog.querySelector(".header").textContent = "Force login, Please wait!";
+            setTimeout(function () { forceLogin(); }, 3000);
+        };
+    } else {
+        insertCoinhidden(false);
+    }
+}
+
+function convertextVoucher() {
+    var usernameEl = document.getElementById("username");
+    voucherToConvert = usernameEl.value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://" + vendorIpAddress + "/convertVoucher", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("voucher=" + voucher + "&convertVoucher=" + voucherToConvert);
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState && 200 == this.status) {
+            if (JSON.parse(this.responseText).status == "false") {
+                insertCoinhidden(true, "Invalid Voucher");
+            } else if (timer == null) {
+                timer = window.setInterval(function () {
+                    dialog.querySelector(".progress-bar").style.width = "30%";
+                    dialog.querySelector(".header").textContent = "Converting, Please wait!";
+                    checkCoin();
+                }, 1000);
+            }
+            document.getElementById("username").value = "";
+        }
+    };
+    xhr.onerror = function () {
+        document.getElementById("username").value = "";
+    };
+}
+
+function insertCoinhidden(showDialog, message) {
+    closeModal(icmodal);
+    clearInterval(timer);
+    timer = null;
+    insertingCoin = false;
+    if (!vcTopUp) audioPlay(false);
+    if (showDialog) {
+        dialog.querySelector(".progress-bar").style.display = "none";
+        openModal(dialog);
+        coinslotExit = true;
+        dialog.querySelector(".header").textContent = message;
+        setTimeout(function () { closeModal(dialog); }, 2000);
+    }
+    if (0 == totalCoinReceived) cancelTopUp();
+}
+
+function cancelTopUp() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://" + vendorIpAddress + "/cancelTopUp", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("voucher=" + voucher + "&mac=" + mac);
+}
+
+function getWifiRate(retryCount) {
+    var ratesBtn = document.getElementById("ratesBtn"),
+        ratesBodyEl = document.getElementById("ratesBody");
+    document.getElementById("ratesBody").style.display = "block";
+    ratesBtn.style.pointerEvents = "none";
+    ratesBodyEl.style.display = "none";
+    var wrmodal = document.querySelector("[data-rates]");
+    ratesBtn.innerHTML = '<div class="loader"></div>';
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://" + vendorIpAddress + "/getRates?date=" + Date.now(), true);
+    xhr.setRequestHeader("Content-type", "text/plain");
+    xhr.send();
+    xhr.onreadystatechange = function () {
+        if (4 == this.readyState && 200 == this.status) {
+            var raw = this.responseText;
+            ratesBtn.style.pointerEvents = "auto";
+            ratesBodyEl.style.display = "block";
+            ratesBtn.textContent = "Wifi Rates";
+            wrmodal.querySelector(".header").textContent = "Wifi Rates";
+            openModal(wrmodal);
+            var rows = raw.split("|"), html = "";
+            for (var i in rows) {
+                var cols = rows[i].split("#"),
+                    timeSecs = 60 * parseInt(cols[2]),
+                    validitySecs = 60 * parseInt(cols[3]);
+                function formatRate(e) {
+                    var days = Math.floor(e / 86400),
+                        hours = Math.floor((e % 86400) / 3600),
+                        mins = Math.floor((e % 3600) / 60),
+                        dStr = days > 0 ? days + (days === 1 ? "Day " : " Days ") : "",
+                        hStr = hours > 0 ? hours + "" : "0",
+                        mStr = mins > 0 ? mins + "" : "0";
+                    if (days > 0 && hours == 0 && mins == 0) return dStr;
+                    if (mins > 0 && hours == 0 && days == 0) return mStr + "min";
+                    if (hours > 0 && mins == 0 && days == 0) return hStr + "hour";
+                    return dStr + hStr + "h:" + mStr + "m";
+                }
+                var timeLabel = formatRate(timeSecs),
+                    validLabel = formatRate(validitySecs);
+                if (validLabel == "0h:0m" || validitySecs == 0) validLabel = "No Pause Time";
+                else if (timeSecs == validitySecs) validLabel = "Unlimited";
+                html += "<tr>";
+                html += "<td>" + currency + " " + cols[1] + ".00</td>";
+                html += "<td>" + timeLabel + "</td>";
+                html += "<td>" + validLabel + "</td>";
+                html += "</tr>";
+                document.getElementById("rates").innerHTML = html;
+            }
+        }
+    };
+    xhr.onerror = function () {
+        if (retryCount < 4) {
+            openModal(wrmodal);
+            wrmodal.querySelector(".header").textContent = "Retrying, Please wait!";
+            setTimeout(function () { getWifiRate(retryCount + 1); }, 1000);
+        } else {
+            wrmodal.querySelector(".header").textContent = "Wifi rates is not availabe at this moment.";
+            setTimeout(function () { closeModal(wrmodal); }, 2000);
+            ratesBtn.style.pointerEvents = "auto";
+            ratesBtn.textContent = "Wifi Rates";
+        }
+    };
+}
+
+ajaxsettings.open("GET", "settings.json", true);
+ajaxsettings.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
+ajaxsettings.setRequestHeader("Pragma", "no-cache");
+ajaxsettings.send();
+ajaxsettings.onreadystatechange = function () {
+    if (4 == this.readyState && 200 == this.status) {
+        var t = JSON.parse(this.responseText);
+        pause_button = t.Settings.pause_button;
+        member_logout_button = t.Settings.member_logout_button;
+        trial_logout_button = t.Settings.trial_logout_button;
+        currency = t.Settings.currency;
+        username_only = t.Settings.username_only;
+        link.href = t.Settings.footer_link;
+        link.textContent = t.Settings.footer_text;
+        if (t.Settings.gcash_payment) {
+            payment_gateway = t.gcash_payment.payment_gateway;
+            portal_key = t.gcash_payment.portal_key;
+        } else {
+            document.getElementById("gcashBtn").style.display = "none";
+        }
+        if (!t.Settings.voucher_input) {
+            document.querySelector(".btn-group .input-group").style.display = "none";
+        }
+        if (t.Settings.subscription) {
+            subscription = true;
+            subscription_prefix = t.subscription_prefix;
+        }
+
+        if (0 == t.Settings.vendo_option) {
+            ssid.innerHTML = t.VendoAddresses[0].ssid;
+            vendor.textContent = t.VendoAddresses[0].vendoName;
+            vendorIpAddress = t.VendoAddresses[0].vendoIp;
+        } else if (1 == t.Settings.vendo_option) {
+            autoSelect = false;
+            if (getStorageValue("vendoIp") == null) {
+                vendorIpAddress = t.VendoAddresses[0].vendoIp;
+                ssid.innerHTML = t.VendoAddresses[0].ssid;
+                vendor.innerHTML = t.VendoAddresses[0].vendoName;
+                setStorageValue("vendoIp", t.VendoAddresses[0].vendoIp);
+                setStorageValue("ssid", t.VendoAddresses[0].ssid);
+                setStorageValue("vendoName", t.VendoAddresses[0].vendoName);
+            } else {
+                vendorIpAddress = getStorageValue("vendoIp");
+                ssid.innerHTML = getStorageValue("ssid");
+                vendor.innerHTML = getStorageValue("vendoName");
+            }
+            for (var n = 0; n < t.VendoAddresses.length; n++) {
+                selectVendo.innerHTML = selectVendo.innerHTML +
+                    '<button type="button" class="btn btn-primary" onclick="insertBtnManual(this)" data-vendo-ip="' +
+                    t.VendoAddresses[n].vendoIp +
+                    '" data-ssid="' + t.VendoAddresses[n].ssid +
+                    '" data-vendo-name="' + t.VendoAddresses[n].vendoName +
+                    '">' + t.VendoAddresses[n].vendoName + "</button>";
+            }
+        } else if (2 == t.Settings.vendo_option) {
+            for (n = 0; n < t.VendoAddresses.length; n++) {
+                if (t.VendoAddresses[n].interfaceName == interfaceName) {
+                    ssid.innerHTML = t.VendoAddresses[n].ssid;
+                    vendor.textContent = t.VendoAddresses[n].vendoName;
+                    vendorIpAddress = t.VendoAddresses[n].vendoIp;
+                }
+            }
+        }
+
+        if (1 !== t.Settings.vendo_option) {
+            autoSelect = true;
+            removeStorageValue("vendoIp");
+            removeStorageValue("ssid");
+            removeStorageValue("vendoName");
+        }
+        api();
+    }
+};
+
+ajaxsettings.onerror = function () {
+    body.style.display = "block";
+    alert("Note: Changes takes effects only after uploading to mikrotik");
+};
+
+insertBtn.onclick = function () {
+    if (autoSelect) {
+        insertBtn.style.display = "none";
+        insertBtn.innerHTML = '<div class="loader"></div>';
+        vcTopUp = false;
+        insertCoin(0);
+    } else {
+        openModal(svmodal);
+    }
+};
+
+document.querySelector("[data-ic-close]").onclick = function () { donepaying(); };
+document.querySelector("[data-sv-close]").onclick = function () { closeModal(svmodal); };
+document.querySelector("[data-wr-close]").onclick = function () { closeModal(document.querySelector("[data-rates]")); };
+document.querySelector("[data-ml-close]").onclick = function () { closeModal(document.querySelector("[data-member]")); };
+document.querySelector("[data-msg-close]").onclick = function () { closeModal(document.querySelector("[data-message]")); };
+
+pauseBtn.onclick = function () { paused(1000); };
+
+document.getElementById("ratesBtn").onclick = function () { getWifiRate(0); };
+
+document.getElementById("gcashBtn").onclick = function () {
+    openModal(document.querySelector("[data-gcash]"));
+};
+document.querySelector("[data-gc-close]").onclick = function () {
+    closeModal(document.querySelector("[data-gcash]"));
+};
+document.querySelector("[data-gc-pay]").onclick = function () {
+    var mobileNum = document.getElementById("gcNumber").value,
+        amount = document.getElementById("gcAmount").value;
+    location.href = payment_gateway + "?portal_key=" + portal_key + "&mobile=" + mobileNum + "&amount=" + amount;
+};
+
+document.getElementById("memberBtn").onclick = function () {
+    document.getElementById("mlBody").style.display = "block";
+    document.querySelector("[data-member]").querySelector(".header").textContent = "Login to Connect";
+    openModal(document.querySelector("[data-member]"));
+};
+
+document.querySelector("[data-login]").onclick = function () {
+    doConnect(true, false, document.getElementById("Muser").value, document.getElementById("Mpass").value);
+};
+
+document.getElementById("submit").onclick = function () {
+    var val = document.getElementById("username").value;
+    if ("" == val) {
+        openModal(dialog);
+        dialog.querySelector(".progress-bar").style.display = "none";
+        dialog.querySelector(".header").textContent = "Invalid Voucher!";
+        setTimeout(function () { closeModal(dialog); }, 2000);
+    } else {
+        vcTopUp = true;
+        insertCoin(0);
+    }
+};
+
+document.querySelector("[data-claim]").onclick = function () {
+    this.innerHTML = '<div class="loader"></div>';
+    this.style.display = "none";
+    setTimeout(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/login", true);
+        xhr.send("dst=&username=T-" + mac);
+        location.reload();
+    }, 1000);
+};
+
+document.querySelector("[data-trl-close]").onclick = function () { closeModal(trlmodal); };
+
+var animate = function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api", true);
+    xhr.send();
+    xhr.onreadystatechange = function () {
+        if (4 === this.readyState && 200 === this.status) {
+            var e = JSON.parse(this.responseText);
+            if (getStorageValue("ip") == null) {
+                setStorageValue("ip", e.ip);
+            } else if (getStorageValue("ip") !== e.ip) {
+                removeStorageValue("ip");
+                location.reload();
+            }
+            mac = e.mac;
+            macNoColon = replaceAll(mac, ":");
+            ipAddress = e.ip;
+            document.getElementById("timer").innerHTML = secondsToDhms(e.timeleft);
+            document.getElementById("status").textContent = e.status;
+            if ("Disconnected" == e.status) intervalManager(0);
+            if (0 == e.timeleft) {
+                var xhr2 = new XMLHttpRequest();
+                xhr2.open("POST", "/logout", true);
+                xhr2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr2.send("erase-cookie=true");
+                xhr2.onreadystatechange = function () {
+                    if (4 == this.readyState && 200 == this.status) location.reload();
+                };
+                if (getCookie("timeLeft") !== null) eraseCookie("timeLeft");
+                removeStorageValue("activeMac");
+                removeStorageValue("tempMac");
+                removeStorageValue("activeVoucher");
+            }
+            if (pause_button) {
+                if (!prefix && trial && trial_logout_button) {
+                    pauseBtn.style.display = "block";
+                    pauseBtn.style.pointerEvents = "auto";
+                }
+            } else {
+                pauseBtn.style.display = "none";
+                pauseBtn.style.pointerEvents = "none";
+            }
+        }
+    };
+    xhr.onerror = function () {
+        notifyCoinSlotError("offline");
+    };
+};
+
+function intervalManager(start, callback, interval) {
+    if (start) {
+        intervalID = setInterval(callback, interval);
+        pauseBtn.textContent = "Pause";
+    } else {
+        clearInterval(intervalID);
+        intervalID = null;
+    }
+}
+
+function audioPlay(isLoop) {
+    if (4 === insertcoinbg.readyState) {
+        if (isLoop) {
+            insertcoinbg.play();
+        } else {
+            insertcoinbg.pause();
+            insertcoinbg.currentTime = 0;
+        }
+    } else {
+        insertcoinbg.src = "assets/sounds/insertcoinbg.mp3?date=" + Date.now();
+        insertcoinbg.load();
+        insertcoinbg.loop = true;
+        insertcoinbg.play();
+    }
+}
+
+function coindropPlay() {
+    if (4 === coinCount.readyState) {
+        coinCount.play();
+    } else {
+        coinCount.src = "assets/sounds/coinreceived.mp3?date=" + Date.now();
+        coinCount.load();
+        coinCount.play();
+    }
+}
+
+function credits(e) {
+    e = Number(e);
+    var days = Math.floor(e / 86400),
+        hours = Math.floor((e % 86400) / 3600),
+        mins = Math.floor((e % 3600) / 60);
+    return (days > 0 ? days + (days == 1 ? " Day " : " Days ") : "") +
+        "" + (hours > 0 ? hours + "" : "0") + "h:" + (mins > 0 ? mins + "" : "0") + "m";
+}
+
+function secondsToDhms(e) {
+    e = Number(e);
+    var d = Math.floor(e / 86400),
+        h = Math.floor((e % 86400) / 3600),
+        m = Math.floor((e % 3600) / 60),
+        s = Math.floor(e % 60);
+    if (d < 10) d = "0" + d;
+    if (h < 10) h = "0" + h;
+    if (m < 10) m = "0" + m;
+    if (s < 10) s = "0" + s;
+    var dayHTML = (parseInt(d) > 0)
+        ? '<div class="inner-wrapper"><div id="day">' + d + (d == 1 ? "</div><div>day</div></div>" : "</div><div>days</div></div>")
+        : "";
+    m = parseInt(m) > 0 ? m + "" : "00";
+    s = parseInt(s) > 0 ? s + "" : "00";
+    if (parseInt(d) > 0 && h == 0) {
+        var hr = parseInt(h) > 0 ? h + "" : "00";
+        return '<div class="d-flex flex-fill align-content-stretch">' +
+            dayHTML +
+            '<div class="inner-wrapper"><div id="hr">' + hr + '</div><div>hours</div></div><div class="inner-wrapper"><div id="min">' +
+            m + '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s + "</div><div>seconds</div></div></div>";
+    }
+    return '<div class="d-flex flex-fill align-content-stretch">' +
+        dayHTML +
+        (parseInt(h) > 0 ? '<div class="inner-wrapper"><div id="hr">' + h + "</div><div>hours</div></div>" : "") +
+        '<div class="inner-wrapper"><div id="min">' + m +
+        '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s +
+        "</div><div>seconds</div></div></div>";
+}
+
+function setStorageValue(key, val) {
+    if (localStorage != null) localStorage.setItem(key, val);
+}
+
+function removeStorageValue(key) {
+    if (localStorage != null) localStorage.removeItem(key);
+}
+
+function getStorageValue(key) {
+    if (localStorage != null) return localStorage.getItem(key);
+}
+
 function clearStorageValue() {
-    null != localStorage && localStorage[_0x5873e6(467)]();
+    if (localStorage != null) localStorage.clear();
 }
-function setCookie(e, t, n) {
-    var o,
-        a = _0x5873e6,
-        i = "";
-    n && ((o = new Date()).setTime(o[a(501)]() + 1e3 * n), (i = a(544) + o[a(607)]())),
-        (document.cookie = e + "=" + (t || "") + i + "; path=/");
+
+function setCookie(name, value, seconds) {
+    var expires = "";
+    if (seconds) {
+        var d = new Date();
+        d.setTime(d.getTime() + 1000 * seconds);
+        expires = "; expires=" + d.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
-function getCookie(e) {
-    for (var t = _0x5873e6, n = e + "=", o = document.cookie.split(";"), a = 0; a < o.length; a++) {
-        for (var i = o[a]; " " == i[t(425)](0); ) i = i.substring(1, i[t(609)]);
-        if (0 == i[t(466)](n)) return i[t(646)](n[t(609)], i[t(609)]);
+
+function getCookie(name) {
+    var nameEQ = name + "=",
+        cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+        var c = cookies[i];
+        while (" " == c.charAt(0)) c = c.substring(1, c.length);
+        if (0 == c.indexOf(nameEQ)) return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
-function eraseCookie(e) {
-    var t = _0x5873e6;
-    document[t(465)] = e + t(489);
+
+function eraseCookie(name) {
+    document.cookie = name + "=; Max-Age=-99999999;";
 }
-function replaceAll(e, t) {
-    for (var n = _0x5873e6, o = e; 0 < o.indexOf(t); ) o = o[n(446)](t, "");
-    return o;
+
+function replaceAll(str, search) {
+    var result = str;
+    while (0 < result.indexOf(search)) result = result.replace(search, "");
+    return result;
 }
-function notifyCoinSlotError(e) {
-    var t = _0x5873e6,
-        n = document[t(540)](t(553));
-    openModal(n),
-        e == t(555) && ((n[t(540)](t(515)).textContent = "Error!"), (document.querySelector(t(462))[t(472)] = t(651))),
-        "coin.slot.banned" == e &&
-            ((n[t(540)](t(515))[t(472)] = "Warning!"), (document[t(540)](t(462)).textContent = t(529))),
-        e == t(626) &&
-            ((n[t(540)](t(515))[t(472)] = t(637)),
-            (document[t(540)]("#message")[t(472)] = "No internet connection as of the moment, Please try again later")),
-        e == t(484)
-            ? ((n.querySelector(t(515))[t(472)] = "Error!"),
-              (document.querySelector(t(462))[t(472)] =
-                  t(536) + '"' + document[t(540)](t(556)).textContent + '"' + t(547)))
-            : setTimeout(function () {
-                  var e = t;
-                  (insertBtn.style[e(434)] = e(416)), (insertBtn[e(472)] = "Insert Coin");
-              }, 3e3);
+
+function notifyCoinSlotError(errorCode) {
+    var msgModal = document.querySelector("[data-message]");
+    openModal(msgModal);
+    if (errorCode == "coinslot.busy") {
+        msgModal.querySelector(".header").textContent = "Error!";
+        document.querySelector("#message").textContent = "Coin slot is busy, Please try again later";
+    }
+    if ("coin.slot.banned" == errorCode) {
+        msgModal.querySelector(".header").textContent = "Warning!";
+        document.querySelector("#message").textContent = "You have been banned from using coin slot, due to multiple request for insert coin, please try again later!";
+    }
+    if (errorCode == "no.internet.detected") {
+        msgModal.querySelector(".header").textContent = "Error!";
+        document.querySelector("#message").innerHTML = "No internet connection as of the moment, Please try again later";
+    }
+    if (errorCode == "offline") {
+        msgModal.querySelector(".header").textContent = "Error!";
+        document.querySelector("#message").innerHTML = 'Error connecting to "' + document.querySelector("[data-vendo]").textContent + '", Please check your wifi connection';
+    } else {
+        setTimeout(function () {
+            insertBtn.style.pointerEvents = "auto";
+            insertBtn.textContent = "Insert Coin";
+        }, 3000);
+    }
 }
-function openModal(e) {
-    var t = _0x5873e6;
-    null != e && (e[t(456)][t(514)](t(546)), body.classList.add("modal-active"));
+
+function openModal(el) {
+    if (el != null) {
+        el.classList.add("show");
+        body.classList.add("modal-active");
+    }
 }
-function closeModal(e) {
-    var t = _0x5873e6;
-    null != e && (e.classList[t(620)](t(546)), body[t(456)][t(620)](t(606)));
+
+function closeModal(el) {
+    if (el != null) {
+        el.classList.remove("show");
+        body.classList.remove("modal-active");
+    }
 }
