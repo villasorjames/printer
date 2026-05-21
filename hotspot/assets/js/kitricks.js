@@ -72,7 +72,7 @@ function api() {
                 mac = e.mac;
                 macNoColon = replaceAll(mac, ":");
                 ipAddress = e.ip;
-                statusEl.textContent = e.status;
+                setStatus(e.status);
                 apiStatus = e.status;
                 if (voucher == null || voucher == "") voucher = macNoColon;
 
@@ -89,14 +89,14 @@ function api() {
                     }
                     if (getCookie("timeLeft") !== null) {
                         timerEl.innerHTML = getCookie("timeLeft");
-                        statusEl.textContent = "Time Paused";
+                        setStatus("Time Paused");
                         pauseBtn.style.display = "block";
                     }
                     if (tempMac !== mac && tempMac !== null) randomtempMac = true;
                     pauseBtn.style.pointerEvents = "auto";
                     intervalManager(0);
                     if (member_button) memberBtnEl.style.display = "block";
-                    body.style.display = "block";
+                    showBody();
                 } else if ("Connected" == e.status) {
                     voucher = e.voucher;
                     if (e.loginBy !== "trial") setStorageValue("activeVoucher", voucher);
@@ -105,7 +105,7 @@ function api() {
                     memberBtnEl.style.display = "none";
                     setStorageValue("activeMac", mac);
                     pause = false;
-                    statusEl.textContent = "Connected";
+                    setStatus("Connected");
                     if (activeMac == null || activeMac == null) setStorageValue("activeMac", mac);
 
                     if (pause_button) {
@@ -163,7 +163,7 @@ function api() {
                         }
                         document.querySelector(".btn-group .input-group").style.display = "none";
                     }
-                    body.style.display = "block";
+                    showBody();
                 }
 
                 if (voucher != macNoColon) {
@@ -174,7 +174,7 @@ function api() {
                     }
                 }
             } else {
-                body.style.display = "block";
+                showBody();
             }
         }
     };
@@ -305,7 +305,7 @@ function paused(delay) {
                     } else if (trial) {
                         location.reload();
                     } else {
-                        statusEl.textContent = "Time Paused";
+                        setStatus("Time Paused");
                         pauseBtn.textContent = "Resume";
                         hideBtnProgress();
                         setCookie("timeLeft", timeleft.innerHTML, 30);
@@ -342,7 +342,7 @@ function doConnect(isLogout, setInvalid, voucherVal, password) {
                     removeStorageValue("tempMac");
                     removeStorageValue("activeVoucher");
                     document.getElementById("timer").innerHTML = secondsToDhms(0);
-                    statusEl.textContent = "Disconnected";
+                    setStatus("Disconnected");
                     if (setInvalid) {
                         setStorageValue("invalidUser", "true");
                     } else {
@@ -770,7 +770,7 @@ ajaxsettings.onreadystatechange = function () {
 };
 
 ajaxsettings.onerror = function () {
-    body.style.display = "block";
+    showBody();
     alert("Note: Changes takes effects only after uploading to mikrotik");
 };
 
@@ -859,7 +859,7 @@ var animate = function () {
             macNoColon = replaceAll(mac, ":");
             ipAddress = e.ip;
             document.getElementById("timer").innerHTML = secondsToDhms(e.timeleft);
-            document.getElementById("status").textContent = e.status;
+            setStatus(e.status);
             if ("Disconnected" == e.status) intervalManager(0);
             if (0 == e.timeleft) {
                 var xhr2 = new XMLHttpRequest();
@@ -1037,6 +1037,24 @@ function notifyCoinSlotError(errorCode) {
             hideBtnProgress();
         }, 3000);
     }
+}
+
+function setStatus(text) {
+    var badge = document.getElementById("statusBadge"),
+        statusEl = document.getElementById("status");
+    statusEl.textContent = text;
+    if (badge) {
+        badge.classList.remove("connected", "disconnected", "paused");
+        if (text === "Connected") badge.classList.add("connected");
+        else if (text === "Time Paused") badge.classList.add("paused");
+        else badge.classList.add("disconnected");
+    }
+}
+
+function showBody() {
+    body.style.display = "";
+    var loader = document.getElementById("portalLoader");
+    if (loader) loader.classList.add("hide");
 }
 
 function openModal(el) {
