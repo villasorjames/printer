@@ -167,28 +167,6 @@ function api() {
                     : (body[t(420)][t(503)] = "block"));
         });
 }
-function getInternetStatus(n, o, a, i) {
-    var r = _0x5873e6,
-        s = document.getElementById("ratesBtn"),
-        c = document[r(540)](r(553)),
-        e = new XMLHttpRequest();
-    e[r(660)](r(630), "internetstatus.txt", !0),
-        e[r(588)]("Expires", r(413)),
-        e[r(588)](r(655), r(411)),
-        (e[r(569)] = function () {
-            var e,
-                t = r;
-            4 != this.readyState ||
-                200 != this.status ||
-                ((e = this[t(530)]) == t(633) &&
-                    (openModal(c),
-                    (c[t(540)](t(515))[t(472)] = a),
-                    (document[t(540)](t(462))[t(472)] = i),
-                    n || ((internet_status = e), (s.style[t(434)] = t(416))),
-                    o && null !== intervalID && paused(300)));
-        }),
-        e[r(431)]();
-}
 function getValidity(o) {
     var e,
         t,
@@ -969,13 +947,6 @@ ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
                     ? ((payment_gateway = t[e(595)].payment_gateway), (portal_key = t[e(595)].portal_key))
                     : (document[e(492)](e(443))[e(420)][e(503)] = e(464)),
                 t.Settings[e(532)] || (document[e(540)](".btn-group .input-group")[e(420)].display = e(464)),
-                t[e(444)][e(597)] &&
-                    getInternetStatus(
-                        t.no_internet_settings[e(528)],
-                        t.no_internet_settings[e(591)],
-                        t[e(451)].internet_status_tittle,
-                        t[e(451)][e(460)]
-                    ),
                 t[e(444)].subscription && ((subscription = !0), (subscription_prefix = t[e(551)])),
                 0 == t[e(444)].vendo_option)
             )
