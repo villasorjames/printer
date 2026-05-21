@@ -631,6 +631,7 @@ function getWifiRate(retryCount) {
     showBtnProgress(ratesBtn);
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "http://" + vendorIpAddress + "/getRates?date=" + Date.now(), true);
+    xhr.timeout = 5000;
     xhr.setRequestHeader("Content-type", "text/plain");
     xhr.send();
     xhr.onreadystatechange = function () {
@@ -672,13 +673,13 @@ function getWifiRate(retryCount) {
             }
         }
     };
-    xhr.onerror = function () {
+    xhr.onerror = xhr.ontimeout = function () {
         if (retryCount < 4) {
             openModal(wrmodal);
             wrmodal.querySelector(".header").textContent = "Retrying, Please wait!";
             setTimeout(function () { getWifiRate(retryCount + 1); }, 1000);
         } else {
-            wrmodal.querySelector(".header").textContent = "Wifi rates is not availabe at this moment.";
+            wrmodal.querySelector(".header").textContent = "Wifi rates is not available at this moment.";
             setTimeout(function () { closeModal(wrmodal); }, 2000);
             ratesBtn.style.pointerEvents = "auto";
             ratesBtn.textContent = "Wifi Rates";
