@@ -21,6 +21,7 @@ var voucher = getStorageValue("activeVoucher"),
     intervalID = null,
     timer = null,
     insertingCoin = false,
+    loadingBtn = null,
     username_only = false,
     pause = false,
     trial = false,
@@ -213,7 +214,7 @@ function getData(o) {
         fallbackData();
     } else {
         var mac_str = (activeMac == null || activeMac == null) ? macNoColon : replaceAll(activeMac, ":");
-        showBtnProgress();
+        showBtnProgress(pauseBtn);
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/data/" + mac_str + ".txt", true);
         xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
@@ -283,7 +284,7 @@ function paused(delay) {
     var statusEl = document.getElementById("status");
     pauseBtn.style.pointerEvents = "none";
     timeleft = document.getElementById("timer");
-    showBtnProgress();
+    showBtnProgress(pauseBtn);
     setTimeout(function () {
         pauseBtn.style.pointerEvents = "auto";
         if (pause) {
@@ -381,7 +382,7 @@ function insertBtnManual(el) {
         vendorEl = document.querySelector("[data-vendo]");
     closeModal(svmodal);
     insertBtn.style.pointerEvents = "none";
-    showBtnProgress();
+    showBtnProgress(insertBtn);
     vendorIpAddress = data.vendoIp;
     ssidEl.innerHTML = data.ssid;
     vendorEl.innerHTML = data.vendoName;
@@ -627,7 +628,7 @@ function getWifiRate(retryCount) {
     ratesBtn.style.pointerEvents = "none";
     ratesBodyEl.style.display = "none";
     var wrmodal = document.querySelector("[data-rates]");
-    showBtnProgress();
+    showBtnProgress(ratesBtn);
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "http://" + vendorIpAddress + "/getRates?date=" + Date.now(), true);
     xhr.setRequestHeader("Content-type", "text/plain");
@@ -774,7 +775,7 @@ ajaxsettings.onerror = function () {
 insertBtn.onclick = function () {
     if (autoSelect) {
         insertBtn.style.display = "none";
-        showBtnProgress();
+        showBtnProgress(insertBtn);
         vcTopUp = false;
         insertCoin(0);
     } else {
@@ -1051,14 +1052,14 @@ function closeModal(el) {
     }
 }
 
-function showBtnProgress() {
-    var el = document.getElementById("btnProgress");
-    el.style.display = "block";
-    el.classList.add("active");
+function showBtnProgress(btn) {
+    loadingBtn = btn || null;
+    if (loadingBtn) loadingBtn.classList.add("btn-loading");
 }
 
 function hideBtnProgress() {
-    var el = document.getElementById("btnProgress");
-    el.style.display = "none";
-    el.classList.remove("active");
+    if (loadingBtn) {
+        loadingBtn.classList.remove("btn-loading");
+        loadingBtn = null;
+    }
 }
