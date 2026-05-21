@@ -128,7 +128,7 @@ function api() {
                         pauseBtn.style.display = "none";
                         prefix = true;
                         document.querySelector(".btn-group .input-group").style.display = "none";
-                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>Subscription</div><div></div></div></div>';
+                        timerEl.textContent = 'Subscription';
                     }
 
                     if (e.timeleft != null || prefix) {
@@ -151,7 +151,7 @@ function api() {
                     } else {
                         unlimited = true;
                         intervalManager(0);
-                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>UNLIMITED</div><div></div></div></div>';
+                        timerEl.textContent = 'UNLIMITED';
                         insertBtn.style.display = "none";
                         if (member_logout_button) {
                             pauseBtn.style.display = "block";
@@ -194,10 +194,11 @@ function getValidity(o) {
             if (4 == this.readyState) {
                 if (200 == this.status) {
                     var parts = this.responseText.split("#");
-                    expEl.innerHTML = parts[1];
                     if (50 < this.responseText.length) {
-                        expEl.innerHTML = "Loading...";
+                        expEl.textContent = "Loading...";
                         setTimeout(function () { getValidity(o + 1); }, 1000);
+                    } else {
+                        expEl.textContent = formatExpiry(parts[1]);
                     }
                 } else {
                     expEl.textContent = "Not Available";
@@ -225,12 +226,12 @@ function getData(o) {
                     var text = this.responseText,
                         parts = text.split("#");
                     macVoucher = parts[0];
-                    expEl.innerHTML = parts[1];
                     if (50 < text.length) {
-                        expEl.innerHTML = "Loading...";
+                        expEl.textContent = "Loading...";
                         setTimeout(function () { getData(o + 1); }, 1000);
                         return;
                     }
+                    expEl.textContent = formatExpiry(parts[1]);
                     if ("Disconnected" == apiStatus) {
                         pauseBtn.style.pointerEvents = "auto";
                         pause = true;
@@ -934,34 +935,40 @@ function credits(e) {
         "" + (hours > 0 ? hours + "" : "0") + "h:" + (mins > 0 ? mins + "" : "0") + "m";
 }
 
+function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+
 function secondsToDhms(e) {
     e = Number(e);
     var d = Math.floor(e / 86400),
         h = Math.floor((e % 86400) / 3600),
         m = Math.floor((e % 3600) / 60),
         s = Math.floor(e % 60);
-    if (d < 10) d = "0" + d;
-    if (h < 10) h = "0" + h;
-    if (m < 10) m = "0" + m;
-    if (s < 10) s = "0" + s;
-    var dayHTML = (parseInt(d) > 0)
-        ? '<div class="inner-wrapper"><div id="day">' + d + (d == 1 ? "</div><div>day</div></div>" : "</div><div>days</div></div>")
-        : "";
-    m = parseInt(m) > 0 ? m + "" : "00";
-    s = parseInt(s) > 0 ? s + "" : "00";
-    if (parseInt(d) > 0 && h == 0) {
-        var hr = parseInt(h) > 0 ? h + "" : "00";
-        return '<div class="d-flex flex-fill align-content-stretch">' +
-            dayHTML +
-            '<div class="inner-wrapper"><div id="hr">' + hr + '</div><div>hours</div></div><div class="inner-wrapper"><div id="min">' +
-            m + '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s + "</div><div>seconds</div></div></div>";
+    var parts = [];
+    if (d > 0) parts.push(d + "d");
+    if (d > 0 || h > 0) parts.push(pad2(h) + "h");
+    parts.push(pad2(m) + "m");
+    parts.push(pad2(s) + "s");
+    return parts.join(" : ");
+}
+
+function formatExpiry(val) {
+    if (!val || val.trim() === "") return "Not Available";
+    val = val.trim();
+    var validityTime = null;
+    if (val.length > 15) {
+        validityTime = new Date(Date.parse(val));
+    } else if (val.length > 8) {
+        var dt = val.split(" ");
+        var yr = new Date().getFullYear();
+        validityTime = new Date(Date.parse(dt[0] + "/" + yr + " " + dt[1]));
+    } else {
+        var cur = new Date();
+        validityTime = new Date(Date.parse((cur.getMonth() + 1) + "/" + cur.getDate() + "/" + cur.getFullYear() + " " + val));
     }
-    return '<div class="d-flex flex-fill align-content-stretch">' +
-        dayHTML +
-        (parseInt(h) > 0 ? '<div class="inner-wrapper"><div id="hr">' + h + "</div><div>hours</div></div>" : "") +
-        '<div class="inner-wrapper"><div id="min">' + m +
-        '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s +
-        "</div><div>seconds</div></div></div>";
+    if (!validityTime || isNaN(validityTime.getTime())) return val;
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return months[validityTime.getMonth()] + " " + validityTime.getDate() + " " +
+           pad2(validityTime.getHours()) + ":" + pad2(validityTime.getMinutes());
 }
 
 function setStorageValue(key, val) {
