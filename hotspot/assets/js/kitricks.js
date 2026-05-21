@@ -401,6 +401,7 @@ function insertCoin(retryCount) {
     extendTimeCriteria = (savedVoucher == null) ? 0 : 1;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://" + vendorIpAddress + "/topUp", true);
+    xhr.timeout = 5000;
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (4 == this.readyState && 200 == this.status) {
@@ -435,7 +436,7 @@ function insertCoin(retryCount) {
             }
         }
     };
-    xhr.onerror = function () {
+    xhr.onerror = xhr.ontimeout = function () {
         if (retryCount < 5) {
             insertBtn.style.pointerEvents = "none";
             openModal(dialog);
