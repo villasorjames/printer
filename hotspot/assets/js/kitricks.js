@@ -54,6 +54,7 @@ var voucher = getStorageValue("activeVoucher"),
     subscription = !1,
     subscription_prefix = [],
     body = document[_0x5873e6(492)]("body"),
+    bottomProgress = document.getElementById("bottom-progress"),
     interfaceName = body[_0x5873e6(516)][_0x5873e6(502)],
     icmodal = document[_0x5873e6(540)](_0x5873e6(475)),
     insertBtn = document[_0x5873e6(492)](_0x5873e6(558)),
@@ -202,7 +203,6 @@ function getData(o) {
     5 < o
         ? fallbackData()
         : ((e = null == activeMac || null == activeMac ? macNoColon : replaceAll(activeMac, ":")),
-          (pauseBtn[a(567)] = a(590)),
           (t = new XMLHttpRequest()).open("GET", a(537) + e + ".txt", !0),
           t.setRequestHeader(a(643), a(413)),
           t[a(588)]("Pragma", a(411)),
@@ -258,8 +258,8 @@ function paused(e) {
     var n = _0x5873e6,
         o = document[n(492)]("status");
     (pauseBtn[n(420)].pointerEvents = "none"),
+        (bottomProgress.style.display = "block"),
         (timeleft = document[n(492)](n(468))),
-        (pauseBtn[n(567)] = '<div class="loader"></div>'),
         setTimeout(function () {
             var e,
                 t = n;
@@ -612,7 +612,7 @@ function insertBtnManual(e) {
         e = document.querySelector(t(534));
     closeModal(svmodal),
         (insertBtn[t(420)].pointerEvents = "none"),
-        (insertBtn[t(567)] = t(590)),
+        (bottomProgress.style.display = "block"),
         (vendorIpAddress = n[t(639)]),
         (o[t(567)] = n[t(428)]),
         (e[t(567)] = n.vendoName),
@@ -676,7 +676,8 @@ function insertCoin(n) {
                       closeModal(dialog);
                   }, 1500),
                   (insertBtn[t(472)] = t(541)),
-                  (insertBtn.style.pointerEvents = "auto"));
+                  (insertBtn.style.pointerEvents = "auto"),
+                  (bottomProgress.style.display = "none"));
         }),
         t.send(o(507) + voucher + o(497) + mac + o(656) + ipAddress + o(552) + extendTimeCriteria),
         (totalCoinReceived = 0),
@@ -994,7 +995,7 @@ ajaxsettings[_0x5873e6(660)](_0x5873e6(630), _0x5873e6(615), !0),
     (insertBtn.onclick = function () {
         var e = _0x5873e6;
         autoSelect
-            ? ((insertBtn[e(420)][e(434)] = e(464)), (insertBtn[e(567)] = e(590)), (vcTopUp = !1), insertCoin(0))
+            ? ((insertBtn[e(420)][e(434)] = e(464)), (vcTopUp = !1), insertCoin(0))
             : openModal(svmodal);
     }),
     (document[_0x5873e6(540)](_0x5873e6(500))[_0x5873e6(659)] = function () {
@@ -1107,7 +1108,7 @@ var animate = function () {
                     ? !prefix &&
                       trial &&
                       trial_logout_button &&
-                      ((pauseBtn[t(420)][t(503)] = t(469)), (pauseBtn[t(420)].pointerEvents = "auto"))
+                      ((pauseBtn[t(420)][t(503)] = t(469)), (pauseBtn[t(420)].pointerEvents = "auto"), (bottomProgress.style.display = "none"))
                     : ((pauseBtn[t(420)][t(503)] = "none"), (pauseBtn[t(420)].pointerEvents = t(464))));
         }),
         (e.onerror = function () {
