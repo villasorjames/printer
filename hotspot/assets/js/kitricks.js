@@ -36,11 +36,6 @@ var voucher = getStorageValue("activeVoucher"),
     trial_logout_button = true,
     subscription = false,
     subscription_prefix = [],
-    internet_status = false,
-    no_internet_allow_insertcoin = true,
-    no_internet_auto_pause = false,
-    no_internet_title = "",
-    no_internet_text = "",
     body = document.getElementById("body"),
     interfaceName = body.dataset.interface,
     icmodal = document.querySelector("[data-insert-coin]"),
@@ -727,13 +722,7 @@ ajaxsettings.onreadystatechange = function () {
             subscription = true;
             subscription_prefix = t.subscription_prefix;
         }
-        if (t.Settings.internet_status && t.no_internet_settings) {
-            internet_status = true;
-            no_internet_allow_insertcoin = t.no_internet_settings.insertcoin;
-            no_internet_auto_pause = t.no_internet_settings.auto_pause;
-            no_internet_title = t.no_internet_settings.internet_status_tittle;
-            no_internet_text = t.no_internet_settings.internet_status_text;
-        }
+
 
         if (0 == t.Settings.vendo_option) {
             ssid.innerHTML = t.VendoAddresses[0].ssid;
@@ -778,11 +767,6 @@ ajaxsettings.onreadystatechange = function () {
             removeStorageValue("vendoName");
         }
         api();
-        if (internet_status) {
-            checkInternetStatus(function (hasInternet) {
-                if (!hasInternet) handleNoInternet();
-            });
-        }
     }
 };
 
@@ -1047,25 +1031,6 @@ function replaceAll(str, search) {
     return result;
 }
 
-function checkInternetStatus(callback) {
-    var img = new Image();
-    var t = setTimeout(function () { img.src = ''; callback(false); }, 5000);
-    img.onload = function () { clearTimeout(t); callback(true); };
-    img.onerror = function () { clearTimeout(t); callback(false); };
-    img.src = 'https://www.google.com/favicon.ico?_=' + Date.now();
-}
-
-function handleNoInternet() {
-    if (!internet_status) return;
-    var msgModal = document.querySelector("[data-message]");
-    msgModal.querySelector(".header").textContent = no_internet_title || "No Internet";
-    document.querySelector("#message").textContent = no_internet_text || "No internet connection as of the moment, Please try again later";
-    openModal(msgModal);
-    if (no_internet_auto_pause && !pause && apiStatus === "Connected") {
-        paused(300);
-    }
-}
-
 function notifyCoinSlotError(errorCode) {
     var msgModal = document.querySelector("[data-message]");
     openModal(msgModal);
@@ -1078,11 +1043,8 @@ function notifyCoinSlotError(errorCode) {
         document.querySelector("#message").textContent = "You have been banned from using coin slot, due to multiple request for insert coin, please try again later!";
     }
     if (errorCode == "no.internet.detected") {
-        msgModal.querySelector(".header").textContent = no_internet_title || "Error!";
-        document.querySelector("#message").innerHTML = no_internet_text || "No internet connection as of the moment, Please try again later";
-        if (no_internet_auto_pause && !pause && apiStatus === "Connected") {
-            paused(300);
-        }
+        msgModal.querySelector(".header").textContent = "Error!";
+        document.querySelector("#message").innerHTML = "No internet connection as of the moment, Please try again later";
     }
     if (errorCode == "offline") {
         msgModal.querySelector(".header").textContent = "Error!";
