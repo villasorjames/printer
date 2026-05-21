@@ -11,7 +11,7 @@
         "trial_logout_button"   :   true,
         "subscription"          :   true,
         "custom_theme"          :   true,
-        "internet_status"       :   true,
+        "internet_status"       :   false,
         "gcash_payment"         :   false
     },
 
@@ -24,14 +24,7 @@
         "textcolor"  :  ""
     },
 
-    "no_internet_settings" : {
-        "insertcoin"               :    true,
-        "auto_pause"               :    false,
-        "internet_status_tittle"   :    "enjoy and have fun",
-        "internet_status_text"     :    "PLEASE CLICK OKAY IF WANT TO PROCEED, THANK YOU!."
-    },
-
-    "gcash_payment" :{
+"gcash_payment" :{
         "payment_gateway":"https://payments.wifree.network/xendit/production/purchase_voucher.php",
         "portal_key" :  ""
     },
