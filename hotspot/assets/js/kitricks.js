@@ -128,7 +128,7 @@ function api() {
                         pauseBtn.style.display = "none";
                         prefix = true;
                         document.querySelector(".btn-group .input-group").style.display = "none";
-                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>Subscription</div><div></div></div></div>';
+                        timerEl.textContent = 'Subscription';
                     }
 
                     if (e.timeleft != null || prefix) {
@@ -151,7 +151,7 @@ function api() {
                     } else {
                         unlimited = true;
                         intervalManager(0);
-                        timerEl.innerHTML = '<div class="d-flex flex-fill align-content-stretch"><div class="inner-wrapper"><div>UNLIMITED</div><div></div></div></div>';
+                        timerEl.textContent = 'UNLIMITED';
                         insertBtn.style.display = "none";
                         if (member_logout_button) {
                             pauseBtn.style.display = "block";
@@ -944,28 +944,12 @@ function secondsToDhms(e) {
         h = Math.floor((e % 86400) / 3600),
         m = Math.floor((e % 3600) / 60),
         s = Math.floor(e % 60);
-    if (d < 10) d = "0" + d;
-    if (h < 10) h = "0" + h;
-    if (m < 10) m = "0" + m;
-    if (s < 10) s = "0" + s;
-    var dayHTML = (parseInt(d) > 0)
-        ? '<div class="inner-wrapper"><div id="day">' + d + (d == 1 ? "</div><div>day</div></div>" : "</div><div>days</div></div>")
-        : "";
-    m = parseInt(m) > 0 ? m + "" : "00";
-    s = parseInt(s) > 0 ? s + "" : "00";
-    if (parseInt(d) > 0 && h == 0) {
-        var hr = parseInt(h) > 0 ? h + "" : "00";
-        return '<div class="d-flex flex-fill align-content-stretch">' +
-            dayHTML +
-            '<div class="inner-wrapper"><div id="hr">' + hr + '</div><div>hours</div></div><div class="inner-wrapper"><div id="min">' +
-            m + '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s + "</div><div>seconds</div></div></div>";
-    }
-    return '<div class="d-flex flex-fill align-content-stretch">' +
-        dayHTML +
-        (parseInt(h) > 0 ? '<div class="inner-wrapper"><div id="hr">' + h + "</div><div>hours</div></div>" : "") +
-        '<div class="inner-wrapper"><div id="min">' + m +
-        '</div><div>minutes</div></div><div class="inner-wrapper"><div id="sec">' + s +
-        "</div><div>seconds</div></div></div>";
+    var parts = [];
+    if (d > 0) parts.push(d + "d");
+    if (d > 0 || h > 0) parts.push(pad2(h) + "h");
+    parts.push(pad2(m) + "m");
+    parts.push(pad2(s) + "s");
+    return parts.join(" : ");
 }
 
 function formatExpiry(val) {
