@@ -11,7 +11,6 @@
         "trial_logout_button"   :   true,
         "subscription"          :   true,
         "custom_theme"          :   true,
-        "internet_status"       :   false,
         "gcash_payment"         :   false
     },
 
