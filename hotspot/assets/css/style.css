@@ -532,6 +532,32 @@ body.modal-active {
     width: 90%;
   }
 }
+#btnProgress {
+  display: none;
+  height: 5px;
+  width: 80%;
+  margin: 0 auto 5px;
+  background: rgba(0, 128, 128, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+#btnProgress.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  height: 100%;
+  width: 40%;
+  background: teal;
+  background: var(--color-primary);
+  border-radius: 3px;
+  animation: btnProgressAnim 1.2s ease-in-out infinite;
+}
+@keyframes btnProgressAnim {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
 @media (orientation: landscape) {
   .row {
     max-width: 450px;

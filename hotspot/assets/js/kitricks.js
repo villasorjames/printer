@@ -213,7 +213,7 @@ function getData(o) {
         fallbackData();
     } else {
         var mac_str = (activeMac == null || activeMac == null) ? macNoColon : replaceAll(activeMac, ":");
-        pauseBtn.innerHTML = '<div class="loader"></div>';
+        showBtnProgress();
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/data/" + mac_str + ".txt", true);
         xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
@@ -244,8 +244,10 @@ function getData(o) {
                     } else if (!unlimited) {
                         pauseBtn.textContent = "Pause";
                     }
+                    hideBtnProgress();
                 } else {
                     fallbackData();
+                    hideBtnProgress();
                 }
             }
         };
@@ -281,7 +283,7 @@ function paused(delay) {
     var statusEl = document.getElementById("status");
     pauseBtn.style.pointerEvents = "none";
     timeleft = document.getElementById("timer");
-    pauseBtn.innerHTML = '<div class="loader"></div>';
+    showBtnProgress();
     setTimeout(function () {
         pauseBtn.style.pointerEvents = "auto";
         if (pause) {
@@ -304,6 +306,7 @@ function paused(delay) {
                     } else {
                         statusEl.textContent = "Time Paused";
                         pauseBtn.textContent = "Resume";
+                        hideBtnProgress();
                         setCookie("timeLeft", timeleft.innerHTML, 30);
                     }
                 }
@@ -378,7 +381,7 @@ function insertBtnManual(el) {
         vendorEl = document.querySelector("[data-vendo]");
     closeModal(svmodal);
     insertBtn.style.pointerEvents = "none";
-    insertBtn.innerHTML = '<div class="loader"></div>';
+    showBtnProgress();
     vendorIpAddress = data.vendoIp;
     ssidEl.innerHTML = data.ssid;
     vendorEl.innerHTML = data.vendoName;
@@ -414,6 +417,7 @@ function insertCoin(retryCount) {
                     icmodal.querySelector(".header").textContent = "Please Insert Coin";
                     insertBtn.style.pointerEvents = "auto";
                     insertBtn.textContent = "Insert Coin";
+                    hideBtnProgress();
                     icmodal.querySelector(".progress-bar").style.width = "100%";
                     document.querySelector("[data-sv-close]").textContent = "Cancel";
                     if (timer == null) {
@@ -442,6 +446,7 @@ function insertCoin(retryCount) {
             setTimeout(function () { closeModal(dialog); }, 1500);
             insertBtn.textContent = "Insert Coin";
             insertBtn.style.pointerEvents = "auto";
+            hideBtnProgress();
         }
     };
     xhr.send("voucher=" + voucher + "&mac=" + mac + "&ipAddress=" + ipAddress + "&extendTime=" + extendTimeCriteria);
@@ -622,7 +627,7 @@ function getWifiRate(retryCount) {
     ratesBtn.style.pointerEvents = "none";
     ratesBodyEl.style.display = "none";
     var wrmodal = document.querySelector("[data-rates]");
-    ratesBtn.innerHTML = '<div class="loader"></div>';
+    showBtnProgress();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "http://" + vendorIpAddress + "/getRates?date=" + Date.now(), true);
     xhr.setRequestHeader("Content-type", "text/plain");
@@ -633,6 +638,7 @@ function getWifiRate(retryCount) {
             ratesBtn.style.pointerEvents = "auto";
             ratesBodyEl.style.display = "block";
             ratesBtn.textContent = "Wifi Rates";
+            hideBtnProgress();
             wrmodal.querySelector(".header").textContent = "Wifi Rates";
             openModal(wrmodal);
             var rows = raw.split("|"), html = "";
@@ -675,6 +681,7 @@ function getWifiRate(retryCount) {
             setTimeout(function () { closeModal(wrmodal); }, 2000);
             ratesBtn.style.pointerEvents = "auto";
             ratesBtn.textContent = "Wifi Rates";
+            hideBtnProgress();
         }
     };
 }
@@ -767,7 +774,7 @@ ajaxsettings.onerror = function () {
 insertBtn.onclick = function () {
     if (autoSelect) {
         insertBtn.style.display = "none";
-        insertBtn.innerHTML = '<div class="loader"></div>';
+        showBtnProgress();
         vcTopUp = false;
         insertCoin(0);
     } else {
@@ -1025,6 +1032,7 @@ function notifyCoinSlotError(errorCode) {
         setTimeout(function () {
             insertBtn.style.pointerEvents = "auto";
             insertBtn.textContent = "Insert Coin";
+            hideBtnProgress();
         }, 3000);
     }
 }
@@ -1041,4 +1049,16 @@ function closeModal(el) {
         el.classList.remove("show");
         body.classList.remove("modal-active");
     }
+}
+
+function showBtnProgress() {
+    var el = document.getElementById("btnProgress");
+    el.style.display = "block";
+    el.classList.add("active");
+}
+
+function hideBtnProgress() {
+    var el = document.getElementById("btnProgress");
+    el.style.display = "none";
+    el.classList.remove("active");
 }
