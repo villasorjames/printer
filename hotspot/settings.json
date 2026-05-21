@@ -13,10 +13,18 @@
         "member_logout_button"  :   true,
         "trial_logout_button"   :   true,
         "subscription"          :   true,
+        "internet_status"       :   true,
         "gcash_payment"         :   false
     },
 
     "subscription_prefix" : ["ME", "Vc", "MO", "Ec"],
+
+    "no_internet_settings" : {
+        "insertcoin"               :    true,
+        "auto_pause"               :    false,
+        "internet_status_tittle"   :    "enjoy and have fun",
+        "internet_status_text"     :    "PLEASE CLICK OKAY IF WANT TO PROCEED, THANK YOU!."
+    },
 
 "gcash_payment" :{
         "gcash_node_ip"   : "10.0.0.254",
