@@ -1,6 +1,6 @@
 ﻿{
     "Settings" : {
-        "vendo_option"          :   1,
+        "vendo_option"          :   0,
         "username_only"         :   false,
         "currency"              :   "₱",
         "footer_text"           :   "TAPICAN, LILOY, ZDN. PISO WIFI BUILDER 09361935986",
@@ -19,14 +19,14 @@
     "subscription_prefix" : ["ME", "Vc", "MO", "Ec"],
 
 "gcash_payment" :{
-        "gcash_node_ip"   : "",
-        "gcash_portal_key": ""
+        "gcash_node_ip"   : "10.0.0.254",
+        "gcash_portal_key": "xxxx-xxxx-xxxx-xxxx"
     },
 
     "VendoAddresses" : [
          {
-			"ssid": "FELZATEL PISO WIFI MAIN VENDO",
-			"vendoName": "Main",
+			"ssid": "Pisowifi",
+			"vendoName": "Main Vendo",
 			"vendoIp": "10.0.15.253",
 			"interfaceName": "bridge1"
 		},
