@@ -1,0 +1,71 @@
+﻿{
+    "Settings" : {
+        "vendo_option"          :   1,
+        "username_only"         :   false,
+        "currency"              :   "₱",
+        "footer_text"           :   "TAPICAN, LILOY, ZDN. PISO WIFI BUILDER 09361935986",
+        "footer_link"           :   "https://www.facebook.com/marlonace.cgo",
+        "voucher_input"         :   true,
+        "pause_button"          :   true,
+        "member_logout_button"  :   true,
+        "trial_logout_button"   :   true,
+        "subscription"          :   true,
+        "custom_theme"          :   true,
+        "internet_status"       :   true,
+        "gcash_payment"         :   false
+    },
+
+    "subscription_prefix" : ["ME", "Vc", "MO", "Ec"],
+
+    "custom_theme" :{
+        "background" :  "black",
+        "container"  :  "white",
+        "color"      :  "orange",
+        "textcolor"  :  ""
+    },
+
+    "no_internet_settings" : {
+        "insertcoin"               :    true,
+        "auto_pause"               :    false,
+        "internet_status_tittle"   :    "enjoy and have fun",
+        "internet_status_text"     :    "PLEASE CLICK OKAY IF WANT TO PROCEED, THANK YOU!."
+    },
+
+    "gcash_payment" :{
+        "payment_gateway":"https://payments.wifree.network/xendit/production/purchase_voucher.php",
+        "portal_key" :  ""
+    },
+
+    "VendoAddresses" : [
+         {
+			"ssid": "FELZATEL PISO WIFI MAIN VENDO",
+			"vendoName": "Main",
+			"vendoIp": "10.0.15.253",
+			"interfaceName": "bridge1"
+		},
+		{
+			"ssid": "SUB VENDO 1",
+			"vendoName": "SUB VENDO 1",
+			"vendoIp": "10.0.15.252",
+			"interfaceName": "bridge1"
+		},
+		{
+			"ssid": "SUB VENDO 2",
+			"vendoName": "vlan11",
+			"vendoIp": "10.0.11.253",
+			"interfaceName": "vlan11"
+		},
+		{
+			"ssid": "PISOWIFI",
+			"vendoName": "vlan24",
+			"vendoIp": "24.0.0.5",
+			"interfaceName": "vlan24"
+		},
+		{
+			"ssid": "PISOWIFI",
+			"vendoName": "vlan25",
+			"vendoIp": "25.0.0.5",
+			"interfaceName": "vlan25"
+		}
+    ]
+}
