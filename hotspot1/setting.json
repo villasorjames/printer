@@ -17,6 +17,7 @@
         "gcash_node_ip": "PHPASTE MO DITO ANG IPHP NG NODE NA NAKA BIND SA WIFREE",
         "gcash_portal_key": "PHPASTE MO DITO ANG PHPORTAL KEY GALING KAY WIFREE",
         "single_vendo_ip": "",
+        "single_vendo_name": "Main Vendo",
         "multi_vendo": true,
         "multi_vendo_option": 2,
         "multi_vendo_ip": [

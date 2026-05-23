@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (!isMultiVendo || multivendoOption === 0) {
         vendoIpAddress = setting.single_vendo_ip;
+        setVendoName(setting.single_vendo_name);
     } else if (multivendoOption === 1) {
         var hsHost = hsAddress.split(":")[0];
         const matchedVendo = multiVendoIps.find(v => v.hs_address === hsHost);
