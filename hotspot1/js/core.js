@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (titleEl) titleEl.textContent = setting.hotspot_name;
     }
 
-    if (!isMultiVendo || multivendoOption === 0) {
+    if (!isMultiVendo) {
         vendoIpAddress = setting.single_vendo_ip;
         setVendoName(setting.single_vendo_name);
     } else if (multivendoOption === 1) {
@@ -354,11 +354,19 @@ function initInsertCoin() {
     const savedCoin = localStorage.getItem("savedCoin");
     coin = savedCoin != null ? savedCoin : 0;
 
-    showNotification("Connecting to vendo..");
-    topUp();
+    if (!isMultiVendo) {
+        showNotification("Connecting to vendo..");
+        topUp();
+    } else if (multivendoOption === 0) {
+        openModal(3);
+    } else {
+        showNotification("Connecting to vendo..");
+        topUp();
+    }
 }
 
 async function topUp() {
+    isMultiVendo && multivendoOption === 0 && closeModal(3);
     var userType = document.getElementById("insert-coin-button").getAttribute("user-type");
     var extendTime = userType === "new" ? 0 : 1;
     if (extendTime === 1) voucher = toSyncVoucher;
