@@ -272,7 +272,7 @@
     <!-- modal[2] : rates -->
     <div class="modal" role="dialog" aria-modal="true" aria-label="WiFi rates">
         <div class="modal-content">
-            <div class="modal-head"><span>WiFi Rates</span></div>
+            <div class="modal-head"><span>WiFi Rates</span><button type="button" onclick="closeModal(2)" style="background:none;border:none;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px;">&times;</button></div>
             <div class="modal-body">
                 <table id="rate-list">
                     <tr>
@@ -282,20 +282,14 @@
                     </tr>
                 </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" onclick="closeModal(2)">CLOSE</button>
-            </div>
         </div>
     </div>
 
     <!-- modal[3] : select vendo -->
     <div class="modal" role="dialog" aria-modal="true" aria-label="Select vendo">
         <div class="modal-content">
-            <div class="modal-head"><span>Select vendo</span></div>
+            <div class="modal-head"><span>Select vendo</span><button type="button" onclick="closeModal(3)" style="background:none;border:none;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px;">&times;</button></div>
             <div class="modal-body" id="vendo-list">
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="closeModal(3)">CLOSE</button>
             </div>
         </div>
     </div>
@@ -321,13 +315,12 @@
     <!-- modal[6] : voucher input -->
     <div class="modal" role="dialog" aria-modal="true" aria-label="Voucher">
         <div class="modal-content">
-            <div class="modal-head"><span>Use voucher</span></div>
+            <div class="modal-head"><span>Use voucher</span><button type="button" onclick="closeModal(6)" style="background:none;border:none;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px;">&times;</button></div>
             <div class="modal-body">
                 <p style="color:#6b7280; font-size:13px; margin-bottom:10px">Enter your voucher code to redeem time.</p>
                 <input type="text" id="convertVoucherInput" class="voucher-input" aria-label="Voucher code" placeholder="Voucher code" />
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="closeModal(6)">CLOSE</button>
                 <button type="button" id="proceedInsertCoinButton" onclick="initConvertVoucher()" style="background:#3b82f6;color:#fff">SUBMIT</button>
             </div>
         </div>
