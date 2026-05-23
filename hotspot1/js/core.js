@@ -12,8 +12,6 @@ var voucher;
 var coin;
 var timer = null;
 var isInsertingCoin = false;
-var coinCheckErrors = 0;
-var MAX_COIN_CHECK_ERRORS = 4;
 var sanitizeMac;
 var currency;
 var multiVendoArray;
@@ -47,6 +45,58 @@ function modalHide(el) {
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+function xhrFetch(url, options) {
+    options = options || {};
+    var method = options.method || "GET";
+    var headers = options.headers || {};
+    var body = options.body || null;
+    var retries = typeof options.retries !== "undefined" ? options.retries : 3;
+    var timeout = options.timeout || 10000;
+    var attempt = 0;
+    return new Promise(function(resolve, reject) {
+        function doRequest() {
+            attempt++;
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            xhr.timeout = timeout;
+            for (var key in headers) {
+                if (Object.prototype.hasOwnProperty.call(headers, key))
+                    xhr.setRequestHeader(key, headers[key]);
+            }
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) return;
+                var status = xhr.status === 1223 ? 204 : xhr.status;
+                var ok = status >= 200 && status < 300;
+                var resp = {
+                    ok: ok, status: status, statusText: xhr.statusText,
+                    text: function() { return Promise.resolve(xhr.responseText); },
+                    json: function() {
+                        try { return Promise.resolve(JSON.parse(xhr.responseText)); }
+                        catch(e) { return Promise.reject(e); }
+                    }
+                };
+                if (ok) { resolve(resp); return; }
+                var retry = status >= 500 || status === 0;
+                retry && attempt < retries ? setTimeout(doRequest, 500 * attempt) :
+                    reject({ status: status, statusText: xhr.statusText, response: xhr.responseText });
+            };
+            xhr.ontimeout = function() {
+                attempt < retries ? setTimeout(doRequest, 500 * attempt) : reject(new Error("Timeout"));
+            };
+            xhr.onerror = function() {
+                attempt < retries ? setTimeout(doRequest, 500 * attempt) : reject(new Error("Network error"));
+            };
+            try { xhr.send(body); }
+            catch(e) { attempt < retries ? setTimeout(doRequest, 500 * attempt) : reject(e); }
+        }
+        doRequest();
+    });
+}
+
+function fetchJson(url, options) {
+    return xhrFetch(url, options).then(function(res) { return res.json(); });
+}
 
 function hideById(id) {
     var el = document.getElementById(id);
@@ -315,43 +365,23 @@ function initInsertCoin() {
 }
 
 async function topUp() {
-    if (isMultiVendo && multivendoOption === 0) {
-        closeModal(3);
-    }
-
-    const userType = document.getElementById("insert-coin-button").getAttribute("user-type");
-    let extendTime;
-
-    if (userType === "new") {
-        extendTime = 0;
-    } else {
-        extendTime = 1;
-        voucher = (typeof toSyncVoucher !== 'undefined' && toSyncVoucher) ? toSyncVoucher : (typeof resumeVoucher !== 'undefined' && resumeVoucher ? resumeVoucher : voucher);
-    }
-
-    if (isMacAsVoucher) {
-        voucher = sanitizeMac;
-    }
+    isMultiVendo && multivendoOption === 0 && closeModal(3);
+    var userType = document.getElementById("insert-coin-button").getAttribute("user-type");
+    var extendTime = userType === "new" ? 0 : 1;
+    if (extendTime === 1) voucher = toSyncVoucher;
+    if (isMacAsVoucher) voucher = sanitizeMac;
 
     try {
-        const url = "http://" + vendoIpAddress + "/topUp?voucher=" + voucher +
+        var url = "http://" + vendoIpAddress + "/topUp?voucher=" + voucher +
             "&ipAddress=" + userIp + "&mac=" + userMac + "&extendTime=" + extendTime;
-        const timeout = new Promise(function(_, reject) {
-            setTimeout(function() { reject(new Error("timeout")); }, 10000);
-        });
-        const response = await Promise.race([fetch(url), timeout]);
-        const data = await response.json();
-
+        var data = await fetchJson(url);
         if (data.status === "true") {
             var p = InsertCoinSound.play(); if (p) p.catch(function(){});
             isInsertingCoin = true;
-            coinCheckErrors = 0;
             closeNotification(10);
             modalShow(modal[0]);
             voucher = data.voucher;
-            if (timer === null) {
-                timer = setInterval(checkCoin, 1000);
-            }
+            if (timer === null) timer = setInterval(checkCoin, 1000);
         } else {
             showNotification(errorCode[data.errorCode]);
             closeNotification(3000);
@@ -364,86 +394,54 @@ async function topUp() {
 }
 
 async function cancelTopUp() {
+    var url = "http://" + vendoIpAddress + "/cancelTopUp?voucher=" + voucher + "&mac=" + userMac;
+    await fetchJson(url).catch(function() {});
     clearInterval(timer);
     timer = null;
     isInsertingCoin = false;
     InsertCoinSound.pause();
     InsertCoinSound.currentTime = 0;
-    try {
-        var url = "http://" + vendoIpAddress + "/cancelTopUp?voucher=" + voucher + "&mac=" + userMac;
-        var timeout = new Promise(function(_, reject) {
-            setTimeout(function() { reject(new Error("timeout")); }, 5000);
-        });
-        await Promise.race([fetch(url), timeout]);
-    } catch (e) {
-        // vendo unreachable, local cleanup already done
-    }
 }
 
 async function checkCoin() {
-    if (!timer) return;
-    try {
-        const url = "http://" + vendoIpAddress + "/checkCoin?voucher=" + voucher;
-        const timeout = new Promise(function(_, reject) {
-            setTimeout(function() { reject(new Error("timeout")); }, 5000);
-        });
-        const response = await Promise.race([fetch(url), timeout]);
-        const data = await response.json();
+    var url = "http://" + vendoIpAddress + "/checkCoin?voucher=" + voucher;
+    var data = await fetchJson(url);
+    var timeAdded = Number(data.timeAdded) || 0;
+    var remainTime = Number(data.remainTime) || 0;
+    var remainSeconds = Math.floor(remainTime / 1000);
+    var waitTime = Number(data.waitTime) || 0;
+    var progressPercent = Math.floor(remainSeconds * 1000 / waitTime * 100);
+    var cancelBtn = document.getElementById("cancelInsertCoinButton");
+    var proceedBtn = document.getElementById("proceedInsertCoinButton");
+    var userTimeEl = document.getElementById("userTime");
 
-        const timeAdded = Number(data.timeAdded) || 0;
-        const remainTime = Number(data.remainTime) || 0;
-        const remainSeconds = Math.floor(remainTime / 1000);
-        const waitTime = Number(data.waitTime) || 0;
-        const progressPercent = Math.floor(remainSeconds * 1000 / waitTime * 100);
-
-        const cancelBtn = document.getElementById("cancelInsertCoinButton");
-        const proceedBtn = document.getElementById("proceedInsertCoinButton");
-        const userTimeEl = document.getElementById("userTime");
-
-        coinCheckErrors = 0;
-        if (data.status === "true") {
-            showToast('' + currency + '' + data.newCoin + " accepted", "success");
-            coin = data.totalCoin;
-            localStorage.setItem("savedCoin", coin);
-            localStorage.setItem("savedVoucher", voucher);
-        } else if (data.errorCode === "coin.is.reading") {
-            showToast("Processing coin", "warning");
-        } else if (data.errorCode === "coin.not.inserted") {
-            updateProgress(progressPercent);
-            if (remainSeconds > 0) {
-                if (coin > 0) {
-                    document.getElementById("userCoin").textContent = coin;
-                    document.getElementById("userCode").textContent = voucher;
-                    userTimeEl.textContent = timeConvert(timeAdded);
-                    cancelBtn.style.opacity = "25%";
-                    cancelBtn.disabled = true;
-                    proceedBtn.style.opacity = "100%";
-                    proceedBtn.disabled = false;
-                } else {
-                    cancelBtn.style.opacity = "100%";
-                }
-            } else if (coin > 0) {
-                loginVoucher();
+    if (data.status === "true") {
+        showToast("₱" + data.newCoin + " accepted", "success");
+        coin = data.totalCoin;
+        localStorage.setItem("savedCoin", coin);
+        localStorage.setItem("savedVoucher", voucher);
+    } else if (data.errorCode === "coin.is.reading") {
+        showToast("Processing coin", "warning");
+    } else if (data.errorCode === "coin.not.inserted") {
+        updateProgress(progressPercent);
+        if (remainSeconds > 0) {
+            if (coin > 0) {
+                document.getElementById("userCoin").innerText = coin;
+                document.getElementById("userCode").innerText = voucher;
+                userTimeEl.innerHTML = timeConvert(timeAdded);
+                cancelBtn.style.opacity = "25%";
+                cancelBtn.disabled = true;
+                proceedBtn.style.opacity = "100%";
+                proceedBtn.disabled = false;
             } else {
-                closeModal(0);
+                cancelBtn.style.opacity = "100%";
             }
-        } else if (data.errorCode === "coinslot.busy") {
-            // waiting
+        } else {
+            if (coin > 0) loginVoucher();
+            else closeModal(0);
         }
-    } catch (e) {
-        coinCheckErrors++;
-        if (coinCheckErrors < MAX_COIN_CHECK_ERRORS) {
-            return;
-        }
-        coinCheckErrors = 0;
-        clearInterval(timer);
-        timer = null;
-        isInsertingCoin = false;
-        InsertCoinSound.pause();
-        InsertCoinSound.currentTime = 0;
-        closeModal(0);
-        showNotification("NodeMCU connection lost. Reconnecting...");
-        setTimeout(function() { location.reload(); }, 3000);
+    } else if (data.errorCode === "coinslot.busy") {
+        // waiting
     }
 }
 
