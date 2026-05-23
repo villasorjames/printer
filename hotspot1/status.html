@@ -255,7 +255,7 @@
     <!-- modal[1] : member login -->
     <div class="modal" role="dialog" aria-modal="true" aria-label="Member login">
         <div class="modal-content">
-            <div class="modal-head"><span>Member login</span></div>
+            <div class="modal-head"><span>Member login</span><button type="button" onclick="closeModal(1)" style="background:none;border:none;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px;">&times;</button></div>
             <div class="modal-body">
                 <form name="memlogin" class="flex-column" action="$(link-login-only)" method="post" $(if chap-id)
                     onSubmit="return doLoginMember()" $(endif)>
@@ -265,9 +265,6 @@
                     <input name="mempassword" type="password" placeholder="Password" required />
                     <input type="submit" value="LOGIN" class="button" />
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="closeModal(1)">CLOSE</button>
             </div>
         </div>
     </div>
