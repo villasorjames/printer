@@ -11,30 +11,11 @@
     <script>if(window.history&&window.history.replaceState){window.history.replaceState(null,document.title,window.location.href)}</script>
     <title>PISO WIFI - Log in</title>
     <style>
-        #portalLoader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#0f172a;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;transition:opacity .4s ease,visibility .4s ease}
-        #portalLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
-        .loader-icon{width:56px;height:56px;border:4px solid rgba(59,130,246,.2);border-top-color:#3b82f6;border-radius:50%;animation:ldSpin .8s linear infinite;margin-bottom:24px}
-        .loader-brand{color:#fff;font-size:22px;font-weight:700;letter-spacing:2px;margin-bottom:16px}
-        .loader-dots{display:-webkit-box;display:-webkit-flex;display:flex}
-        .loader-dots span{display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:50%;animation:ldBounce 1.2s infinite ease-in-out;margin-right:8px}
-        .loader-dots span:last-child{margin-right:0}
-        .loader-dots span:nth-child(1){animation-delay:0s}
-        .loader-dots span:nth-child(2){animation-delay:.15s}
-        .loader-dots span:nth-child(3){animation-delay:.3s}
-        @-webkit-keyframes ldSpin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
-        @keyframes ldSpin{to{transform:rotate(360deg)}}
-        @-webkit-keyframes ldBounce{0%,80%,100%{-webkit-transform:scale(0);transform:scale(0);opacity:.3}40%{-webkit-transform:scale(1);transform:scale(1);opacity:1}}
-        @keyframes ldBounce{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
     </style>
     <script>var _ts=Date.now();document.write('<link rel="stylesheet" href="css/style.css?ts='+_ts+'">');document.write('<script src="js/core.js?ts='+_ts+'"><\/script>');</script>
 </head>
 
 <body>
-
-    <div id="portalLoader">
-        <div class="loader-icon"></div>
-        <div class="loader-dots"><span></span><span></span><span></span></div>
-    </div>
 
     $(if chap-id)
     <form name="sendin" action="$(link-login-only)" method="post" style="display:none">

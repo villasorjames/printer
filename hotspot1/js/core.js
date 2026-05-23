@@ -246,14 +246,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         vendoStatusInterval = setInterval(checkVendoStatus, 10000);
     }
 
-    // Hide loading overlay
-    var loader = document.getElementById('portalLoader');
-    if (loader) {
-        setTimeout(function () {
-            loader.classList.add('hide');
-            setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
-        }, 600);
-    }
 });
 
 var vendoDotEl = null;
