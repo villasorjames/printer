@@ -679,14 +679,21 @@ a:hover { text-decoration: underline; }
 /* Vendo list */
 .vendo-list-items {
     background: var(--vendo-item-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
     padding: 12px 16px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
-.vendo-list-items:hover { background: var(--vendo-item-hover-bg); border-color: #3b82f6; }
+.vendo-list-items:hover { background: var(--vendo-item-hover-bg); border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.15); }
+.vendo-list-items img { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+.vendo-list-items span { flex: 1; font-size: 0.95rem; }
 
 /* Progress circle (coin insertion) */
 .progress-circle {

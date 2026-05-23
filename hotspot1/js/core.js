@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         multiVendoIps.forEach(vendo => {
             const item = document.createElement("div");
             item.className = "vendo-list-items";
-            item.innerHTML = "<div>" + vendo.vendo_name + "</motion>";
+            item.innerHTML = '<img src="img/vendo.png" alt="vendo"><span>' + vendo.vendo_name + '</span>';
             item.addEventListener("click", () => {
                 vendoIpAddress = vendo.vendo_ip;
                 checkVendoStatus();
