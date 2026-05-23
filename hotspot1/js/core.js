@@ -12,6 +12,8 @@ var voucher;
 var coin;
 var timer = null;
 var isInsertingCoin = false;
+var coinCheckErrors = 0;
+var MAX_COIN_CHECK_ERRORS = 4;
 var sanitizeMac;
 var currency;
 var multiVendoArray;
@@ -333,6 +335,7 @@ async function topUp() {
         if (data.status === "true") {
             var p = InsertCoinSound.play(); if (p) p.catch(function(){});
             isInsertingCoin = true;
+            coinCheckErrors = 0;
             closeNotification(10);
             modalShow(modal[0]);
             voucher = data.voucher;
@@ -387,6 +390,7 @@ async function checkCoin() {
         const proceedBtn = document.getElementById("proceedInsertCoinButton");
         const userTimeEl = document.getElementById("userTime");
 
+        coinCheckErrors = 0;
         if (data.status === "true") {
             showToast('' + currency + '' + data.newCoin + " accepted", "success");
             coin = data.totalCoin;
@@ -417,6 +421,11 @@ async function checkCoin() {
             // waiting
         }
     } catch (e) {
+        coinCheckErrors++;
+        if (coinCheckErrors < MAX_COIN_CHECK_ERRORS) {
+            return;
+        }
+        coinCheckErrors = 0;
         clearInterval(timer);
         timer = null;
         isInsertingCoin = false;
