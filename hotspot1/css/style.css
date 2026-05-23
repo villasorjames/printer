@@ -791,3 +791,70 @@ a:hover { text-decoration: underline; }
 
 .member-card h1 { font-size: 1.25rem; color: var(--member-card-text); margin-bottom: 4px; }
 .member-card h2 { font-size: 0.85rem; color: var(--member-card-text); letter-spacing: 1px; }
+
+/* === SweetAlert2 / E-Payment old browser fix === */
+.swal2-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 99999 !important;
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -webkit-align-items: center !important;
+    align-items: center !important;
+    -webkit-justify-content: center !important;
+    justify-content: center !important;
+    background: rgba(0,0,0,0.5) !important;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 16px;
+}
+.swal2-popup {
+    background: #fff !important;
+    border-radius: 14px !important;
+    padding: 24px 20px !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    position: relative !important;
+    -webkit-box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+}
+.swal2-icon { margin: 0 auto 16px !important; }
+.swal2-title {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin-bottom: 6px !important;
+}
+.swal2-content, .swal2-html-container {
+    font-size: 0.88rem !important;
+    color: #64748b !important;
+    margin-bottom: 16px !important;
+}
+.swal2-actions {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: flex !important;
+    -webkit-flex-wrap: wrap !important;
+    flex-wrap: wrap !important;
+    -webkit-justify-content: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+}
+.swal2-confirm, .swal2-cancel, .swal2-deny {
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    min-width: 100px !important;
+}
