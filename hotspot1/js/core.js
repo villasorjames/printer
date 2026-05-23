@@ -248,6 +248,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         vendoStatusInterval = setInterval(checkVendoStatus, 10000);
     }
 
+    var resumeCoin = localStorage.getItem("savedCoin");
+    var resumeVoucherKey = localStorage.getItem("savedVoucher");
+    if (resumeCoin && Number(resumeCoin) > 0 && resumeVoucherKey) {
+        coin = Number(resumeCoin);
+        voucher = resumeVoucherKey;
+        showNotification("Resuming previous session...");
+        closeNotification(3000);
+        initInsertCoin();
+    }
+
 });
 
 var vendoDotEl = null;
@@ -431,12 +441,8 @@ async function checkCoin() {
         isInsertingCoin = false;
         InsertCoinSound.pause();
         InsertCoinSound.currentTime = 0;
-        coin = 0;
-        voucher = "";
-        localStorage.removeItem("savedCoin");
-        localStorage.removeItem("savedVoucher");
         closeModal(0);
-        showNotification("NodeMCU connection lost");
+        showNotification("NodeMCU connection lost. Reconnecting...");
         setTimeout(function() { location.reload(); }, 3000);
     }
 }
