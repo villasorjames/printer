@@ -535,7 +535,6 @@ function closeNotification(ms) {
     }, ms);
 }
 
-let toastCount = 0;
 
 var progressValue = null;
 var circumference = 2 * Math.PI * 40;
@@ -548,71 +547,26 @@ function updateProgress(progress) {
     progressValue.style.strokeDashoffset = offset;
 }
 
-function showToast(message, type = "success") {
-    const container = document.getElementById("toastContainer");
-    const toast = document.createElement("div");
+function showToast(message, type) {
+    type = type || "success";
+    var container = document.getElementById("toastContainer");
+    var existing = container.querySelectorAll(".toast");
+    for (var i = 0; i < existing.length; i++) {
+        if (existing[i].textContent === message) return;
+    }
+    var toast = document.createElement("div");
     toast.className = "toast " + type;
-    toast.innerHTML = '<span style="font-family: monospace; font-size: larger">' + message + '</span>';
-
-    const colors = {
-        success: "#4CAF50",
-        warning: "#FF9800",
-        error: "#f44336"
-    };
-    const borderColor = colors[type] || "#333";
-
-    toast.style.cssText = `
-        background-color: #fff;
-        border: 3px solid #000;
-        border-left: 8px solid ${borderColor};
-        color: #000;
-        padding: 12px 20px;
-        margin: 10px;
-        border-radius: 4px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        min-width: 250px;
-        max-width: 300px;
-        word-wrap: break-word;
-        opacity: 0;
-        transform: translateX(400px);
-        transition: all 0.3s ease;
-        pointer-events: auto;
-        position: absolute;
-        font-weight: 700;
-    `;
-
+    toast.textContent = message;
     container.appendChild(toast);
-    toastCount++;
-    adjustToasts();
-
-    setTimeout(() => {
-        toast.style.opacity = "1";
-        toast.style.transform = "translateX(0)";
-    }, 100);
-
-    setTimeout(() => dismissToast(toast), 4000);
+    setTimeout(function() { toast.classList.add("show"); }, 30);
+    setTimeout(function() { dismissToast(toast); }, 3500);
 }
 
 function dismissToast(toastEl) {
-    toastEl.style.opacity = "0";
-    toastEl.style.transform = "translateX(400px)";
-    setTimeout(() => {
-        if (toastEl.parentNode) {
-            toastEl.parentNode.removeChild(toastEl);
-            toastCount--;
-            adjustToasts();
-        }
-    }, 300);
-}
-
-function adjustToasts() {
-    const toasts = document.querySelectorAll("#toastContainer .toast");
-    let top = 20;
-    toasts.forEach(toast => {
-        toast.style.top = top + "px";
-        toast.style.right = "20px";
-        top += (toast.offsetHeight || 50) + 10;
-    });
+    toastEl.classList.remove("show");
+    setTimeout(function() {
+        if (toastEl.parentNode) toastEl.parentNode.removeChild(toastEl);
+    }, 280);
 }
 
 function formatExpiry(val) {
