@@ -369,7 +369,7 @@ async function topUp() {
     isMultiVendo && multivendoOption === 0 && closeModal(3);
     var userType = document.getElementById("insert-coin-button").getAttribute("user-type");
     var extendTime = userType === "new" ? 0 : 1;
-    if (extendTime === 1) voucher = toSyncVoucher;
+    if (extendTime === 1 && typeof toSyncVoucher !== 'undefined' && toSyncVoucher) voucher = toSyncVoucher;
     if (isMacAsVoucher) voucher = sanitizeMac;
 
     try {
