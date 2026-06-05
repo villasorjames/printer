@@ -1,243 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login Portal</title>
-	<script>document.write('<link rel="stylesheet" href="assets/css/style.css?_=' + Date.now() + '">');</script>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="description" content="WiFi Hotspot Portal">
+    <script>if(window.history&&window.history.replaceState){window.history.replaceState(null,document.title,window.location.href)}</script>
+    <title>WiFi Portal</title>
+    <script>var _ts=Date.now();document.write('<link rel="stylesheet" href="assets/css/style.css?_='+_ts+'">');</script>
 </head>
-<body id="body" data-interface="$(interface-name)">
-	<div class="row">
-		<div class="banner">
-			<h2 data-ssid hidden>Kit Pisowifi</h2>
-			<div class="ribbon-wrapper">
-				<div data-vendo class="ribbon">
-					KiT Vendo
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="content">
-				<div class="time-wrapper ">
-					<span id="timer">
-						<div class="d-flex flex-fill align-content-stretch">
-							<div class="inner-wrapper">
-								<div id="min">00</div>
-								<div>minutes</div>
-							</div>
-							<div class="inner-wrapper">
-								<div id="sec">00</div>
-								<div>seconds</div>
-							</div>
-						</div>
-					</span>
-				</div>
-			</div><br>
-		</div>
-		<div class="details">
-			<table id="details">
-				<tr>
-					<td>
-						<p><b>Status:</b>
-					</td>
-					<td>
-						<span id="status">Connected</span>
-					</td>
-				</tr>
-				<tr id="userID">
 
-				</tr>
-				<tr>
-					<td>
-						<p><b>MAC:</b></p>
-					</td>
-					<td>
-						<span id="mac">$(mac)</span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<p><b>IP:</b></p>
-					</td>
-					<td>
-						<span id="ip">$(ip)</span>
-					</td>
-				</tr>
-				<tr id="Exp">
-					<td>
-						<p><b>Expiration:</b></p>
-					</td>
-					<td>
-						<span id="exp">--</span>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<br>
-		<div class="btn-group">
-			<button type="button" class="btn btn-primary" id="insertBtn">Insert Coin</button>
-			<button type="button" class="btn btn-primary" id="pauseBtn">Pause</button>
-			<button type="button" class="btn btn-primary" id="ratesBtn">Wifi Rates</button>
-			<button type="button" class="btn btn-primary" id="memberBtn">Member Login</button>
-			<button type="button" class="btn btn-primary" id="gcashBtn">Gcash</button>
-			<button type="button" class="btn btn-primary" id="voucherBtn">Voucher</button>
-		</div>
-		<footer class="main-footer">
-			<b>Powered by: <a id="link" href="#">KiTricks.Net</a>.</b><br>Click link to contact me.<br>
-		</footer>
-	</div>
-		<div class="modal" data-insert-coin tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header">Please Insert Coin</div>
-				<div class="progress-bar"></div>
-				<div id="insBody">
-					<hr>
-					<table>
-						<tr>
-							<td>
-								<p><b>Amount:</b>
-							</td>
-							<td class="span">
-								<span id="totalCoin"><span class="peso">P</span> 0</span>.00
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<p><b>Time:</b></p>
-							</td>
-							<td>
-								<span id="totalTime">--:--</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<p><b>Validity:</b></p>
-							</td>
-							<td>
-								<span id="validity">--:--</span>
-							</td>
-						</tr>
-					</table>
-					<br>
-					<hr>
-					<br>
-					<button data-ic-close class="btn btn-secondary">Cancel</button>
-				</div>
-			</div>
-		</div>
-		<div class="modal" data-select-vendo>
-			<div class="modal-dialog">
-				<div class="header">Chose Your Location</div>
-				<hr>
-				<div id="selectVendo"></div>
-				<hr>
-				<button data-sv-close class="btn btn-secondary">Close</button>
-			</div>
-		</div>
-		<div class="modal" data-rates>
-			<div class="modal-dialog">
-				<div class="header">Wifi Rates</div>
-				<div id="ratesBody">
-					<hr>
-					<table>
-						<thead>
-							<tr>
-								<td>Amount</td>
-								<td>Time</td>
-								<td>Validity</td>
-							</tr>
-						</thead>
-						<tbody id="rates"></tbody>
-					</table>
-					<br>
-					<button data-wr-close class="btn btn-secondary">Close</button>
-				</div>
-			</div>
-		</div>
-		<div class="modal" data-voucher tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header">Enter Voucher</div>
-				<div id="vcBody">
-					<hr>
-					<input type="text" id="username" value="" placeholder="Voucher Here.." />
-					<hr>
-					<br>
-					<div class="btn-footer">
-						<button data-vc-close class="btn btn-secondary">Cancel</button>
-						<button id="submit" class="btn btn-primary">Submit</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal" data-member tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header">Login to Connect</div>
-				<div id="mlBody">
-					<hr>
-					<input type="username" id="Muser" placeholder="Username" />
-					<input type="password" id="Mpass" placeholder="Password" />
-					<hr>
-					<br>
-					<div class="btn-footer">
-						<button data-ml-close class="btn btn-secondary">Cancel</button>
-						<button data-login class="btn btn-primary">Login</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal" data-dialog tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header"></div>
-				<div class="progress-bar"></div>
-				<button data-dialog-close class="btn btn-secondary" style="display:none;">Cancel</button>
-			</div>
-		</div>
-		<div class="modal" data-trial tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header"></div><br>
-				<hr>
-				<br>
-				<div class="btn-footer">
-					<button data-trl-close class="btn btn-secondary">Cancel</button>
-					<button data-claim class="btn btn-primary">Claim</button>
-				</div>
-			</div>
-		</div>
-		<div class="modal" data-message tabindex="-1">
-			<div class="modal-dialog dialog-small">
-				<div class="header"></div>
-				<hr>
-				<span id="message"></span>
-				<hr>
-				<br>
-				<button data-msg-close class="btn btn-secondary">Okay</button>
-			</div>
-		</div>
-	<br>
-		<script>
-		(function () {
-			// Red / Yellow / Green status dot driven by the status text.
-			var st = document.getElementById("status");
-			function paintStatus() {
-				if (!st) return;
-				var txt = (st.textContent || "").toLowerCase();
-				st.className = st.className.replace(/\bis-(connected|paused|disconnected)\b/g, "").replace(/\s+/g, " ");
-				var cls = "is-connected";
-				if (txt.indexOf("pause") > -1) cls = "is-paused";
-				else if (txt.indexOf("disconnect") > -1) cls = "is-disconnected";
-				st.className = (st.className + " " + cls).replace(/^\s|\s$/g, "");
-			}
-			if (st) {
-				paintStatus();
-				if (window.setInterval) { setInterval(paintStatus, 700); }
-			}
-		})();
-	</script>
-	<script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js" async></script>
-	<link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
-	<script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js" async></script>
-	<script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js" async></script>
-	<script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js" async></script>
-	<script>document.write('<script src="assets/js/kitricks.js?_=' + Date.now() + '"><\/script>');</script>
+<body id="body" data-interface="$(interface-name)">
+
+    <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="ie-fixMinHeight">
+        <main class="main">
+            <div class="wrap">
+                <div class="page-card">
+
+                    <!-- Banner -->
+                    <div class="banner-container" id="bannerContainer">
+                        <div class="dark-overlay"></div>
+                        <div class="banner-text">
+                            <h1 class="wifi-text" id="hotspotName">PISO WIFI</h1>
+                            <div class="vendo-name" data-vendo id="vendoName"></div>
+                        </div>
+                    </div>
+                    <!-- Hidden SSID node required by kitricks.js -->
+                    <span data-ssid hidden style="display:none"></span>
+
+                    <div class="card-body">
+
+                        <!-- Announcement -->
+                        <div class="announcement" id="announcement">High Speed Connection</div>
+
+                        <!-- Status badge -->
+                        <div class="status-container">
+                            <div id="sessionStatus" class="status-badge disconnected">
+                                <span class="status-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </span>
+                                <span id="status" class="status-text">Disconnected</span>
+                            </div>
+                        </div>
+
+                        <!-- Time remaining -->
+                        <div class="time-card" id="timeCard">
+                            <div class="time-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                Time Remaining
+                            </div>
+                            <div id="timer">--</div>
+                        </div>
+
+                        <!-- Expiry -->
+                        <div class="expiry-card">
+                            <div class="expiry-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                Expiry
+                            </div>
+                            <div class="expiry-value" id="exp">--</div>
+                        </div>
+
+                        <!-- Device info collapsible -->
+                        <div class="dropdown-row" style="grid-template-columns:1fr">
+                            <button type="button" class="dropdown-btn" onclick="toggleDropdown('deviceInfo',this)" aria-expanded="false">
+                                <span class="btn-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                    Device Info
+                                </span>
+                                <span class="dropdown-caret">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-content" id="deviceInfo">
+                            <table class="info-table">
+                                <tbody>
+                                    <tr id="userID"></tr>
+                                    <tr>
+                                        <td class="info-label">IP</td>
+                                        <td class="info-value" id="ip">$(ip)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">MAC</td>
+                                        <td class="info-value" id="mac">$(mac)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">NodeMCU</td>
+                                        <td class="info-value"><span class="vendo-dot"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Action buttons — .btn-group and .input-group kept for kitricks.js compat -->
+                        <div class="btn-group">
+                            <div class="input-group" style="display:none"></div>
+
+                            <button type="button" class="btn btn-success" id="insertBtn" aria-label="Insert coin to purchase access">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                <span>Insert Coin</span>
+                            </button>
+
+                            <button type="button" class="btn btn-warning" id="pauseBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                                Pause
+                            </button>
+
+                            <div class="action-grid">
+                                <button type="button" class="btn btn-primary" id="ratesBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                                    WiFi Rates
+                                </button>
+                                <button type="button" class="btn btn-primary" id="voucherBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>
+                                    Voucher
+                                </button>
+                            </div>
+
+                            <div class="action-grid">
+                                <button type="button" class="btn btn-primary" id="memberBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    Member
+                                </button>
+                                <button type="button" class="btn btn-primary" id="gcashBtn" style="display:none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                    E-Payment
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="footer-credit">
+                            Powered by <a id="link" href="#" target="_blank">JamesTech</a>
+                        </div>
+
+                    </div><!-- /card-body -->
+                </div><!-- /page-card -->
+            </div><!-- /wrap -->
+        </main>
+    </div>
+
+    <!-- ========== MODAL: Insert Coin ========== -->
+    <div class="modal" data-insert-coin role="dialog" aria-modal="true" aria-label="Insert coin">
+        <div class="modal-content">
+            <div class="header">Please Insert Coin</div>
+            <div class="progress-bar-track"><div class="progress-bar"></div></div>
+            <div class="modal-body" id="insBody">
+                <div class="insert-coin-details">
+                    <span class="icd-label">Amount</span>
+                    <span class="icd-value" id="totalCoin"><span class="peso">P</span>&thinsp;0</span>
+                </div>
+                <div class="insert-coin-details">
+                    <span class="icd-label">Time</span>
+                    <span class="icd-value" id="totalTime">--:--</span>
+                </div>
+                <div class="insert-coin-details">
+                    <span class="icd-label">Validity</span>
+                    <span class="icd-value" id="validity">--:--</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-ic-close>Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Select Vendo ========== -->
+    <div class="modal" data-select-vendo role="dialog" aria-modal="true" aria-label="Select vendo">
+        <div class="modal-content">
+            <div class="header">
+                Choose Your Location
+                <button type="button" class="header-close" data-sv-close aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="selectVendo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: WiFi Rates ========== -->
+    <div class="modal" data-rates role="dialog" aria-modal="true" aria-label="WiFi rates">
+        <div class="modal-content">
+            <div class="header">
+                WiFi Rates
+                <button type="button" class="header-close" data-wr-close aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body" id="ratesBody">
+                <div id="rates-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Time</th>
+                                <th>Validity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rates"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Voucher Input ========== -->
+    <div class="modal" data-voucher role="dialog" aria-modal="true" aria-label="Voucher">
+        <div class="modal-content">
+            <div class="header">
+                Use Voucher
+                <button type="button" class="header-close" data-vc-close aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--muted);font-size:13px;margin-bottom:12px">Enter your voucher code to redeem time.</p>
+                <input type="text" id="username" class="voucher-input" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off" autocapitalize="characters">
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-vc-close>Cancel</button>
+                <button type="button" id="submit" class="primary">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Member Login ========== -->
+    <div class="modal" data-member role="dialog" aria-modal="true" aria-label="Member login">
+        <div class="modal-content">
+            <div class="header">
+                Member Login
+                <button type="button" class="header-close" data-ml-close aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body" id="mlBody">
+                <form class="form-col">
+                    <input type="text" id="Muser" placeholder="Username" autocomplete="username" required>
+                    <input type="password" id="Mpass" placeholder="Password" autocomplete="current-password" required>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-ml-close>Cancel</button>
+                <button type="button" data-login class="primary">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Dialog (notifications / retry) ========== -->
+    <div class="modal" data-dialog role="alertdialog" aria-modal="true" aria-label="Notification">
+        <div class="modal-content">
+            <div class="header"></div>
+            <div class="progress-bar-track"><div class="progress-bar"></div></div>
+            <div class="modal-body" style="text-align:center;padding:1.25rem"></div>
+            <div class="modal-footer">
+                <button type="button" data-dialog-close style="display:none">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Free Trial ========== -->
+    <div class="modal" data-trial role="dialog" aria-modal="true" aria-label="Free trial">
+        <div class="modal-content">
+            <div class="header">Free Trial</div>
+            <div class="modal-body">
+                <p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:1rem">
+                    Enjoy a free trial session. Tap Claim to connect.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-trl-close>Cancel</button>
+                <button type="button" data-claim class="primary">Claim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Message ========== -->
+    <div class="modal" data-message role="alertdialog" aria-modal="true" aria-label="Message">
+        <div class="modal-content">
+            <div class="header">Notice</div>
+            <div class="modal-body" style="text-align:center">
+                <p id="message" style="font-size:0.95rem;color:var(--text)"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-msg-close class="primary">Okay</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Dropdown toggle used by Device Info button */
+        function toggleDropdown(id, btn) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var open = el.classList.contains('open');
+            el.classList.toggle('open', !open);
+            if (btn) btn.setAttribute('aria-expanded', (!open).toString());
+        }
+
+        /* Status badge: update class from status text */
+        (function () {
+            var badge = document.getElementById('sessionStatus');
+            var st    = document.getElementById('status');
+            if (!badge || !st) return;
+
+            function paintBadge() {
+                var txt = (st.textContent || '').toLowerCase();
+                var cls = 'disconnected';
+                if (txt.indexOf('connect') > -1 && txt.indexOf('dis') === -1) cls = 'connected';
+                else if (txt.indexOf('trial') > -1) cls = 'connected';
+                else if (txt.indexOf('member') > -1) cls = 'connected';
+                else if (txt.indexOf('pause') > -1 || txt.indexOf('paused') > -1) cls = 'paused';
+
+                badge.className = 'status-badge ' + cls;
+
+                /* Swap icon */
+                var icon = badge.querySelector('.status-icon');
+                if (!icon) return;
+                if (cls === 'connected') {
+                    icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+                } else if (cls === 'paused') {
+                    icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+                } else {
+                    icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+                }
+            }
+            paintBadge();
+            setInterval(paintBadge, 600);
+        })();
+    </script>
+
+    <script>document.write('<script src="assets/js/kitricks.js?_='+_ts+'"><\/script>');</script>
+
+    <!-- wifree e-wallet payment widget -->
+    <script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js" async></script>
+    <link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
+    <script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js" async></script>
+    <script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js" async></script>
+
 </body>
+</html>

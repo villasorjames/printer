@@ -1034,7 +1034,7 @@ function animate() {
       macNoColon = replaceAll(mac, ":");
       ipAddress = e.ip;
       document.getElementById("timer").innerHTML = secondsToDhms(e.timeleft);
-      stats.textContent = e.status;
+      document.getElementById("status").textContent = e.status;
       if (e.status == "Disconnected") {
         intervalManager(0);
         setMemberLoginVisible(true);
