@@ -13,7 +13,6 @@
     "member_logout_button": true,
     "trial_logout_button": true,
     "subscription": true,
-    "custom_theme": false,
     "theme": "light",
     "internet_status": true,
     "gcash_payment": false
@@ -26,13 +25,6 @@
     "Ec"
   ],
 
-  "custom_theme": {
-    "background": "black",
-    "container": "white",
-    "color": "orange",
-    "textcolor": ""
-  },
-
   "no_internet_settings": {
     "insertcoin": false,
     "auto_pause": false,
@@ -41,7 +33,7 @@
   },
 
   "gcash_payment": {
-    "payment_gateway": "https://payments.wifree.network/xendit/production/purchase_voucher.php",
+    "node_ip": "",
     "portal_key": ""
   },
 

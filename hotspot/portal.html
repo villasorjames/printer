@@ -10,7 +10,7 @@
 <body id="body" data-interface="$(interface-name)">
 	<div class="row">
 		<div class="banner">
-			<h2 data-ssid>Kit Pisowifi</h2>
+			<h2 data-ssid hidden>Kit Pisowifi</h2>
 			<div class="ribbon-wrapper">
 				<div data-vendo class="ribbon">
 					KiT Vendo
@@ -155,22 +155,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal" data-gcash tabindex="-1">
-			<div class="modal-dialog">
-				<div class="header">Buy voucher using GCash</div>
-				<div id="mlBody">
-					<hr>
-					<input type="number" id="gcNumber" placeholder="mobile #" />
-					<input type="number" id="gcAmount" placeholder="amount" />
-					<hr>
-					<br>
-					<div class="btn-footer">
-						<button data-gc-close class="btn btn-secondary">Cancel</button>
-						<button data-gc-pay class="btn btn-primary">Pay</button>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="modal" data-voucher tabindex="-1">
 			<div class="modal-dialog">
 				<div class="header">Enter Voucher</div>
@@ -250,5 +234,10 @@
 			}
 		})();
 	</script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/jquery.min.js" async></script>
+	<link rel="stylesheet" href="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.css">
+	<script src="http://payments.wifree.network/widgetv2/juanfi/loadingoverlay.min.js" async></script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/sweetalert2.js" async></script>
+	<script src="http://payments.wifree.network/widgetv2/juanfi/ewalletvoucher.js" async></script>
 	<script>document.write('<script src="assets/js/kitricks.js?_=' + Date.now() + '"><\/script>');</script>
 </body>

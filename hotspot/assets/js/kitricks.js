@@ -30,7 +30,7 @@ var apiStatus = "";
 var ipAddress = "";
 var mac = "";
 var macNoColon = "";
-var payment_gateway = "";
+var gcash_node_ip = "";
 var portal_key = "";
 var internet_status = "";
 var intervalID = null;
@@ -841,14 +841,8 @@ ajaxsettings.onreadystatechange = function () {
     username_only = t.Settings.username_only;
     link.href = t.Settings.footer_link;
     link.textContent = t.Settings.footer_text;
-    if (t.Settings.custom_theme) {
-      document.documentElement.style.setProperty("--background", t.custom_theme.background);
-      document.documentElement.style.setProperty("--container", t.custom_theme.container);
-      document.documentElement.style.setProperty("--color-primary", t.custom_theme.color);
-      document.documentElement.style.setProperty("--text-color", t.custom_theme.textcolor);
-    }
     if (t.Settings.gcash_payment) {
-      payment_gateway = t.gcash_payment.payment_gateway;
+      gcash_node_ip = t.gcash_payment.node_ip;
       portal_key = t.gcash_payment.portal_key;
     } else {
       document.getElementById("gcashBtn").style.display = "none";
@@ -974,7 +968,7 @@ document.getElementById("ratesBtn").onclick = function () {
   getWifiRate(0);
 };
 document.getElementById("gcashBtn").onclick = function () {
-  openModal(document.querySelector("[data-gcash]"));
+  display_ewalletvoucher_modal(portal_key, gcash_node_ip, "username", "submit");
 };
 document.getElementById("voucherBtn").onclick = function () {
   document.getElementById("username").value = "";
@@ -982,14 +976,6 @@ document.getElementById("voucherBtn").onclick = function () {
 };
 document.querySelector("[data-vc-close]").onclick = function () {
   closeModal(document.querySelector("[data-voucher]"));
-};
-document.querySelector("[data-gc-close]").onclick = function () {
-  closeModal(document.querySelector("[data-gcash]"));
-};
-document.querySelector("[data-gc-pay]").onclick = function () {
-  var t = document.getElementById("gcNumber").value;
-  var n = document.getElementById("gcAmount").value;
-  location.href = payment_gateway + "?portal_key=" + portal_key + "&mobile=" + t + "&amount=" + n;
 };
 document.getElementById("memberBtn").onclick = function () {
   var t = document.querySelector("[data-member]");
