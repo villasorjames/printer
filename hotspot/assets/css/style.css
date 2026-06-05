@@ -430,7 +430,7 @@ body.modal-active { overflow: hidden; }
 }
 
 /* Progress bar track (below modal header) */
-.progress-bar-track { height: 4px; background: rgba(0,0,0,0.08); overflow: hidden; }
+.progress-bar-track { height: 4px; background: #e5e7eb; overflow: hidden; }
 
 /* .progress-bar queried by kitricks.js for width and display */
 .progress-bar {
@@ -438,14 +438,25 @@ body.modal-active { overflow: hidden; }
     -webkit-transition: width 0.4s ease; transition: width 0.4s ease;
 }
 
-/* Animated bar in dialog modal */
+/* Dialog modal: indeterminate sweep */
 [data-dialog] .progress-bar {
-    width: 55%;
+    width: 45%;
     -webkit-animation: pbar-move 1.4s ease-in-out infinite;
     animation: pbar-move 1.4s ease-in-out infinite;
 }
 @-webkit-keyframes pbar-move { 0%{margin-left:-55%;} 100%{margin-left:100%;} }
 @keyframes pbar-move { 0%{margin-left:-55%;} 100%{margin-left:100%;} }
+
+/* Dialog modal: pure white, no blue header */
+[data-dialog] .header {
+    background: #fff;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+    border-bottom: 1px solid #e5e7eb;
+}
 
 .modal-body { padding: 1.1rem 1.25rem; color: var(--text); }
 

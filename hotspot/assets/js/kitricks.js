@@ -222,6 +222,14 @@ function getInternetStatus(n, o, a, i) {
   };
   e.send();
 }
+function formatExpiry(s) {
+  try {
+    var p = (s || "").trim().split(" ");
+    var d = p[0].split("-");
+    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return mo[parseInt(d[1], 10) - 1] + " " + parseInt(d[2], 10) + (p[1] ? " " + p[1] : "");
+  } catch (x) { return s; }
+}
 function getValidity(o) {
   var e;
   var t;
@@ -229,8 +237,7 @@ function getValidity(o) {
   if (o > 5) {
     i.textContent = "Not Available";
   } else {
-    e = activeMac == null || activeMac == null ? macNoColon : replaceAll(activeMac, ":");
-    (t = new XMLHttpRequest()).open("GET", cacheBust("/data/" + e + ".txt"), true);
+    (t = new XMLHttpRequest()).open("GET", cacheBust("/data/" + macNoColon + ".txt"), true);
     t.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
     t.setRequestHeader("Pragma", "no-cache");
     t.send();
@@ -240,7 +247,7 @@ function getValidity(o) {
       if (this.readyState == 4) {
         if (this.status == 200) {
           t = (e = this.responseText).split("#");
-          i.textContent = t[1];
+          i.textContent = formatExpiry(t[1]);
           if (e.length > 50) {
             i.textContent = "Loading...";
             setTimeout(function () {
@@ -746,6 +753,8 @@ function getWifiRate(n) {
       m.style.display = "block";
       p.textContent = "Wifi Rates";
       wrmodal.querySelector(".header").textContent = "Wifi Rates";
+      var _wc = wrmodal.querySelector("[data-wr-close]");
+      if (_wc) _wc.style.display = "";
       openModal(wrmodal);
       var t;
       var n = e.split("|");
@@ -786,13 +795,16 @@ function getWifiRate(n) {
   };
   e.onerror = function () {
     var t = document.getElementById("ratesBtn");
+    var _wc = wrmodal.querySelector("[data-wr-close]");
     if (n < 4) {
+      if (_wc) _wc.style.display = "none";
       openModal(wrmodal);
       wrmodal.querySelector(".header").textContent = "Retrying, Please wait!";
       setTimeout(function () {
         getWifiRate(n + 1);
       }, 1000);
     } else {
+      if (_wc) _wc.style.display = "";
       wrmodal.querySelector(".header").textContent = "Wifi rates is not availabe at this moment.";
       setTimeout(function () {
         closeModal(wrmodal);

@@ -89,11 +89,7 @@
                                         <td class="info-label">MAC</td>
                                         <td class="info-value" id="mac">$(mac)</td>
                                     </tr>
-                                    <tr>
-                                        <td class="info-label">NodeMCU</td>
-                                        <td class="info-value"><span class="vendo-dot"></span></td>
-                                    </tr>
-                                </tbody>
+                                                </tbody>
                             </table>
                         </div>
 
@@ -319,7 +315,12 @@
                 }
             }
             paintBadge();
-            setInterval(paintBadge, 600);
+            if (window.MutationObserver) {
+                var _obs = new MutationObserver(paintBadge);
+                _obs.observe(st, { childList: true, characterData: true, subtree: true });
+            } else {
+                setInterval(paintBadge, 300);
+            }
         })();
     </script>
 
