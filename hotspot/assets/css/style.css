@@ -190,29 +190,37 @@ a:hover { text-decoration: underline; }
 }
 
 /* Timer HTML injected by secondsToDhms() */
-#timer { padding: 4px 0; min-height: 2rem; }
+#timer {
+    padding: 6px 0; min-height: 2.4rem;
+    font-size: 2rem; font-weight: 800; letter-spacing: 2px;
+    color: #16a34a; text-align: center; line-height: 1.2;
+}
 
+/* Span-based timer output from secondsToDhms() */
+#timer .t-num {
+    font-size: 2.2rem; font-weight: 800;
+    color: #16a34a; letter-spacing: -1px; vertical-align: middle;
+}
+#timer .t-unit {
+    font-size: 0.85rem; font-weight: 600;
+    color: var(--muted); vertical-align: middle; letter-spacing: 0;
+}
+#timer .t-sep {
+    font-size: 1.4rem; color: #94a3b8;
+    font-weight: 400; letter-spacing: 0; vertical-align: middle;
+}
+
+/* Legacy inner-wrapper classes (kept for cookie-stored timer HTML) */
 #timer .d-flex {
     display: -webkit-box; display: -webkit-flex; display: flex;
     -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
     -webkit-box-align: baseline; -webkit-align-items: baseline; align-items: baseline;
 }
-
 .d-flex { display: block; }
 .flex-fill { width: auto; }
-.align-content-stretch {}
-
 .inner-wrapper { text-align: center; min-width: 54px; padding: 0 6px; }
-
-.inner-wrapper > div:first-child {
-    font-size: 2.2rem; font-weight: 800;
-    color: #16a34a; line-height: 1; letter-spacing: -1px;
-}
-
-.inner-wrapper > div:last-child {
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--muted); margin-top: 3px;
-}
+.inner-wrapper > div:first-child { font-size: 2.2rem; font-weight: 800; color: #16a34a; }
+.inner-wrapper > div:last-child { font-size: 10px; color: var(--muted); margin-top: 3px; }
 
 /* ===== SVG icon ===== */
 
@@ -447,8 +455,9 @@ body.modal-active { overflow: hidden; }
 @-webkit-keyframes pbar-move { 0%{margin-left:-55%;} 100%{margin-left:100%;} }
 @keyframes pbar-move { 0%{margin-left:-55%;} 100%{margin-left:100%;} }
 
-/* Dialog modal: pure white, no blue header */
-[data-dialog] .header {
+/* Dialog + WiFi-rates modals: pure white header */
+[data-dialog] .header,
+[data-rates] .header {
     background: #fff;
     color: var(--text);
     font-size: 1rem;

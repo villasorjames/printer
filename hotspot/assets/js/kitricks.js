@@ -1151,26 +1151,17 @@ function secondsToDhms(e) {
   var o = Math.floor(e % 86400 / 3600);
   var a = Math.floor(e % 3600 / 60);
   var i = Math.floor(e % 60);
-  if (n < 10) {
-    n = "0" + n;
+  function pad(v) { return v < 10 ? "0" + v : "" + v; }
+  function seg(v, u) {
+    return '<span class="t-num">' + pad(v) + '</span><span class="t-unit">' + u + '</span>';
   }
-  if (o < 10) {
-    o = "0" + o;
-  }
-  if (a < 10) {
-    a = "0" + a;
-  }
-  if (i < 10) {
-    i = "0" + i;
-  }
-  e = n > 0 ? "<div class=\"inner-wrapper\"><div id=\"day\">" + n + (n == 1 ? "</div><div>day</div></div>" : "</div><div>days</div></div>") : "";
-  a = a > 0 ? a + "" : "00";
-  i = i > 0 ? i + "" : "00";
-  if (n > 0 && o == 0) {
-    var r = o > 0 ? o + "" : "00";
-    return "<div class=\"d-flex flex-fill align-content-stretch\">" + e + "<div class=\"inner-wrapper\"><div id=\"hr\">" + r + "</div><div>hours</div></div><div class=\"inner-wrapper\"><div id=\"min\">" + a + "</div><div>minutes</div></div><div class=\"inner-wrapper\"><div id=\"sec\">" + i + "</div><div>seconds</div></div>";
-  }
-  return "<div class=\"d-flex flex-fill align-content-stretch\">" + e + (r = o > 0 ? "<div class=\"inner-wrapper\"><div id=\"hr\">" + o + "</div><div>hours</div></div>" : "") + "<div class=\"inner-wrapper\"><div id=\"min\">" + a + "</div><div>minutes</div></div><div class=\"inner-wrapper\"><div id=\"sec\">" + i + "</div><div>seconds</div></div></div>";
+  var sep = '<span class="t-sep"> : </span>';
+  var parts = [];
+  if (n > 0) parts.push(seg(n, n === 1 ? "day" : "days"));
+  parts.push(seg(o, "h"));
+  parts.push(seg(a, "m"));
+  parts.push(seg(i, "s"));
+  return parts.join(sep);
 }
 function setStorageValue(e, t) {
   if (localStorage != null) {
