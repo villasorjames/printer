@@ -226,7 +226,7 @@ function formatExpiry(s) {
   try {
     var p = (s || "").trim().split(" ");
     var d = p[0].split("-");
-    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var mo = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     return mo[parseInt(d[1], 10) - 1] + " " + parseInt(d[2], 10) + (p[1] ? " " + p[1] : "");
   } catch (x) { return s; }
 }
@@ -1151,17 +1151,10 @@ function secondsToDhms(e) {
   var o = Math.floor(e % 86400 / 3600);
   var a = Math.floor(e % 3600 / 60);
   var i = Math.floor(e % 60);
-  function pad(v) { return v < 10 ? "0" + v : "" + v; }
   function seg(v, u) {
-    return '<span class="t-num">' + pad(v) + '</span><span class="t-unit">' + u + '</span>';
+    return '<span class="t-num">' + v + '</span><span class="t-unit">' + u + '</span>';
   }
-  var sep = '<span class="t-sep"> : </span>';
-  var parts = [];
-  if (n > 0) parts.push(seg(n, n === 1 ? "day" : "days"));
-  parts.push(seg(o, "h"));
-  parts.push(seg(a, "m"));
-  parts.push(seg(i, "s"));
-  return parts.join(sep);
+  return [seg(n,"d"), seg(o,"h"), seg(a,"m"), seg(i,"s")].join(" ");
 }
 function setStorageValue(e, t) {
   if (localStorage != null) {
