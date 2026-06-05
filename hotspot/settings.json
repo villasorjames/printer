@@ -1,0 +1,80 @@
+{
+  "Settings": {
+    "vendo_option": 2,
+    "username_only": true,
+    "currency": "&#x20B1;",
+    "footer_text": "JamesTech",
+    "footer_link": "https://www.facebook.com/James.Tech.Pro",
+    "voucher_input": true,
+    "pause_button": true,
+    "insert_coin_button": true,
+    "wifi_rates_button": true,
+    "member_button": false,
+    "member_logout_button": true,
+    "trial_logout_button": true,
+    "subscription": true,
+    "custom_theme": false,
+    "theme": "light",
+    "internet_status": true,
+    "gcash_payment": false
+  },
+
+  "subscription_prefix": [
+    "ME",
+    "Vc",
+    "MO",
+    "Ec"
+  ],
+
+  "custom_theme": {
+    "background": "black",
+    "container": "white",
+    "color": "orange",
+    "textcolor": ""
+  },
+
+  "no_internet_settings": {
+    "insertcoin": false,
+    "auto_pause": false,
+    "internet_status_tittle": "enjoy and have fun",
+    "internet_status_text": "PLEASE CLICK OKAY IF WANT TO PROCEED, THANK YOU!."
+  },
+
+  "gcash_payment": {
+    "payment_gateway": "https://payments.wifree.network/xendit/production/purchase_voucher.php",
+    "portal_key": ""
+  },
+
+  "VendoAddresses": [
+    {
+      "ssid": "PISO WIFI",
+      "vendoName": "MainVendo",
+      "vendoIp": "10.0.0.254",
+      "interfaceName": "bridge.HS"
+    },
+    {
+      "ssid": "SUB VENDO 1",
+      "vendoName": "SUB VENDO 1",
+      "vendoIp": "10.0.15.252",
+      "interfaceName": "bridge1"
+    },
+    {
+      "ssid": "SUB VENDO 2",
+      "vendoName": "vlan11",
+      "vendoIp": "10.0.11.253",
+      "interfaceName": "vlan11"
+    },
+    {
+      "ssid": "PISOWIFI",
+      "vendoName": "vlan24",
+      "vendoIp": "24.0.0.5",
+      "interfaceName": "vlan24"
+    },
+    {
+      "ssid": "PISOWIFI",
+      "vendoName": "vlan25",
+      "vendoIp": "25.0.0.5",
+      "interfaceName": "vlan25"
+    }
+  ]
+}

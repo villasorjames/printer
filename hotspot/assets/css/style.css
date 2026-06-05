@@ -1,0 +1,534 @@
+/* === James Tech portal — high-contrast minimal theme (old-browser safe) === */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --text: #000000;
+  --text-muted: #3f3f46;
+  --text-faint: #71717a;
+  --border: #d4d4d8;
+  --accent: #000000;
+  --accent-text: #ffffff;
+  --ring: #a1a1aa;
+  --green: #15803d;
+  --yellow: #b45309;
+  --red: #b91c1c;
+  --mono: "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ===== CSS-drawn peso sign (₱) for devices whose fonts lack U+20B1 =====
+   Renders as a capital "P" with a double horizontal strike, so it shows
+   correctly on old Android / old browsers that draw the real glyph as a box. */
+.peso {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  font-style: normal;
+  padding-left: 1px;
+}
+.peso::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: 1px;
+  top: 0.18em;
+  height: 0.12em;
+  border-top: 0.12em solid currentColor;
+  border-bottom: 0.12em solid currentColor;
+}
+
+body.dark {
+  /* light/dark toggle removed; dark variables intentionally cleared */
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100%;
+  display: none;
+  line-height: 1.5;
+}
+
+.row {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 18px 16px 24px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+/* Footer drops to the bottom of the screen even when content is short. */
+.row > .main-footer {
+  margin-top: auto;
+}
+
+/* ===== Header / banner ===== */
+.banner {
+  position: relative;
+  display: block;
+  padding: 6px 0 22px;
+}
+.banner:after { content: ""; display: table; clear: both; }
+.banner h2[data-ssid] {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 52px;
+  position: relative;
+  line-height: 42px;
+}
+.banner h2[data-ssid]:before {
+  content: ">_";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 42px;
+  height: 42px;
+  line-height: 42px;
+  text-align: center;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 10px;
+}
+.ribbon-wrapper {
+  float: right;
+}
+.ribbon {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+/* ===== Cards ===== */
+.container, .details {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+.container { padding: 24px 18px; }
+.content { padding: 0; }
+.details { padding: 6px 18px; }
+
+/* ===== Timer ===== */
+.time-wrapper { text-align: center; }
+#timer .d-flex { display: block; text-align: center; }
+.inner-wrapper {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 10px;
+  min-width: 54px;
+}
+.inner-wrapper > div:first-child {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.inner-wrapper > div:last-child {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-faint);
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* ===== Details table ===== */
+#details { width: 100%; border-collapse: collapse; }
+#details td {
+  padding: 7px 2px;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+}
+#details tr:last-child td { border-bottom: none; }
+#details td p { margin: 0; }
+#details td b { color: var(--text-muted); font-weight: 600; }
+#details td:last-child {
+  text-align: right;
+  font-weight: 700;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+/* ===== Status dot (Red / Yellow / Green) ===== */
+#status {
+  display: inline-block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  padding-left: 16px;
+  position: relative;
+  color: var(--green);
+}
+#status:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+}
+/* Connected = green (default). Status text drives color via body/state classes. */
+#status.is-connected { color: var(--green); }
+#status.is-connected:before { background: var(--green); }
+#status.is-paused { color: var(--yellow); }
+#status.is-paused:before { background: var(--yellow); }
+#status.is-disconnected { color: var(--red); }
+#status.is-disconnected:before { background: var(--red); }
+
+/* ===== Buttons ===== */
+.btn-group {
+  display: block;
+}
+.btn-group > .btn {
+  margin-bottom: 8px;
+  width: 65%;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn {
+  display: block;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer;
+  width: 100%;
+  background: var(--surface);
+  color: var(--text);
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:focus, .btn:active, .submit:focus, .submit:active {
+  outline: none;
+}
+.btn-primary:focus, .btn-primary:active {
+  border-color: var(--accent);
+}
+.btn-secondary:focus, .btn-secondary:active {
+  border-color: var(--border);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+}
+
+.input-group { margin-top: 2px; }
+.input-group .d-flex {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+#username {
+  display: table-cell;
+  width: 70%;
+  border: 2px solid var(--border);
+  border-right: none;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px 0 0 10px;
+  padding: 11px 15px;
+  font-size: 15px;
+  outline: none;
+  font-family: var(--sans);
+}
+.submit {
+  display: table-cell;
+  width: 30%;
+  white-space: nowrap;
+  text-align: center;
+  border: 2px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 11px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--accent);
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* ===== Footer ===== */
+.main-footer {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.7;
+}
+.main-footer a { color: var(--text-muted); text-decoration: none; font-weight: 700; }
+
+/* ===== Modals ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  text-align: center;
+}
+.modal.show { display: block; }
+.modal:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.modal-dialog {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 360px;
+  padding: 22px;
+  margin: 12px;
+}
+.dialog-small { max-width: 320px; }
+.modal .header { font-size: 17px; font-weight: 800; text-align: center; }
+.modal hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+.modal table { width: 100%; border-collapse: collapse; }
+.modal table td { padding: 10px 2px; font-size: 14px; color: var(--text-muted); }
+.modal table td:last-child, .modal table .span { text-align: right; font-weight: 700; color: var(--text); font-family: var(--mono); }
+.modal input {
+  width: 100%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 10px;
+}
+.btn-footer { display: table; width: 100%; }
+.btn-footer .btn { display: table-cell; width: 50%; }
+.btn-footer .btn:first-child { border-radius: 10px 0 0 10px; }
+.btn-footer .btn:last-child { border-radius: 0 10px 10px 0; }
+/* Voucher input inside its modal: behave like a normal modal input. */
+.modal #username {
+  display: block;
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 15px;
+}
+.modal .btn-footer .btn { width: 50%; max-width: none; margin-left: 0; margin-right: 0; }
+.progress-bar {
+  height: 6px;
+  width: 0;
+  background: var(--accent);
+  border-radius: 999px;
+  margin: 14px 0;
+}
+#message { display: block; text-align: center; font-size: 14px; padding: 6px 0; color: var(--text-muted); }
+#selectVendo .btn { margin-bottom: 8px; }
+#ratesBody table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+#ratesBody thead td {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-faint);
+  border-bottom: 2px solid var(--border);
+  font-family: var(--sans);
+  font-weight: 700;
+  padding: 8px 4px;
+  text-align: center;
+}
+#rates td {
+  text-align: center;
+  padding: 11px 4px;
+  font-size: 13px;
+  font-family: var(--mono);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+#rates tr:last-child td { border-bottom: none; }
+
+/* ===== Button loading indicator (hloader) — horizontal dots ===== */
+.hloader {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  height: 8px;
+  line-height: 0;
+  white-space: nowrap;
+}
+.hloader span,
+.hloader span::before,
+.hloader span::after {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  -webkit-animation: hbounce 0.9s infinite ease-in-out both;
+  animation: hbounce 0.9s infinite ease-in-out both;
+}
+.hloader span {
+  position: relative;
+  margin: 0 9px;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+.hloader span::before,
+.hloader span::after {
+  content: "";
+  position: absolute;
+  top: 0;
+}
+.hloader span::before {
+  left: -9px;
+  -webkit-animation-delay: -0.18s;
+  animation-delay: -0.18s;
+}
+.hloader span::after {
+  left: 9px;
+  -webkit-animation-delay: 0.18s;
+  animation-delay: 0.18s;
+}
+@-webkit-keyframes hbounce {
+  0%, 80%, 100% { opacity: 0.3; -webkit-transform: scale(0.7); }
+  40% { opacity: 1; -webkit-transform: scale(1); }
+}
+@keyframes hbounce {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.7); }
+  40% { opacity: 1; transform: scale(1); }
+}
+@-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.loader {
+  margin: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: currentColor;
+  -webkit-animation: spin 1s ease infinite;
+  animation: spin 1s ease infinite;
+}
+
+.d-flex { display: block; }
+.flex-fill { width: auto; }
+.align-content-stretch { }
+
+/* ===== Compact mode: fit everything on one screen, no scroll =====
+   Triggers on shorter phone viewports. Tightens spacing, card padding,
+   timer size, button height and gaps so the whole portal fits without
+   scrolling even with all buttons + voucher input visible. */
+@media (max-height: 820px) {
+  /* In compact mode let content flow naturally right under the buttons
+     instead of pinning the footer to the very bottom (which leaves a gap). */
+  .row { min-height: 0; }
+  .row > .main-footer { margin-top: 14px; }
+
+  .row { padding: 12px 14px 14px; }
+  .banner { padding: 4px 0 12px; }
+  .banner h2[data-ssid] { font-size: 19px; line-height: 38px; padding-left: 46px; }
+  .banner h2[data-ssid]:before { width: 38px; height: 38px; line-height: 38px; font-size: 14px; }
+  .ribbon { font-size: 10px; padding: 5px 10px; }
+
+  .container, .details { margin-bottom: 9px; border-radius: 13px; }
+  .container { padding: 13px 16px; }
+  .details { padding: 3px 16px; }
+  .details br { display: none; }
+
+  .inner-wrapper > div:first-child { font-size: 33px; }
+  .inner-wrapper > div:last-child { font-size: 10px; margin-top: 4px; }
+  .inner-wrapper { margin: 0 8px; min-width: 48px; }
+
+  #details td { padding: 8px 2px; font-size: 13px; }
+  #details td:last-child { font-size: 12px; }
+
+  .row > br { display: none; }
+
+  .btn-group > .btn { margin-bottom: 8px; }
+  .btn { padding: 12px; font-size: 15px; width: 60%; max-width: 240px; margin-left: auto; margin-right: auto; }
+  #username, .submit { padding: 12px 13px; font-size: 15px; }
+
+  .main-footer { font-size: 11px; line-height: 1.4; }
+}
+
+/* Shorter screens (most phones after browser chrome) — squeeze a bit more. */
+@media (max-height: 760px) {
+  .row { padding: 9px 13px 11px; min-height: 0; }
+  .banner { padding: 2px 0 9px; }
+  .banner h2[data-ssid] { font-size: 18px; line-height: 36px; padding-left: 44px; }
+  .banner h2[data-ssid]:before { width: 36px; height: 36px; line-height: 36px; }
+  .container, .details { margin-bottom: 7px; }
+  .container { padding: 10px 16px; }
+  .details { padding: 2px 16px; }
+  .inner-wrapper > div:first-child { font-size: 29px; }
+  .inner-wrapper > div:last-child { font-size: 9px; margin-top: 3px; }
+  #details td { padding: 6px 2px; font-size: 13px; }
+  .btn-group > .btn { margin-bottom: 6px; }
+  .btn { padding: 10px; font-size: 14px; width: 60%; max-width: 240px; margin-left: auto; margin-right: auto; }
+  #username, .submit { padding: 10px 12px; font-size: 14px; }
+  .row > .main-footer { margin-top: 10px; }
+  .main-footer { font-size: 10px; }
+}
+
+/* Very short screens (older / smaller phones) — squeeze the most. */
+@media (max-height: 640px) {
+  .row { padding: 7px 12px 9px; min-height: 0; }
+  .banner { padding: 2px 0 7px; }
+  .container, .details { margin-bottom: 5px; }
+  .container { padding: 8px 14px; }
+  .details { padding: 1px 14px; }
+  .inner-wrapper > div:first-child { font-size: 25px; }
+  #details td { padding: 5px 2px; font-size: 12px; }
+  #details td:last-child { font-size: 11px; }
+  .btn-group > .btn { margin-bottom: 4px; }
+  .btn { padding: 8px; font-size: 13px; width: 60%; max-width: 240px; margin-left: auto; margin-right: auto; }
+  #username, .submit { padding: 8px 10px; font-size: 13px; }
+  .row > .main-footer { margin-top: 7px; }
+  .main-footer { font-size: 10px; }
+}
