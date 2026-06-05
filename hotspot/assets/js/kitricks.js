@@ -1236,13 +1236,14 @@ function notifyCoinSlotError(e) {
 }
 function openModal(e) {
   if (e != null) {
-    e.classList.add("show");
+    e.style.display = "-webkit-flex";
+    e.style.display = "flex";
     body.classList.add("modal-active");
   }
 }
 function closeModal(e) {
   if (e != null) {
-    e.classList.remove("show");
+    e.style.display = "none";
     body.classList.remove("modal-active");
   }
 }

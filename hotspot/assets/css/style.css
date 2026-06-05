@@ -393,6 +393,9 @@ a:hover { text-decoration: underline; }
 }
 
 body.modal-active { overflow: hidden; }
+
+.modal {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: var(--modal-overlay); z-index: 1000;
     overflow-y: auto; -webkit-overflow-scrolling: touch;
     padding: 1rem;
