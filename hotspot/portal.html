@@ -25,12 +25,12 @@
                     <div class="banner-container" id="bannerContainer">
                         <div class="dark-overlay"></div>
                         <div class="banner-text">
-                            <h1 class="wifi-text" id="hotspotName">PISO WIFI</h1>
+                            <!-- data-ssid is set by kitricks.js to the SSID name -->
+                            <h1 class="wifi-text" data-ssid>PISO WIFI</h1>
                             <div class="vendo-name" data-vendo id="vendoName"></div>
                         </div>
                     </div>
-                    <!-- Hidden SSID node required by kitricks.js -->
-                    <span data-ssid hidden style="display:none"></span>
+                    <script>(function(){var i=new Image();i.onload=function(){var c=document.getElementById('bannerContainer');if(c){c.style.backgroundImage='url(assets/img/banner.jpg)';c.style.backgroundSize='cover';c.style.backgroundPosition='center';}};i.src='assets/img/banner.jpg';})();</script>
 
                     <div class="card-body">
 
@@ -185,10 +185,7 @@
     <!-- ========== MODAL: WiFi Rates ========== -->
     <div class="modal" data-rates role="dialog" aria-modal="true" aria-label="WiFi rates">
         <div class="modal-content">
-            <div class="header">
-                WiFi Rates
-                <button type="button" class="header-close" data-wr-close aria-label="Close">&times;</button>
-            </div>
+            <div class="header">WiFi Rates</div>
             <div class="modal-body" id="ratesBody">
                 <div id="rates-wrap">
                     <table>
@@ -202,6 +199,9 @@
                         <tbody id="rates"></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-wr-close>Close</button>
             </div>
         </div>
     </div>
@@ -218,7 +218,6 @@
                 <input type="text" id="username" class="voucher-input" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off" autocapitalize="characters">
             </div>
             <div class="modal-footer">
-                <button type="button" data-vc-close>Cancel</button>
                 <button type="button" id="submit" class="primary">Submit</button>
             </div>
         </div>
@@ -227,10 +226,7 @@
     <!-- ========== MODAL: Member Login ========== -->
     <div class="modal" data-member role="dialog" aria-modal="true" aria-label="Member login">
         <div class="modal-content">
-            <div class="header">
-                Member Login
-                <button type="button" class="header-close" data-ml-close aria-label="Close">&times;</button>
-            </div>
+            <div class="header">Member Login</div>
             <div class="modal-body" id="mlBody">
                 <form class="form-col">
                     <input type="text" id="Muser" placeholder="Username" autocomplete="username" required>
