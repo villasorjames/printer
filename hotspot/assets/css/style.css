@@ -430,11 +430,11 @@ body.modal-active { overflow: hidden; }
 }
 
 /* Progress bar track (below modal header) */
-.progress-bar-track { height: 3px; background: rgba(59,130,246,0.15); overflow: hidden; }
+.progress-bar-track { height: 4px; background: rgba(0,0,0,0.08); overflow: hidden; }
 
 /* .progress-bar queried by kitricks.js for width and display */
 .progress-bar {
-    height: 3px; background: rgba(255,255,255,0.6); width: 0%;
+    height: 4px; background: #3b82f6; width: 0%;
     -webkit-transition: width 0.4s ease; transition: width 0.4s ease;
 }
 

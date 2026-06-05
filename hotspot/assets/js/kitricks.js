@@ -844,6 +844,7 @@ ajaxsettings.onreadystatechange = function () {
     if (t.Settings.gcash_payment) {
       gcash_node_ip = t.gcash_payment.node_ip;
       portal_key = t.gcash_payment.portal_key;
+      document.getElementById("gcashBtn").style.display = "block";
     } else {
       document.getElementById("gcashBtn").style.display = "none";
     }
