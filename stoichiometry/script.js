@@ -1,0 +1,124 @@
+// Standard atomic weights (g/mol)
+const ATOMIC = { Mg: 24.305, Al: 26.982, K: 39.098, N: 14.007, O: 15.999 };
+
+// Formulas as atom-count maps
+const SPECIES = {
+  Mg:    { label: "Mg",            atoms: { Mg: 1 } },
+  Al:    { label: "Al",            atoms: { Al: 1 } },
+  KNO3:  { label: "KNO<sub>3</sub>",  atoms: { K: 1, N: 1, O: 3 } },
+  MgO:   { label: "MgO",           atoms: { Mg: 1, O: 1 } },
+  Al2O3: { label: "Al<sub>2</sub>O<sub>3</sub>", atoms: { Al: 2, O: 3 } },
+  K2O:   { label: "K<sub>2</sub>O",   atoms: { K: 2, O: 1 } },
+  N2:    { label: "N<sub>2</sub>",    atoms: { N: 2 } },
+};
+
+// Balanced: 2 Mg + 2 Al + 2 KNO3 -> 2 MgO + Al2O3 + K2O + N2
+const REACTANTS = [["Mg", 2], ["Al", 2], ["KNO3", 2]];
+const PRODUCTS  = [["MgO", 2], ["Al2O3", 1], ["K2O", 1], ["N2", 1]];
+
+const molarMass = key =>
+  Object.entries(SPECIES[key].atoms).reduce((s, [el, n]) => s + ATOMIC[el] * n, 0);
+
+const fmt = (x, d = 3) => x.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d });
+
+function formatMass(grams) {
+  if (grams !== 0 && Math.abs(grams) < 0.1) return `${fmt(grams * 1000, 1)} mg`;
+  return `${fmt(grams, 3)} g`;
+}
+
+function renderAtomBalance() {
+  const count = side => {
+    const totals = {};
+    side.forEach(([k, c]) => {
+      for (const [el, n] of Object.entries(SPECIES[k].atoms)) totals[el] = (totals[el] || 0) + n * c;
+    });
+    return totals;
+  };
+  const L = count(REACTANTS), R = count(PRODUCTS);
+  document.getElementById("atomBalance").innerHTML = Object.keys(ATOMIC).map(el => {
+    const ok = L[el] === R[el];
+    return `<tr><td>${el}</td><td>${L[el] || 0}</td><td>${R[el] || 0} <span class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"}</span></td></tr>`;
+  }).join("");
+}
+
+function calculate(totalGrams) {
+  // Mass of one "formula set" of reactants (per coefficient)
+  const setMass = REACTANTS.reduce((s, [k, c]) => s + molarMass(k) * c, 0);
+  const extent = totalGrams / setMass; // reaction extent (mol of reaction)
+
+  const reactants = REACTANTS.map(([k, c]) => {
+    const M = molarMass(k);
+    const mol = extent * c;
+    return { k, c, M, mol, mass: mol * M, frac: (M * c) / setMass };
+  });
+  const products = PRODUCTS.map(([k, c]) => {
+    const M = molarMass(k);
+    const mol = extent * c;
+    return { k, c, M, mol, mass: mol * M };
+  });
+  return { setMass, extent, reactants, products };
+}
+
+function render(totalGrams) {
+  const r = calculate(totalGrams);
+
+  document.getElementById("reactantBody").innerHTML = r.reactants.map(x => `
+    <tr>
+      <td>${SPECIES[x.k].label}</td>
+      <td>${fmt(x.M, 3)}</td>
+      <td>${fmt(x.frac * 100, 2)}%</td>
+      <td>${x.mol.toExponential(4)} mol</td>
+      <td><strong>${formatMass(x.mass)}</strong></td>
+    </tr>`).join("");
+  const rSum = r.reactants.reduce((s, x) => s + x.mass, 0);
+  document.getElementById("reactantFoot").innerHTML =
+    `<tr><td>Total</td><td></td><td>100%</td><td></td><td>${formatMass(rSum)}</td></tr>`;
+
+  document.getElementById("productBody").innerHTML = r.products.map(x => `
+    <tr>
+      <td>${SPECIES[x.k].label}</td>
+      <td>${x.c}</td>
+      <td>${fmt(x.M, 3)}</td>
+      <td>${x.mol.toExponential(4)} mol</td>
+      <td>${formatMass(x.mass)}</td>
+    </tr>`).join("");
+  const pSum = r.products.reduce((s, x) => s + x.mass, 0);
+  document.getElementById("productFoot").innerHTML =
+    `<tr><td>Total</td><td></td><td></td><td></td><td>${formatMass(pSum)}</td></tr>`;
+
+  const diff = Math.abs(pSum - rSum);
+  document.getElementById("conservation").innerHTML =
+    `Mass conservation: reactants ${formatMass(rSum)} = products ${formatMass(pSum)} ` +
+    (diff < 1e-9 * Math.max(1, rSum) ? '<span class="ok">✔</span>' : '<span class="no">✘</span>');
+
+  const [mg, al, kno3] = r.reactants;
+  document.getElementById("steps").innerHTML = `
+    <li>Molar masses: Mg = <code>${fmt(mg.M)}</code>, Al = <code>${fmt(al.M)}</code>, KNO<sub>3</sub> = <code>${fmt(kno3.M)}</code> g/mol.</li>
+    <li>Molar ratio from the equation: Mg : Al : KNO<sub>3</sub> = 2 : 2 : 2 = 1 : 1 : 1.</li>
+    <li>Mass of one mole of each together: <code>${fmt(mg.M)} + ${fmt(al.M)} + ${fmt(kno3.M)} = ${fmt(r.setMass / 2)}</code> g.</li>
+    <li>Moles of each component: <code>n = ${fmt(totalGrams, 4)} g ÷ ${fmt(r.setMass / 2)} g/mol = ${mg.mol.toExponential(4)} mol</code>.</li>
+    <li>Mg mass: <code>${mg.mol.toExponential(4)} × ${fmt(mg.M)} = ${formatMass(mg.mass)}</code></li>
+    <li>Al mass: <code>${al.mol.toExponential(4)} × ${fmt(al.M)} = ${formatMass(al.mass)}</code></li>
+    <li>KNO<sub>3</sub> mass: <code>${kno3.mol.toExponential(4)} × ${fmt(kno3.M)} = ${formatMass(kno3.mass)}</code></li>
+    <li>Check: ${formatMass(mg.mass)} + ${formatMass(al.mass)} + ${formatMass(kno3.mass)} = ${formatMass(rSum)}</li>`;
+}
+
+function readInput() {
+  const value = parseFloat(document.getElementById("massInput").value);
+  const unit = parseFloat(document.getElementById("unitSelect").value);
+  const err = document.getElementById("error");
+  if (!Number.isFinite(value) || value <= 0) {
+    err.textContent = "Please enter a mass greater than 0.";
+    err.hidden = false;
+    return;
+  }
+  err.hidden = true;
+  render(value * unit);
+}
+
+document.getElementById("massForm").addEventListener("submit", e => { e.preventDefault(); readInput(); });
+document.getElementById("massInput").addEventListener("input", readInput);
+document.getElementById("unitSelect").addEventListener("change", readInput);
+
+renderAtomBalance();
+readInput();

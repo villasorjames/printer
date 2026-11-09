@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mg / Al / KNO₃ Stoichiometry Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Mg / Al / KNO<sub>3</sub> Stoichiometry Calculator</h1>
+      <p class="subtitle">Enter a total mass and get the stoichiometric mass of each component.</p>
+    </header>
+
+    <section class="card">
+      <h2>1. Balanced reaction</h2>
+      <div class="equation">
+        2 Mg + 2 Al + 2 KNO<sub>3</sub> &rarr; 2 MgO + Al<sub>2</sub>O<sub>3</sub> + K<sub>2</sub>O + N<sub>2</sub>
+      </div>
+      <details>
+        <summary>How it is derived</summary>
+        <p>The oxidizer is shared between two half-reactions:</p>
+        <ul>
+          <li>5 Mg + 2 KNO<sub>3</sub> &rarr; 5 MgO + K<sub>2</sub>O + N<sub>2</sub> &nbsp;(0.4 mol KNO<sub>3</sub> per Mg)</li>
+          <li>10 Al + 6 KNO<sub>3</sub> &rarr; 5 Al<sub>2</sub>O<sub>3</sub> + 3 K<sub>2</sub>O + 3 N<sub>2</sub> &nbsp;(0.6 mol KNO<sub>3</sub> per Al)</li>
+        </ul>
+        <p>With equal moles of Mg and Al, KNO<sub>3</sub> needed = 0.4 + 0.6 = 1 mol per mol of each metal, so the molar ratio is
+          <strong>Mg : Al : KNO<sub>3</sub> = 1 : 1 : 1</strong>.</p>
+        <table class="atoms">
+          <thead><tr><th>Atom</th><th>Reactants</th><th>Products</th></tr></thead>
+          <tbody id="atomBalance"></tbody>
+        </table>
+      </details>
+    </section>
+
+    <section class="card">
+      <h2>2. Enter total mass</h2>
+      <form id="massForm" class="input-row" autocomplete="off">
+        <input type="number" id="massInput" min="0" step="any" value="1" aria-label="Total mass">
+        <select id="unitSelect" aria-label="Unit">
+          <option value="1">g</option>
+          <option value="0.001">mg</option>
+        </select>
+        <button type="submit">Calculate</button>
+      </form>
+      <p id="error" class="error" hidden></p>
+    </section>
+
+    <section class="card">
+      <h2>3. Reactant masses</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Molar mass (g/mol)</th><th>Mass fraction</th><th>Moles</th><th>Mass</th></tr>
+          </thead>
+          <tbody id="reactantBody"></tbody>
+          <tfoot id="reactantFoot"></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Products (theoretical)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Product</th><th>Coefficient</th><th>Molar mass (g/mol)</th><th>Moles</th><th>Mass</th></tr>
+          </thead>
+          <tbody id="productBody"></tbody>
+          <tfoot id="productFoot"></tfoot>
+        </table>
+      </div>
+      <p id="conservation" class="note"></p>
+    </section>
+
+    <section class="card">
+      <h2>5. Step-by-step calculation</h2>
+      <ol id="steps" class="steps"></ol>
+    </section>
+
+    <p class="warning">⚠ Educational stoichiometry only. Metal powder / nitrate mixtures are sensitive and hazardous; do not prepare them outside a licensed, supervised setting.</p>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
