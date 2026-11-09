@@ -3,130 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mg / Al / KNO₃ Stoichiometry Calculator</title>
+  <title>Stoichiometry Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
-:root {
-  --bg: #0f1115;
-  --card: #181b22;
-  --border: #2b303b;
-  --text: #e8eaf0;
-  --muted: #9aa3b2;
-  --accent: #4f9cff;
-  --good: #3ccf8e;
-  --bad: #ff6b6b;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.5;
-}
-.container { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
-h1 { font-size: 1.6rem; margin: 0 0 4px; }
-h2 { font-size: 1.1rem; margin: 0 0 12px; color: var(--accent); }
-.subtitle { color: var(--muted); margin: 0 0 20px; }
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 16px;
-}
-.equation {
-  font-size: 1.15rem;
-  font-weight: 600;
-  text-align: center;
-  padding: 14px;
-  background: #11141a;
-  border: 1px dashed var(--border);
-  border-radius: 8px;
-  overflow-x: auto;
-}
-details { margin-top: 12px; }
-summary { cursor: pointer; color: var(--accent); }
-.input-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.input-row input {
-  flex: 1 1 160px;
-  padding: 10px 12px;
-  font-size: 1.1rem;
-  background: #11141a;
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-.input-row select, .input-row button {
-  padding: 10px 14px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: #11141a;
-  color: var(--text);
-}
-.input-row button { background: var(--accent); border-color: var(--accent); color: #fff; cursor: pointer; font-weight: 600; }
-.input-row button:hover { filter: brightness(1.1); }
-.error { color: var(--bad); margin: 8px 0 0; }
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; white-space: nowrap; }
-th { background: #11141a; font-weight: 600; }
-tfoot td { font-weight: 700; }
-.atoms { margin-top: 10px; width: auto; }
-.ok { color: var(--good); }
-.no { color: var(--bad); }
-.note { color: var(--muted); margin: 10px 0 0; }
-.steps li { margin-bottom: 6px; }
-.steps code { background: #11141a; padding: 2px 6px; border-radius: 4px; }
-.warning { color: #ffc861; font-size: 0.9rem; text-align: center; }
+    :root {
+      --bg: #f4f6fb;
+      --bg-grad: radial-gradient(1200px 600px at 10% -10%, #dfe8ff 0%, transparent 60%),
+                 radial-gradient(900px 500px at 110% 10%, #ffe6f0 0%, transparent 55%);
+      --surface: #ffffff;
+      --surface-2: #f1f4fa;
+      --border: #e2e7f0;
+      --text: #141a26;
+      --muted: #5f6b80;
+      --accent: #4f6bff;
+      --accent-2: #8a5cff;
+      --good: #12a36b;
+      --bad: #e0464e;
+      --warn-bg: #fff6e0;
+      --warn-text: #8a5a00;
+      --c-mg: #4f6bff;
+      --c-al: #14b8a6;
+      --c-kno3: #f59e0b;
+      --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+      --radius: 16px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0e14;
+        --bg-grad: radial-gradient(1200px 600px at 10% -10%, #1a2350 0%, transparent 60%),
+                   radial-gradient(900px 500px at 110% 10%, #3a1638 0%, transparent 55%);
+        --surface: #131823;
+        --surface-2: #0f131c;
+        --border: #232a39;
+        --text: #e8ecf4;
+        --muted: #8e99ad;
+        --accent: #7b8cff;
+        --accent-2: #a98bff;
+        --good: #34d399;
+        --bad: #f87171;
+        --warn-bg: #2a2110;
+        --warn-text: #f5c66b;
+        --c-mg: #7b8cff;
+        --c-al: #2dd4bf;
+        --c-kno3: #fbbf24;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-grad), var(--bg);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 40px 16px 56px; }
+
+    /* Header */
+    .hero { text-align: center; margin-bottom: 28px; }
+    .badge {
+      display: inline-block; font-size: .75rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      padding: 6px 12px; border-radius: 999px; margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 800; margin: 0 0 8px; letter-spacing: -.02em;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .subtitle { color: var(--muted); margin: 0; font-size: 1.05rem; }
+
+    /* Cards */
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px; margin-bottom: 18px; box-shadow: var(--shadow);
+    }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .step {
+      width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+      font-weight: 700; font-size: .85rem; color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      flex-shrink: 0;
+    }
+    h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+
+    /* Input */
+    .input-wrap {
+      display: flex; align-items: stretch; border: 2px solid var(--border); border-radius: 14px;
+      background: var(--surface-2); overflow: hidden; transition: border-color .15s, box-shadow .15s;
+    }
+    .input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+    .input-wrap input {
+      flex: 1; min-width: 0; border: 0; background: transparent; color: var(--text);
+      font: 700 2rem "Inter", sans-serif; padding: 14px 18px; outline: none;
+    }
+    .input-wrap .unit {
+      display: grid; place-items: center; padding: 0 22px; font-weight: 700; font-size: 1.2rem;
+      color: var(--muted); border-left: 1px solid var(--border);
+    }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .presets button {
+      font: 600 .9rem "Inter", sans-serif; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      transition: background .15s, border-color .15s;
+    }
+    .presets button:hover { border-color: var(--accent); }
+    .presets button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .error { color: var(--bad); margin: 10px 0 0; font-weight: 500; }
+
+    /* Result tiles */
+    .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .tile {
+      position: relative; padding: 18px; border-radius: 14px; background: var(--surface-2);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .tile::before {
+      content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--c);
+    }
+    .tile .name { font-weight: 700; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+    .tile .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+    .tile .value { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+    .tile .value small { font-size: 1rem; font-weight: 600; color: var(--muted); margin-left: 4px; }
+    .tile .meta { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
+
+    .bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; margin: 18px 0 8px; background: var(--surface-2); }
+    .bar span { display: block; height: 100%; transition: width .3s ease; }
+    .legend { display: flex; flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: .85rem; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center; margin-top: 16px;
+      padding: 14px 18px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    /* Equation */
+    .equation {
+      font: 600 clamp(1rem, 2.6vw, 1.3rem) "Inter", sans-serif; text-align: center;
+      padding: 20px 14px; border-radius: 12px; overflow-x: auto; white-space: nowrap;
+      background: var(--surface-2); border: 1px dashed var(--border);
+    }
+    .equation .coef { color: var(--accent); font-weight: 800; }
+    .equation .arrow { color: var(--muted); margin: 0 10px; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+    .pill {
+      font-size: .82rem; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+      background: color-mix(in srgb, var(--good) 14%, transparent); color: var(--good);
+    }
+
+    details { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; }
+    summary { cursor: pointer; color: var(--accent); font-weight: 600; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▸ "; display: inline-block; transition: transform .2s; }
+    details[open] summary::before { transform: rotate(90deg); }
+    details ul { padding-left: 20px; }
+    details p, details li { color: var(--muted); }
+    details strong { color: var(--text); }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .95rem; }
+    th, td { padding: 12px 14px; text-align: left; white-space: nowrap; }
+    th { background: var(--surface-2); color: var(--muted); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+    tbody tr + tr td, tfoot td { border-top: 1px solid var(--border); }
+    tbody tr:hover td { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+    tfoot td { font-weight: 700; }
+    td.num, th.num { text-align: right; }
+    .atoms-wrap { display: inline-block; margin-top: 10px; }
+    .ok { color: var(--good); font-weight: 700; }
+    .no { color: var(--bad); font-weight: 700; }
+    .note { color: var(--muted); margin: 12px 0 0; font-size: .92rem; }
+
+    /* Steps */
+    .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+    .steps li {
+      counter-increment: s; position: relative; padding: 10px 0 10px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: 0; }
+    .steps li::before {
+      content: counter(s); position: absolute; left: 0; top: 10px; width: 26px; height: 26px;
+      border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 700;
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--muted);
+    }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .85em;
+      background: var(--surface-2); border: 1px solid var(--border); padding: 2px 6px; border-radius: 6px;
+    }
+
+    .warning {
+      display: flex; gap: 10px; align-items: flex-start; padding: 14px 18px; border-radius: 12px;
+      background: var(--warn-bg); color: var(--warn-text); font-size: .92rem; font-weight: 500;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grid-2 > .card { margin-bottom: 18px; }
+
+    @media (max-width: 760px) {
+      .tiles { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; gap: 0; }
+      .container { padding-top: 28px; }
+      .equation { white-space: normal; line-height: 1.9; }
+    }
   </style>
 </head>
 <body>
   <main class="container">
-    <header>
-      <h1>Mg / Al / KNO<sub>3</sub> Stoichiometry Calculator</h1>
-      <p class="subtitle">Enter a total mass and get the stoichiometric mass of each component.</p>
+    <header class="hero">
+      <span class="badge">Stoichiometry</span>
+      <h1>Mg · Al · KNO<sub>3</sub> Calculator</h1>
+      <p class="subtitle">Enter a total mass in kilograms to get the mass of each component.</p>
     </header>
 
     <section class="card">
-      <h2>1. Balanced reaction</h2>
-      <div class="equation">
-        2 Mg + 2 Al + 2 KNO<sub>3</sub> &rarr; 2 MgO + Al<sub>2</sub>O<sub>3</sub> + K<sub>2</sub>O + N<sub>2</sub>
-      </div>
-      <details>
-        <summary>How it is derived</summary>
-        <p>The oxidizer is shared between two half-reactions:</p>
-        <ul>
-          <li>5 Mg + 2 KNO<sub>3</sub> &rarr; 5 MgO + K<sub>2</sub>O + N<sub>2</sub> &nbsp;(0.4 mol KNO<sub>3</sub> per Mg)</li>
-          <li>10 Al + 6 KNO<sub>3</sub> &rarr; 5 Al<sub>2</sub>O<sub>3</sub> + 3 K<sub>2</sub>O + 3 N<sub>2</sub> &nbsp;(0.6 mol KNO<sub>3</sub> per Al)</li>
-        </ul>
-        <p>With equal moles of Mg and Al, KNO<sub>3</sub> needed = 0.4 + 0.6 = 1 mol per mol of each metal, so the molar ratio is
-          <strong>Mg : Al : KNO<sub>3</sub> = 1 : 1 : 1</strong>.</p>
-        <table class="atoms">
-          <thead><tr><th>Atom</th><th>Reactants</th><th>Products</th></tr></thead>
-          <tbody id="atomBalance"></tbody>
-        </table>
-      </details>
-    </section>
-
-    <section class="card">
-      <h2>2. Enter total mass</h2>
-      <form id="massForm" class="input-row" autocomplete="off">
-        <input type="number" id="massInput" min="0" step="any" value="1" aria-label="Total mass">
-        <select id="unitSelect" aria-label="Unit">
-          <option value="1000">kg</option>
-        </select>
-        <button type="submit">Calculate</button>
+      <div class="card-head"><span class="step">1</span><h2>Total mass</h2></div>
+      <form id="massForm" autocomplete="off">
+        <div class="input-wrap">
+          <input type="number" id="massInput" min="0" step="any" value="1" inputmode="decimal" aria-label="Total mass in kilograms">
+          <span class="unit">kg</span>
+        </div>
+        <div class="presets" id="presets">
+          <button type="button" data-v="0.5">0.5 kg</button>
+          <button type="button" data-v="1">1 kg</button>
+          <button type="button" data-v="2">2 kg</button>
+          <button type="button" data-v="5">5 kg</button>
+          <button type="button" data-v="10">10 kg</button>
+        </div>
       </form>
       <p id="error" class="error" hidden></p>
     </section>
 
     <section class="card">
-      <h2>3. Reactant masses</h2>
+      <div class="card-head"><span class="step">2</span><h2>Component masses</h2></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="bar" id="bar"></div>
+      <div class="legend" id="legend"></div>
+      <div class="total-row"><span>Total</span><span id="totalMass">—</span></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><span class="step">3</span><h2>Balanced reaction</h2></div>
+      <div class="equation">
+        <span class="coef">2</span> Mg + <span class="coef">2</span> Al + <span class="coef">2</span> KNO<sub>3</sub>
+        <span class="arrow">⟶</span>
+        <span class="coef">2</span> MgO + Al<sub>2</sub>O<sub>3</sub> + K<sub>2</sub>O + N<sub>2</sub>
+      </div>
+      <div class="pill-row">
+        <span class="pill">Molar ratio 1 : 1 : 1</span>
+        <span class="pill" id="balancedPill">Balanced ✔</span>
+      </div>
+      <details>
+        <summary>How it is derived</summary>
+        <p>The KNO<sub>3</sub> is shared between two reactions:</p>
+        <ul>
+          <li>5 Mg + 2 KNO<sub>3</sub> → 5 MgO + K<sub>2</sub>O + N<sub>2</sub> (0.4 mol KNO<sub>3</sub> per Mg)</li>
+          <li>10 Al + 6 KNO<sub>3</sub> → 5 Al<sub>2</sub>O<sub>3</sub> + 3 K<sub>2</sub>O + 3 N<sub>2</sub> (0.6 mol KNO<sub>3</sub> per Al)</li>
+        </ul>
+        <p>With equal moles of Mg and Al, KNO<sub>3</sub> needed = 0.4 + 0.6 = 1 mol per mol of each metal, so
+          <strong>Mg : Al : KNO<sub>3</sub> = 1 : 1 : 1</strong>.</p>
+        <div class="table-wrap atoms-wrap">
+          <table>
+            <thead><tr><th>Atom</th><th class="num">Reactants</th><th class="num">Products</th><th></th></tr></thead>
+            <tbody id="atomBalance"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><span class="step">4</span><h2>Reactant details</h2></div>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Component</th><th>Molar mass (g/mol)</th><th>Mass fraction</th><th>Moles</th><th>Mass</th></tr>
+            <tr><th>Component</th><th class="num">Molar mass (g/mol)</th><th class="num">Mass fraction</th><th class="num">Moles</th><th class="num">Mass</th></tr>
           </thead>
           <tbody id="reactantBody"></tbody>
           <tfoot id="reactantFoot"></tfoot>
@@ -135,11 +287,11 @@ tfoot td { font-weight: 700; }
     </section>
 
     <section class="card">
-      <h2>4. Products (theoretical)</h2>
+      <div class="card-head"><span class="step">5</span><h2>Products (theoretical)</h2></div>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Product</th><th>Coefficient</th><th>Molar mass (g/mol)</th><th>Moles</th><th>Mass</th></tr>
+            <tr><th>Product</th><th class="num">Coefficient</th><th class="num">Molar mass (g/mol)</th><th class="num">Moles</th><th class="num">Mass</th></tr>
           </thead>
           <tbody id="productBody"></tbody>
           <tfoot id="productFoot"></tfoot>
@@ -149,133 +301,152 @@ tfoot td { font-weight: 700; }
     </section>
 
     <section class="card">
-      <h2>5. Step-by-step calculation</h2>
+      <div class="card-head"><span class="step">6</span><h2>Step-by-step calculation</h2></div>
       <ol id="steps" class="steps"></ol>
     </section>
 
-    <p class="warning">⚠ Educational stoichiometry only. Metal powder / nitrate mixtures are sensitive and hazardous; do not prepare them outside a licensed, supervised setting.</p>
+    <p class="warning"><span>⚠</span><span>Educational stoichiometry only. Metal powder / nitrate mixtures are sensitive and hazardous; do not prepare them outside a licensed, supervised setting.</span></p>
   </main>
+
   <script>
 // Standard atomic weights (g/mol)
 const ATOMIC = { Mg: 24.305, Al: 26.982, K: 39.098, N: 14.007, O: 15.999 };
 
-// Formulas as atom-count maps
 const SPECIES = {
-  Mg:    { label: "Mg",            atoms: { Mg: 1 } },
-  Al:    { label: "Al",            atoms: { Al: 1 } },
-  KNO3:  { label: "KNO<sub>3</sub>",  atoms: { K: 1, N: 1, O: 3 } },
-  MgO:   { label: "MgO",           atoms: { Mg: 1, O: 1 } },
+  Mg:    { label: "Mg",                          atoms: { Mg: 1 },             color: "--c-mg" },
+  Al:    { label: "Al",                          atoms: { Al: 1 },             color: "--c-al" },
+  KNO3:  { label: "KNO<sub>3</sub>",             atoms: { K: 1, N: 1, O: 3 },  color: "--c-kno3" },
+  MgO:   { label: "MgO",                         atoms: { Mg: 1, O: 1 } },
   Al2O3: { label: "Al<sub>2</sub>O<sub>3</sub>", atoms: { Al: 2, O: 3 } },
-  K2O:   { label: "K<sub>2</sub>O",   atoms: { K: 2, O: 1 } },
-  N2:    { label: "N<sub>2</sub>",    atoms: { N: 2 } },
+  K2O:   { label: "K<sub>2</sub>O",              atoms: { K: 2, O: 1 } },
+  N2:    { label: "N<sub>2</sub>",               atoms: { N: 2 } },
 };
 
 // Balanced: 2 Mg + 2 Al + 2 KNO3 -> 2 MgO + Al2O3 + K2O + N2
 const REACTANTS = [["Mg", 2], ["Al", 2], ["KNO3", 2]];
 const PRODUCTS  = [["MgO", 2], ["Al2O3", 1], ["K2O", 1], ["N2", 1]];
 
+const $ = id => document.getElementById(id);
 const molarMass = key =>
   Object.entries(SPECIES[key].atoms).reduce((s, [el, n]) => s + ATOMIC[el] * n, 0);
-
 const fmt = (x, d = 3) => x.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d });
-
-function formatMass(grams) {
-  return `${fmt(grams / 1000, 3)} kg`;
-}
+const kg = grams => `${fmt(grams / 1000, 3)} kg`;
+const mol = n => `${fmt(n, n >= 100 ? 1 : 3)} mol`;
 
 function renderAtomBalance() {
   const count = side => {
-    const totals = {};
+    const t = {};
     side.forEach(([k, c]) => {
-      for (const [el, n] of Object.entries(SPECIES[k].atoms)) totals[el] = (totals[el] || 0) + n * c;
+      for (const [el, n] of Object.entries(SPECIES[k].atoms)) t[el] = (t[el] || 0) + n * c;
     });
-    return totals;
+    return t;
   };
   const L = count(REACTANTS), R = count(PRODUCTS);
-  document.getElementById("atomBalance").innerHTML = Object.keys(ATOMIC).map(el => {
+  let all = true;
+  $("atomBalance").innerHTML = Object.keys(ATOMIC).map(el => {
     const ok = L[el] === R[el];
-    return `<tr><td>${el}</td><td>${L[el] || 0}</td><td>${R[el] || 0} <span class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"}</span></td></tr>`;
+    all = all && ok;
+    return `<tr><td>${el}</td><td class="num">${L[el] || 0}</td><td class="num">${R[el] || 0}</td><td class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"}</td></tr>`;
   }).join("");
+  if (!all) { $("balancedPill").textContent = "Not balanced ✘"; $("balancedPill").style.color = "var(--bad)"; }
 }
 
 function calculate(totalGrams) {
-  // Mass of one "formula set" of reactants (per coefficient)
   const setMass = REACTANTS.reduce((s, [k, c]) => s + molarMass(k) * c, 0);
-  const extent = totalGrams / setMass; // reaction extent (mol of reaction)
-
+  const extent = totalGrams / setMass;
   const reactants = REACTANTS.map(([k, c]) => {
-    const M = molarMass(k);
-    const mol = extent * c;
-    return { k, c, M, mol, mass: mol * M, frac: (M * c) / setMass };
+    const M = molarMass(k), n = extent * c;
+    return { k, c, M, mol: n, mass: n * M, frac: (M * c) / setMass };
   });
   const products = PRODUCTS.map(([k, c]) => {
-    const M = molarMass(k);
-    const mol = extent * c;
-    return { k, c, M, mol, mass: mol * M };
+    const M = molarMass(k), n = extent * c;
+    return { k, c, M, mol: n, mass: n * M };
   });
   return { setMass, extent, reactants, products };
 }
 
 function render(totalGrams) {
   const r = calculate(totalGrams);
-
-  document.getElementById("reactantBody").innerHTML = r.reactants.map(x => `
-    <tr>
-      <td>${SPECIES[x.k].label}</td>
-      <td>${fmt(x.M, 3)}</td>
-      <td>${fmt(x.frac * 100, 2)}%</td>
-      <td>${x.mol.toExponential(4)} mol</td>
-      <td><strong>${formatMass(x.mass)}</strong></td>
-    </tr>`).join("");
   const rSum = r.reactants.reduce((s, x) => s + x.mass, 0);
-  document.getElementById("reactantFoot").innerHTML =
-    `<tr><td>Total</td><td></td><td>100%</td><td></td><td>${formatMass(rSum)}</td></tr>`;
+  const pSum = r.products.reduce((s, x) => s + x.mass, 0);
 
-  document.getElementById("productBody").innerHTML = r.products.map(x => `
+  $("tiles").innerHTML = r.reactants.map(x => `
+    <div class="tile" style="--c: var(${SPECIES[x.k].color})">
+      <div class="name"><span class="dot"></span><span>${SPECIES[x.k].label}</span></div>
+      <div class="value">${fmt(x.mass / 1000, 3)}<small>kg</small></div>
+      <div class="meta">${fmt(x.frac * 100, 2)}% · ${mol(x.mol)}</div>
+    </div>`).join("");
+  $("bar").innerHTML = r.reactants.map(x =>
+    `<span style="width:${x.frac * 100}%; background: var(${SPECIES[x.k].color})" title="${fmt(x.frac * 100, 2)}%"></span>`).join("");
+  $("legend").innerHTML = r.reactants.map(x =>
+    `<span><i style="background: var(${SPECIES[x.k].color})"></i>${SPECIES[x.k].label} ${fmt(x.frac * 100, 2)}%</span>`).join("");
+  $("totalMass").textContent = kg(rSum);
+
+  $("reactantBody").innerHTML = r.reactants.map(x => `
     <tr>
       <td>${SPECIES[x.k].label}</td>
-      <td>${x.c}</td>
-      <td>${fmt(x.M, 3)}</td>
-      <td>${x.mol.toExponential(4)} mol</td>
-      <td>${formatMass(x.mass)}</td>
+      <td class="num">${fmt(x.M, 3)}</td>
+      <td class="num">${fmt(x.frac * 100, 2)}%</td>
+      <td class="num">${mol(x.mol)}</td>
+      <td class="num"><strong>${kg(x.mass)}</strong></td>
     </tr>`).join("");
-  const pSum = r.products.reduce((s, x) => s + x.mass, 0);
-  document.getElementById("productFoot").innerHTML =
-    `<tr><td>Total</td><td></td><td></td><td></td><td>${formatMass(pSum)}</td></tr>`;
+  $("reactantFoot").innerHTML =
+    `<tr><td>Total</td><td></td><td class="num">100%</td><td></td><td class="num">${kg(rSum)}</td></tr>`;
 
-  const diff = Math.abs(pSum - rSum);
-  document.getElementById("conservation").innerHTML =
-    `Mass conservation: reactants ${formatMass(rSum)} = products ${formatMass(pSum)} ` +
-    (diff < 1e-9 * Math.max(1, rSum) ? '<span class="ok">✔</span>' : '<span class="no">✘</span>');
+  $("productBody").innerHTML = r.products.map(x => `
+    <tr>
+      <td>${SPECIES[x.k].label}</td>
+      <td class="num">${x.c}</td>
+      <td class="num">${fmt(x.M, 3)}</td>
+      <td class="num">${mol(x.mol)}</td>
+      <td class="num">${kg(x.mass)}</td>
+    </tr>`).join("");
+  $("productFoot").innerHTML =
+    `<tr><td>Total</td><td></td><td></td><td></td><td class="num">${kg(pSum)}</td></tr>`;
+
+  const ok = Math.abs(pSum - rSum) < 1e-9 * Math.max(1, rSum);
+  $("conservation").innerHTML =
+    `Mass conservation: reactants ${kg(rSum)} = products ${kg(pSum)} <span class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"}</span>`;
 
   const [mg, al, kno3] = r.reactants;
-  document.getElementById("steps").innerHTML = `
+  const per = r.setMass / 2;
+  $("steps").innerHTML = `
     <li>Molar masses: Mg = <code>${fmt(mg.M)}</code>, Al = <code>${fmt(al.M)}</code>, KNO<sub>3</sub> = <code>${fmt(kno3.M)}</code> g/mol.</li>
     <li>Molar ratio from the equation: Mg : Al : KNO<sub>3</sub> = 2 : 2 : 2 = 1 : 1 : 1.</li>
-    <li>Mass of one mole of each together: <code>${fmt(mg.M)} + ${fmt(al.M)} + ${fmt(kno3.M)} = ${fmt(r.setMass / 2)}</code> g.</li>
-    <li>Moles of each component: <code>n = ${fmt(totalGrams, 1)} g ÷ ${fmt(r.setMass / 2)} g/mol = ${mg.mol.toExponential(4)} mol</code>.</li>
-    <li>Mg mass: <code>${mg.mol.toExponential(4)} × ${fmt(mg.M)} = ${formatMass(mg.mass)}</code></li>
-    <li>Al mass: <code>${al.mol.toExponential(4)} × ${fmt(al.M)} = ${formatMass(al.mass)}</code></li>
-    <li>KNO<sub>3</sub> mass: <code>${kno3.mol.toExponential(4)} × ${fmt(kno3.M)} = ${formatMass(kno3.mass)}</code></li>
-    <li>Check: ${formatMass(mg.mass)} + ${formatMass(al.mass)} + ${formatMass(kno3.mass)} = ${formatMass(rSum)}</li>`;
+    <li>Mass of one mole of each together: <code>${fmt(mg.M)} + ${fmt(al.M)} + ${fmt(kno3.M)} = ${fmt(per)} g</code></li>
+    <li>Convert to grams: <code>${fmt(totalGrams / 1000, 3)} kg × 1000 = ${fmt(totalGrams, 1)} g</code></li>
+    <li>Moles of each: <code>n = ${fmt(totalGrams, 1)} g ÷ ${fmt(per)} g/mol = ${mol(mg.mol)}</code></li>
+    <li>Mg: <code>${mol(mg.mol)} × ${fmt(mg.M)} g/mol = ${kg(mg.mass)}</code></li>
+    <li>Al: <code>${mol(al.mol)} × ${fmt(al.M)} g/mol = ${kg(al.mass)}</code></li>
+    <li>KNO<sub>3</sub>: <code>${mol(kno3.mol)} × ${fmt(kno3.M)} g/mol = ${kg(kno3.mass)}</code></li>
+    <li>Check: <code>${kg(mg.mass)} + ${kg(al.mass)} + ${kg(kno3.mass)} = ${kg(rSum)}</code></li>`;
+}
+
+function syncPresets(v) {
+  document.querySelectorAll("#presets button").forEach(b =>
+    b.classList.toggle("active", parseFloat(b.dataset.v) === v));
 }
 
 function readInput() {
-  const value = parseFloat(document.getElementById("massInput").value);
-  const unit = parseFloat(document.getElementById("unitSelect").value);
-  const err = document.getElementById("error");
+  const value = parseFloat($("massInput").value);
+  syncPresets(value);
   if (!Number.isFinite(value) || value <= 0) {
-    err.textContent = "Please enter a mass greater than 0.";
-    err.hidden = false;
+    $("error").textContent = "Please enter a mass greater than 0 kg.";
+    $("error").hidden = false;
     return;
   }
-  err.hidden = true;
-  render(value * unit);
+  $("error").hidden = true;
+  render(value * 1000);
 }
 
-document.getElementById("massForm").addEventListener("submit", e => { e.preventDefault(); readInput(); });
-document.getElementById("massInput").addEventListener("input", readInput);
-document.getElementById("unitSelect").addEventListener("change", readInput);
+$("massForm").addEventListener("submit", e => { e.preventDefault(); readInput(); });
+$("massInput").addEventListener("input", readInput);
+$("presets").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  $("massInput").value = b.dataset.v;
+  readInput();
+});
 
 renderAtomBalance();
 readInput();
